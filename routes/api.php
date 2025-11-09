@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\TopicController;
+use App\Http\Controllers\Api\VocabularyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +31,20 @@ Route::get('/ping', function () {
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
+});
+
+// Public routes - Vocabulary và Topics (không cần authentication)
+Route::prefix('topics')->group(function () {
+    Route::get('/', [TopicController::class, 'index']);
+    Route::get('/{id}', [TopicController::class, 'show']);
+    Route::get('/{id}/vocabularies', [TopicController::class, 'vocabularies']);
+});
+
+Route::prefix('vocabularies')->group(function () {
+    Route::get('/', [VocabularyController::class, 'index']);
+    Route::get('/random', [VocabularyController::class, 'random']);
+    Route::get('/{id}', [VocabularyController::class, 'show']);
+    Route::get('/{id}/translation/{languageCode}', [VocabularyController::class, 'translation']);
 });
 
 // Protected routes - Cần authentication
