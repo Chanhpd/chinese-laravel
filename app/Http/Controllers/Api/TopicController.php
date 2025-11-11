@@ -25,14 +25,33 @@ class TopicController extends Controller
                 $query->where('is_active', $request->boolean('active'));
             }
 
+            // Filter by HSK level - topics that have vocabularies in this level
+            if ($request->has('level')) {
+                $query->whereHas('vocabularies', function($q) use ($request) {
+                    $q->where('level', $request->level);
+                });
+            }
+
             // Include vocabulary count
             if ($request->boolean('with_count')) {
                 $query->withCount('vocabularies');
+                
+                // If level is specified, count only vocabularies of that level
+                if ($request->has('level')) {
+                    $query->withCount(['vocabularies as vocabularies_level_count' => function($q) use ($request) {
+                        $q->where('level', $request->level);
+                    }]);
+                }
             }
 
             // Include vocabularies
             if ($request->boolean('with_vocabularies')) {
-                $query->with('vocabularies');
+                $query->with(['vocabularies' => function($q) use ($request) {
+                    // If level is specified, only load vocabularies of that level
+                    if ($request->has('level')) {
+                        $q->where('level', $request->level);
+                    }
+                }]);
             }
 
             // Load translations
