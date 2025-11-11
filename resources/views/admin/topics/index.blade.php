@@ -125,7 +125,7 @@
     </div>
     @if($topics->hasPages())
     <div class="card-footer">
-        {{ $topics->links() }}
+        {{ $topics->appends(['level' => $level])->links() }}
     </div>
     @endif
 </div>

@@ -11,9 +11,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             min-height: 100vh;
             background-color: #f8f9fa;
+            overflow-x: hidden;
+            position: relative;
+        }
+        /* Hide any decorative pseudo elements */
+        body::before,
+        body::after {
+            display: none !important;
         }
         .sidebar {
             min-height: 100vh;
@@ -75,6 +85,52 @@
             margin-bottom: 30px;
             padding-bottom: 15px;
             border-bottom: 2px solid #e2e8f0;
+        }
+        /* Fix pagination styles */
+        .pagination {
+            margin-bottom: 0;
+        }
+        .pagination .page-link {
+            color: #667eea;
+            border: 1px solid #e2e8f0;
+        }
+        .pagination .page-link:hover {
+            color: #764ba2;
+            background-color: #f8f9fa;
+            border-color: #e2e8f0;
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #667eea;
+            border-color: #667eea;
+            color: white;
+        }
+        .pagination .page-item.disabled .page-link {
+            color: #cbd5e0;
+        }
+        .pagination i {
+            font-size: 0.875rem;
+        }
+        .card-footer {
+            background-color: white;
+            padding: 15px 24px;
+        }
+        /* Prevent overflow and hide decorative elements */
+        body {
+            overflow-x: hidden;
+            position: relative;
+        }
+        /* Hide any large pseudo elements that might be decorative */
+        body::before,
+        body::after,
+        .container-fluid::before,
+        .container-fluid::after,
+        main::before,
+        main::after {
+            display: none !important;
+        }
+        /* Ensure no absolute positioned elements overflow */
+        body > *:not(.container-fluid) {
+            display: none;
         }
     </style>
     

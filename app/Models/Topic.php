@@ -21,6 +21,7 @@ class Topic extends Model
         'image_url',
         'is_active',
         'sort_order',
+        'level',
     ];
 
     /**
