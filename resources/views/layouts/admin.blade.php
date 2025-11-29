@@ -157,6 +157,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" 
+                               href="{{ route('admin.users.index') }}">
+                                <i class="bi bi-people"></i> Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.topics.*') ? 'active' : '' }}" 
                                href="{{ route('admin.topics.index') }}">
                                 <i class="bi bi-folder"></i> Topics

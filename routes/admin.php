@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TopicController;
 use App\Http\Controllers\Admin\VocabularyController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\StoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,10 +13,28 @@ use App\Http\Controllers\Admin\VocabularyController;
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     
-    // Dashboard
+    // Dashboard & Statistics
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/logs', [DashboardController::class, 'logs'])->name('logs');
+    Route::get('/statistics/user-growth', [DashboardController::class, 'userGrowth'])->name('statistics.user-growth');
+    Route::get('/statistics/learning-activity', [DashboardController::class, 'learningActivity'])->name('statistics.learning-activity');
+    Route::get('/statistics/top-learners', [DashboardController::class, 'topLearners'])->name('statistics.top-learners');
+    
+    // User Management
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/{id}', [UserController::class, 'show'])->name('show');
+        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::put('/{id}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
+        Route::put('/{id}/role', [UserController::class, 'changeRole'])->name('change-role');
+        Route::post('/{id}/block', [UserController::class, 'block'])->name('block');
+        Route::post('/{id}/unblock', [UserController::class, 'unblock'])->name('unblock');
+        Route::get('/{id}/progress', [UserController::class, 'progress'])->name('progress');
+        Route::get('/{id}/saved-vocabularies', [UserController::class, 'savedVocabularies'])->name('saved-vocabularies');
+    });
     
     // Topics
     Route::resource('topics', TopicController::class);
@@ -25,4 +45,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('vocabularies', VocabularyController::class);
     Route::post('vocabularies/{vocabulary}/translations', [VocabularyController::class, 'updateTranslations'])
         ->name('vocabularies.translations.update');
+    
+    // Stories
+    Route::prefix('stories')->name('stories.')->group(function () {
+        Route::get('/', [StoryController::class, 'index'])->name('index');
+        Route::post('/', [StoryController::class, 'store'])->name('store');
+        Route::get('/statistics', [StoryController::class, 'statistics'])->name('statistics');
+        Route::get('/{id}', [StoryController::class, 'show'])->name('show');
+        Route::put('/{id}', [StoryController::class, 'update'])->name('update');
+        Route::delete('/{id}', [StoryController::class, 'destroy'])->name('destroy');
+    });
 });

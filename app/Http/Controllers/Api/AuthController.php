@@ -11,7 +11,7 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     /**
-     * Đăng ký user mới
+     * Register a new user
      * 
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -35,7 +35,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Đăng ký thành công',
+                'message' => 'User registered successfully',
                 'data' => [
                     'user' => $user,
                     'token' => $token,
@@ -45,20 +45,20 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Dữ liệu không hợp lệ',
+                'message' => 'Validation failed',
                 'errors' => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Có lỗi xảy ra',
+                'message' => 'An error occurred',
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Đăng nhập
+     * User login
      * 
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -76,18 +76,18 @@ class AuthController extends Controller
             if (!$user || !Hash::check($validated['password'], $user->password)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Email hoặc mật khẩu không đúng',
+                    'message' => 'Invalid email or password',
                 ], 401);
             }
 
-            // Xóa token cũ (optional)
+            // Delete old tokens (optional)
             $user->tokens()->delete();
 
             $token = $user->createToken('mobile-app')->plainTextToken;
 
             return response()->json([
                 'success' => true,
-                'message' => 'Đăng nhập thành công',
+                'message' => 'Login successful',
                 'data' => [
                     'user' => $user,
                     'token' => $token,
@@ -97,20 +97,20 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Dữ liệu không hợp lệ',
+                'message' => 'Validation failed',
                 'errors' => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Có lỗi xảy ra',
+                'message' => 'An error occurred',
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Đăng xuất
+     * User logout
      * 
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -118,25 +118,25 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try {
-            // Xóa token hiện tại
+            // Delete current access token
             $request->user()->currentAccessToken()->delete();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Đăng xuất thành công',
+                'message' => 'Logout successful',
             ], 200);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Có lỗi xảy ra',
+                'message' => 'An error occurred',
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Lấy thông tin user hiện tại
+     * Get current user information
      * 
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
