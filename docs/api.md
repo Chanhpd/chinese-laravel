@@ -325,9 +325,32 @@ Lấy tất cả các chủ đề học từ vựng.
 
 #### Query Parameters
 - `lang` (string, optional): Language code (de, en, es, fr, it, ja, ko, ru, vi, zh)
+- `level` (string, optional): Filter topics by HSK level (HSK1, HSK2, HSK3, HSK4, HSK5, HSK6) - chỉ lấy topics có từ vựng ở level này
 - `active` (boolean, optional): Lọc topics đang active
-- `with_count` (boolean, optional): Bao gồm số lượng vocabulary trong mỗi topic
-- `with_vocabularies` (boolean, optional): Bao gồm tất cả vocabularies trong topic
+- `with_count` (boolean, optional): Bao gồm số lượng vocabulary trong mỗi topic (nếu có level, chỉ đếm vocab ở level đó)
+- `with_vocabularies` (boolean, optional): Bao gồm tất cả vocabularies trong topic (nếu có level, chỉ lấy vocab ở level đó)
+
+#### Examples
+
+**Lấy tất cả topics:**
+```
+GET /api/topics
+```
+
+**Lấy topics có từ vựng HSK1 (tiếng Việt):**
+```
+GET /api/topics?level=HSK1&lang=vi
+```
+
+**Lấy topics HSK2 với số lượng từ vựng:**
+```
+GET /api/topics?level=HSK2&with_count=1
+```
+
+**Lấy topics HSK1 kèm vocabularies (tiếng Nhật):**
+```
+GET /api/topics?level=HSK1&with_vocabularies=1&lang=ja
+```
 
 #### Response Success (200)
 ```json
@@ -343,6 +366,8 @@ Lấy tất cả các chủ đề học từ vựng.
       "image_url": "https://example.com/images/greetings.jpg",
       "is_active": true,
       "sort_order": 1,
+      "vocabularies_count": 5,
+      "vocabularies_level_count": 3,
       "created_at": "2025-11-09T02:45:00.000000Z",
       "updated_at": "2025-11-09T02:45:00.000000Z"
     }
@@ -350,7 +375,11 @@ Lấy tất cả các chủ đề học từ vựng.
 }
 ```
 
-**Note**: Khi `lang=en` (hoặc không có lang), `name` sẽ là tiếng Anh. Khi `lang=vi`, `name` sẽ là tiếng Việt.
+**Note**: 
+- Khi có tham số `level`, chỉ trả về topics có ít nhất 1 vocabulary ở level đó
+- `vocabularies_count`: tổng số vocabulary trong topic
+- `vocabularies_level_count`: số vocabulary ở level được filter (chỉ có khi có `with_count=1` và `level`)
+- Khi `lang=en` (hoặc không có lang), `name` sẽ là tiếng Anh. Khi `lang=vi`, `name` sẽ là tiếng Việt.
 
 ---
 
@@ -643,14 +672,19 @@ Lấy bản dịch của một vocabulary theo mã ngôn ngữ.
 curl "http://localhost:8000/api/topics?lang=vi"
 ```
 
-### Lấy danh sách topics (tiếng Nhật)
+### Lấy topics có từ vựng HSK1 (tiếng Nhật)
 ```bash
-curl "http://localhost:8000/api/topics?lang=ja"
+curl "http://localhost:8000/api/topics?level=HSK1&lang=ja"
 ```
 
-### Lấy topic với số lượng vocabularies
+### Lấy topics HSK2 với số lượng vocabularies
 ```bash
-curl "http://localhost:8000/api/topics?with_count=1&lang=ko"
+curl "http://localhost:8000/api/topics?level=HSK2&with_count=1&lang=ko"
+```
+
+### Lấy topics HSK1 kèm vocabularies (tiếng Pháp)
+```bash
+curl "http://localhost:8000/api/topics?level=HSK1&with_vocabularies=1&lang=fr"
 ```
 
 ### Lấy vocabularies của topic 1 (tiếng Việt)

@@ -20,9 +20,8 @@ class TopicController extends Controller
         $query = Topic::with('vocabularies');
         
         if ($level !== 'all') {
-            $query->whereHas('vocabularies', function($q) use ($level) {
-                $q->where('level', $level);
-            });
+            // Filter by topic level instead of vocabulary level
+            $query->where('level', $level);
         }
         
         $topics = $query->orderBy('sort_order')->paginate(20);

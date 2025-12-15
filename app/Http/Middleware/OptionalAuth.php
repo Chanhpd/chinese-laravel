@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class OptionalAuth
+{
+    /**
+     * Handle an incoming request.
+     * Authenticate user nếu có token, nhưng không yêu cầu bắt buộc
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        // Thử authenticate với Sanctum, nhưng không throw exception nếu fail
+        if ($request->bearerToken()) {
+            try {
+                $user = Auth::guard('sanctum')->user();
+                if ($user) {
+                    Auth::setUser($user);
+                }
+            } catch (\Exception $e) {
+                // Ignore authentication errors, cho phép tiếp tục như guest
+            }
+        }
+        
+        return $next($request);
+    }
+}

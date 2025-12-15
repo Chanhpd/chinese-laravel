@@ -34,6 +34,7 @@ class Vocabulary extends Model
         'tone_pattern',
         'related_words',
         'similar_chars',
+        'sentences',
         'pronunciation_audio',
         'image_url',
         'level',
@@ -47,6 +48,7 @@ class Vocabulary extends Model
     protected $casts = [
         'related_words' => 'array',
         'similar_chars' => 'array',
+        'sentences' => 'array',
         'stroke_count' => 'integer',
     ];
 

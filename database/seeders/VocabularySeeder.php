@@ -37,6 +37,11 @@ class VocabularySeeder extends Seeder
                 'tone_pattern' => '3-3',
                 'related_words' => ['您好', '大家好', '嗨'],
                 'similar_chars' => ['妳好'],
+                'sentences' => [
+                    '___，你叫什么名字？',
+                    '早上见面时说___。',
+                    '___，很高兴认识你。'
+                ],
                 'pronunciation_audio' => 'https://example.com/audio/nihao.mp3',
                 'image_url' => 'https://example.com/images/nihao.jpg',
                 'level' => 'HSK1',
@@ -61,6 +66,11 @@ class VocabularySeeder extends Seeder
                 'tone_pattern' => '3',
                 'related_words' => ['您', '你们', '你的'],
                 'similar_chars' => ['妳', '尔'],
+                'sentences' => [
+                    '___好，我叫李明。',
+                    '___是学生吗？',
+                    '___今天忙不忙？'
+                ],
                 'pronunciation_audio' => 'https://example.com/audio/ni.mp3',
                 'image_url' => 'https://example.com/images/ni.jpg',
                 'level' => 'HSK1',
@@ -107,8 +117,13 @@ class VocabularySeeder extends Seeder
                 'radical_info' => '言(speech)',
                 'stroke_count' => 17,
                 'tone_pattern' => '4-0',
-                'related_words' => ['感谢', '多谢', '谢谢你'],
+                'related_words' => ['感谢', '多谢', '谢了'],
                 'similar_chars' => ['謝'],
+                'sentences' => [
+                    '___你的帮助。',
+                    '非常___你。',
+                    '___，我很喜欢这个礼物。'
+                ],
                 'pronunciation_audio' => 'https://example.com/audio/xiexie.mp3',
                 'image_url' => 'https://example.com/images/xiexie.jpg',
                 'level' => 'HSK1',
@@ -235,8 +250,13 @@ class VocabularySeeder extends Seeder
                 'radical_info' => '一(one)',
                 'stroke_count' => 1,
                 'tone_pattern' => '1',
-                'related_words' => ['一个', '一点', '一些'],
-                'similar_chars' => ['丨'],
+                'related_words' => ['一个', '第一', '一点'],
+                'similar_chars' => ['二', '丨'],
+                'sentences' => [
+                    '我有___个苹果。',
+                    '___加___等于二。',
+                    '这是第___名。'
+                ],
                 'pronunciation_audio' => 'https://example.com/audio/yi.mp3',
                 'image_url' => 'https://example.com/images/yi.jpg',
                 'level' => 'HSK1',

@@ -126,6 +126,19 @@
                         @endif
                     </dd>
                     
+                    <dt class="col-sm-3">Practice Sentences:</dt>
+                    <dd class="col-sm-9">
+                        @if($vocabulary->sentences && count($vocabulary->sentences) > 0)
+                            <ol class="mb-0">
+                                @foreach($vocabulary->sentences as $sentence)
+                                    <li class="chinese-text mb-2" style="font-size: 1.1rem;">{{ $sentence }}</li>
+                                @endforeach
+                            </ol>
+                        @else
+                            <span class="text-muted">No practice sentences</span>
+                        @endif
+                    </dd>
+                    
                     <dt class="col-sm-3">Audio URL:</dt>
                     <dd class="col-sm-9">
                         @if($vocabulary->pronunciation_audio)

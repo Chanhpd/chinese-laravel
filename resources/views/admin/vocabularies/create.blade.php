@@ -258,6 +258,18 @@
                         </div>
                     </div>
                     
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-puzzle"></i> Practice Sentences (Fill in the blank with ___)
+                        </label>
+                        <small class="text-muted d-block mb-2">Add practice sentences where ___ represents the word to fill in. One sentence per line.</small>
+                        <textarea class="form-control" 
+                                  id="sentences_input" 
+                                  rows="4"
+                                  placeholder="Example:&#10;我每天___中文。&#10;他在学校___汉语。&#10;我想___一点新的单词。">{{ isset($vocabulary) && $vocabulary->sentences ? implode("\n", $vocabulary->sentences) : old('sentences_text') }}</textarea>
+                        <small class="text-muted">Each line will be a separate practice sentence</small>
+                    </div>
+                    
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="pronunciation_audio" class="form-label">Pronunciation Audio URL</label>
@@ -313,4 +325,33 @@
         </div>
     </div>
 </form>
+
+@push('scripts')
+<script>
+// Convert sentences textarea to array before form submit
+document.querySelector('form').addEventListener('submit', function(e) {
+    const sentencesInput = document.getElementById('sentences_input');
+    const sentencesText = sentencesInput.value.trim();
+    
+    // Remove old hidden inputs if any
+    document.querySelectorAll('input[name^="sentences["]').forEach(el => el.remove());
+    
+    if (sentencesText) {
+        // Split by newlines and filter empty lines
+        const sentences = sentencesText.split('\n')
+            .map(line => line.trim())
+            .filter(line => line.length > 0);
+        
+        // Create hidden inputs for each sentence
+        sentences.forEach((sentence, index) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `sentences[${index}]`;
+            input.value = sentence;
+            this.appendChild(input);
+        });
+    }
+});
+</script>
+@endpush
 @endsection
