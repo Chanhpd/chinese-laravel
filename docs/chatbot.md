@@ -1,4 +1,7 @@
 
+## API AI cchat bot 
+- Giúp tôi triển khai chức năng chat bot về học tiếng Trung, bên dưỡi là mẫu tôi mà tôi cần bạn áp dụng 
+- Về môi trường và api key tôi có bỏ trong .env
 
 ```php 
 <?php

@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\VocabularyController;
 use App\Http\Controllers\Api\UserProgressController;
 use App\Http\Controllers\Api\SavedVocabularyController;
 use App\Http\Controllers\StoryController;
+use App\Http\Controllers\ChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,9 @@ Route::prefix('stories')->group(function () {
     Route::get('/{slug}', [StoryController::class, 'show']);
 });
 
+// Chat bot AI - Public (nhưng tự động lưu lịch sử nếu có token)
+Route::post('/chat', [ChatController::class, 'chat'])->middleware('optional.auth');
+
 // Protected routes - Cần authentication
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -66,6 +70,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
+    });
+
+    // Chat History routes (Yêu cầu authentication)
+    Route::prefix('chat')->group(function () {
+        Route::get('/history', [ChatController::class, 'history']); // Lấy lịch sử chat
+        Route::delete('/history/{id}', [ChatController::class, 'deleteHistory']); // Xóa 1 chat
+        Route::delete('/history', [ChatController::class, 'clearHistory']); // Xóa toàn bộ lịch sử
     });
 
     // User Progress routes
