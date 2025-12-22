@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\VocabularyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\StoryController;
 use App\Http\Controllers\Admin\RadicalController;
+use App\Http\Controllers\AdminExamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,5 +70,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::get('/{id}', [RadicalController::class, 'show'])->name('show');
         Route::put('/{id}', [RadicalController::class, 'update'])->name('update');
         Route::delete('/{id}', [RadicalController::class, 'destroy'])->name('destroy');
+    });
+
+    // Exams
+    Route::prefix('exams')->name('exams.')->group(function () {
+        Route::get('/', [AdminExamController::class, 'index'])->name('index');
+        Route::post('/', [AdminExamController::class, 'store'])->name('store');
+        Route::get('/{id}', [AdminExamController::class, 'show'])->name('show');
+        Route::put('/{id}', [AdminExamController::class, 'update'])->name('update');
+        Route::delete('/{id}', [AdminExamController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}/statistics', [AdminExamController::class, 'statistics'])->name('statistics');
+        Route::get('/{id}/attempts', [AdminExamController::class, 'attempts'])->name('attempts');
+        Route::post('/{id}/toggle-active', [AdminExamController::class, 'toggleActive'])->name('toggle-active');
+        Route::post('/{id}/duplicate', [AdminExamController::class, 'duplicate'])->name('duplicate');
     });
 });
