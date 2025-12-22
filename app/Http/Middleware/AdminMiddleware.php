@@ -18,8 +18,8 @@ class AdminMiddleware
     {
         $user = auth()->user();
 
-        // Check if user has admin or super_admin role
-        if (!in_array($user->role, ['admin', 'super_admin'])) {
+        // Check if user has admin, super_admin, or staff role
+        if (!in_array($user->role, ['admin', 'super_admin', 'staff'])) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,

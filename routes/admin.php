@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\TopicController;
 use App\Http\Controllers\Admin\VocabularyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\StoryController;
+use App\Http\Controllers\Admin\RadicalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,5 +55,19 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::get('/{id}', [StoryController::class, 'show'])->name('show');
         Route::put('/{id}', [StoryController::class, 'update'])->name('update');
         Route::delete('/{id}', [StoryController::class, 'destroy'])->name('destroy');
+    });
+
+    // Radicals
+    Route::prefix('radicals')->name('radicals.')->group(function () {
+        Route::get('/', [RadicalController::class, 'index'])->name('index');
+        Route::post('/', [RadicalController::class, 'store'])->name('store');
+        Route::get('/statistics', [RadicalController::class, 'statistics'])->name('statistics');
+        Route::get('/levels', [RadicalController::class, 'getLevels'])->name('levels');
+        Route::post('/bulk-import', [RadicalController::class, 'bulkImport'])->name('bulk-import');
+        Route::put('/bulk-update', [RadicalController::class, 'bulkUpdate'])->name('bulk-update');
+        Route::delete('/bulk-delete', [RadicalController::class, 'bulkDelete'])->name('bulk-delete');
+        Route::get('/{id}', [RadicalController::class, 'show'])->name('show');
+        Route::put('/{id}', [RadicalController::class, 'update'])->name('update');
+        Route::delete('/{id}', [RadicalController::class, 'destroy'])->name('destroy');
     });
 });

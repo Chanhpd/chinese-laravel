@@ -120,11 +120,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // Staff không có quyền tạo user
+        if (auth()->user()->isStaff()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Staff không có quyền tạo user',
+            ], 403);
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'role' => ['required', Rule::in(['user', 'admin', 'super_admin'])],
+            'role' => ['required', Rule::in(['user', 'admin', 'super_admin', 'staff'])],
             'status' => ['nullable', Rule::in(['active', 'inactive', 'blocked'])],
         ]);
 
@@ -158,6 +166,14 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Staff không có quyền sửa thông tin user
+        if (auth()->user()->isStaff()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Staff không có quyền sửa thông tin user',
+            ], 403);
+        }
+
         $user = User::findOrFail($id);
         $oldValues = $user->only(['name', 'email', 'role', 'status']);
 
@@ -165,7 +181,7 @@ class UserController extends Controller
             'name' => 'sometimes|required|string|max:255',
             'email' => ['sometimes', 'required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => 'sometimes|nullable|string|min:8',
-            'role' => ['sometimes', 'required', Rule::in(['user', 'admin', 'super_admin'])],
+            'role' => ['sometimes', 'required', Rule::in(['user', 'admin', 'super_admin', 'staff'])],
             'status' => ['sometimes', 'required', Rule::in(['active', 'inactive', 'blocked'])],
         ]);
 
@@ -199,6 +215,14 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        // Staff không có quyền xóa user
+        if (auth()->user()->isStaff()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Staff không có quyền xóa user',
+            ], 403);
+        }
+
         $user = User::findOrFail($id);
 
         // Prevent deleting super admin
@@ -231,8 +255,16 @@ class UserController extends Controller
      */
     public function changeRole(Request $request, $id)
     {
+        // Staff không có quyền đổi role
+        if (auth()->user()->isStaff()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Staff không có quyền thay đổi role của user',
+            ], 403);
+        }
+
         $request->validate([
-            'role' => ['required', Rule::in(['user', 'admin', 'super_admin'])],
+            'role' => ['required', Rule::in(['user', 'admin', 'super_admin', 'staff'])],
         ]);
 
         $user = User::findOrFail($id);
@@ -270,6 +302,14 @@ class UserController extends Controller
      */
     public function block($id)
     {
+        // Staff không có quyền block user
+        if (auth()->user()->isStaff()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Staff không có quyền block user',
+            ], 403);
+        }
+
         $user = User::findOrFail($id);
 
         // Cannot block super admin
@@ -302,6 +342,14 @@ class UserController extends Controller
      */
     public function unblock($id)
     {
+        // Staff không có quyền unblock user
+        if (auth()->user()->isStaff()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Staff không có quyền unblock user',
+            ], 403);
+        }
+
         $user = User::findOrFail($id);
         $user->unblock();
 
