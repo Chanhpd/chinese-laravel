@@ -5,7 +5,6 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TopicController;
 use App\Http\Controllers\Admin\VocabularyController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\StoryController;
 use App\Http\Controllers\Admin\RadicalController;
 use App\Http\Controllers\AdminExamController;
 
@@ -47,16 +46,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('vocabularies', VocabularyController::class);
     Route::post('vocabularies/{vocabulary}/translations', [VocabularyController::class, 'updateTranslations'])
         ->name('vocabularies.translations.update');
-    
-    // Stories
-    Route::prefix('stories')->name('stories.')->group(function () {
-        Route::get('/', [StoryController::class, 'index'])->name('index');
-        Route::post('/', [StoryController::class, 'store'])->name('store');
-        Route::get('/statistics', [StoryController::class, 'statistics'])->name('statistics');
-        Route::get('/{id}', [StoryController::class, 'show'])->name('show');
-        Route::put('/{id}', [StoryController::class, 'update'])->name('update');
-        Route::delete('/{id}', [StoryController::class, 'destroy'])->name('destroy');
-    });
 
     // Radicals
     Route::prefix('radicals')->name('radicals.')->group(function () {

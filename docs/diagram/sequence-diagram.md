@@ -17,133 +17,59 @@
 
 actor User
 participant "Frontend" as FE
-participant "API Controller" as API
+participant "API" as API
 participant "TopicController" as TC
 participant "VocabularyController" as VC
 participant "UserTopicProgress" as UTP
-participant "SavedVocabulary" as SV
-participant "UserStreak" as US
 database Database as DB
 
-== Browse and Select Topic ==
-User -> FE: Open Learning Section
-FE -> API: GET /api/topics?is_active=1
+== Browse Topics ==
+User -> FE: Open Learning
+FE -> API: GET /api/topics
 API -> TC: index()
-TC -> DB: Query active topics
-DB --> TC: Return topics list
-TC --> API: Topics with vocabularies count
-API --> FE: JSON response
-FE --> User: Display topics list
+TC -> DB: Query topics
+DB --> TC: List
+TC --> API: Response
+API --> FE: JSON
+FE --> User: Display topics
 
+== Select Topic ==
 User -> FE: Select Topic (id: 5)
 FE -> API: GET /api/topics/5
 API -> TC: show(5)
-TC -> DB: Query topic with vocabularies
-DB --> TC: Topic details + vocabularies
-TC -> DB: Check UserTopicProgress for user
-DB --> TC: User progress data
-TC --> API: Complete topic data
-API --> FE: JSON response
-FE --> User: Display topic details\nand vocabulary list
+TC -> DB: Query topic
+DB --> TC: Data
+TC -> DB: Check progress
+DB --> TC: Progress
+TC --> API: Response
+API --> FE: JSON
+FE --> User: Display vocabularies
 
 == Study Vocabulary ==
 User -> FE: Select Vocabulary (id: 123)
 FE -> API: GET /api/vocabularies/123
 API -> VC: show(123)
-VC -> DB: Query vocabulary with translations
-DB --> VC: Vocabulary details
-VC --> API: Full vocabulary data
-API --> FE: JSON response
-FE --> User: Display word, translations,\nexamples, audio
+VC -> DB: Query vocabulary
+DB --> VC: Data
+VC --> API: Response
+API --> FE: JSON
+FE --> User: Display word + audio
 
 User -> FE: Click "Play Audio"
-FE -> FE: Play pronunciation_audio
+FE -> FE: Play audio
 
-User -> FE: Click "Save Vocabulary"
-FE -> API: POST /api/saved-vocabularies\n{vocabulary_id: 123, notes: "..."}
-API -> SV: store()
-SV -> DB: Insert saved_vocabulary record
-DB --> SV: Record created
-SV --> API: Success response
-API --> FE: JSON response
-FE --> User: Show "Saved successfully"
-
-== Mark as Completed ==
-User -> FE: Click "Mark as Completed"
-FE -> API: POST /api/user-topic-progress/mark-completed\n{topic_id: 5, vocabulary_id: 123}
-API -> UTP: markWordCompleted()
-
-UTP -> DB: Get or create UserTopicProgress\nfor user_id and topic_id
-DB --> UTP: Progress record
-
-UTP -> UTP: Increment completed_words
-UTP -> UTP: Calculate progress percentage\n(completed_words / total_words * 100)
-
-alt Progress >= 90%
-    UTP -> UTP: Set mastery_level = 'mastered'
-else Progress >= 70%
-    UTP -> UTP: Set mastery_level = 'advanced'
-else Progress >= 40%
-    UTP -> UTP: Set mastery_level = 'intermediate'
-else
-    UTP -> UTP: Set mastery_level = 'beginner'
-end
-
-UTP -> UTP: Update last_studied_at = now()
-UTP -> DB: Save UserTopicProgress
-DB --> UTP: Record updated
-UTP --> API: Progress updated
-API --> FE: JSON response
-FE --> User: Show updated progress
-
-== Review Saved Vocabularies ==
-User -> FE: Click "Review Saved Words"
-FE -> API: GET /api/saved-vocabularies
-API -> SV: index()
-SV -> DB: Query saved vocabularies\nwith vocabulary details
-DB --> SV: Saved vocabularies list
-SV --> API: Formatted data
-API --> FE: JSON response
-FE --> User: Display saved words list
-
-User -> FE: Review a saved word
-FE -> API: POST /api/saved-vocabularies/{id}/review
-API -> SV: markAsReviewed(id)
-SV -> DB: Increment review_count\nUpdate last_reviewed_at
-DB --> SV: Record updated
-SV --> API: Success response
-API --> FE: JSON response
-FE --> User: Show review recorded
-
-== Update Streak ==
-User -> FE: Complete study session
-FE -> API: POST /api/streak/check-in
-API -> US: performCheckIn()
-
-US -> DB: Get UserStreak for user
-DB --> US: Streak record
-
-US -> US: Check if already checked in today
-alt Not checked in today
-    US -> US: Check if consecutive day
-    alt Consecutive day
-        US -> US: Increment streak_count
-    else Not consecutive
-        US -> US: Reset streak_count = 1
-    end
-    US -> US: Update last_check_in_date = today
-    US -> US: Increment total_check_in_days
-    US -> US: Update weekly_check_ins JSON
-    US -> US: Check if new longest_streak
-    US -> DB: Save UserStreak
-    DB --> US: Record updated
-    US --> API: Streak updated
-else Already checked in
-    US --> API: Already checked in today
-end
-
-API --> FE: JSON response
-FE --> User: Show streak status
+== Mark Completed ==
+User -> FE: Mark as Completed
+FE -> API: POST /api/progress/mark
+API -> UTP: markCompleted()
+UTP -> DB: Get/Create progress
+DB --> UTP: Record
+UTP -> UTP: Update progress
+UTP -> DB: Save
+DB --> UTP: Updated
+UTP --> API: Response
+API --> FE: JSON
+FE --> User: Show progress
 
 @enduml
 ```
@@ -155,131 +81,76 @@ FE --> User: Show streak status
 
 actor User
 participant "Frontend" as FE
-participant "API Controller" as API
+participant "API" as API
 participant "ExamController" as EC
 participant "UserExamAttempt" as UEA
 participant "UserAnswer" as UA
-participant "Exam" as E
-participant "Question" as Q
-participant "QuestionContent" as QC
 database Database as DB
 
 == Browse and Select Exam ==
 User -> FE: Open Exam Section
-FE -> API: GET /api/exams?level=HSK1&is_active=1
+FE -> API: GET /api/exams?level=HSK1
 API -> EC: index()
-EC -> DB: Query active exams\nwith parts and questions count
+EC -> DB: Query active exams
 DB --> EC: Exams list
-EC --> API: Formatted exam data
-API --> FE: JSON response
-FE --> User: Display available exams
+EC --> API: Response
+API --> FE: JSON
+FE --> User: Display exams
 
 User -> FE: Select Exam (id: 1)
 FE -> API: GET /api/exams/1
 API -> EC: show(1)
-EC -> DB: Query exam with all details:\n- exam_parts\n- questions\n- question_types\n- question_contents
-DB --> EC: Complete exam structure
-EC --> API: Full exam data
-API --> FE: JSON response
-FE --> User: Display exam overview\n(title, time, parts, questions count)
+EC -> DB: Query exam details
+DB --> EC: Exam data
+EC --> API: Response
+API --> FE: JSON
+FE --> User: Display exam overview
 
 == Start Exam ==
 User -> FE: Click "Start Exam"
 FE -> API: POST /api/exams/1/start
-API -> EC: startExam(1)
-EC -> UEA: Create new attempt
-
-UEA -> UEA: Set exam_id = 1\nSet user_id = auth()->id()\nSet status = 'in_progress'\nSet started_at = now()
+API -> UEA: Create attempt
 UEA -> DB: Insert UserExamAttempt
-DB --> UEA: Attempt created (id: 999)
-UEA --> EC: Attempt ID
-EC --> API: Attempt created
-API --> FE: JSON response\n{attempt_id: 999, started_at, ...}
+DB --> UEA: Created (id: 999)
+UEA --> API: Response
+API --> FE: JSON
 FE -> FE: Start timer
-FE --> User: Show exam questions
+FE --> User: Show questions
 
 == Answer Questions ==
 loop For each question
-    User -> FE: View question (Listening/Reading)
-    
-    alt Question has audio
-        FE -> FE: Load and play Q_audio
-        User -> User: Listen to audio
-    end
-    
-    User -> User: Read question and options
-    User -> FE: Select answer(s)
-    
-    FE -> API: POST /api/exam-attempts/999/answers\n{question_content_id: 45,\nuser_answer: ["2"],\nanswered_at: "..."}
+    User -> FE: Select answer
+    FE -> API: POST /api/exam-attempts/999/answers
     API -> UA: store()
-    
-    UA -> UA: Set attempt_id = 999\nSet question_content_id = 45\nSet user_answer = ["2"]\nSet answered_at = now()
     UA -> DB: Insert UserAnswer
-    DB --> UA: Answer saved
+    DB --> UA: Saved
     UA --> API: Success
-    API --> FE: Answer recorded
-    FE --> User: Show answer selected
+    API --> FE: Response
+    FE --> User: Answer recorded
 end
 
-== Submit Exam ==
-User -> FE: Click "Submit Exam"
-FE -> FE: Confirm submission
-User -> FE: Confirm "Yes"
-
+== Submit and Score ==
+User -> FE: Click "Submit"
 FE -> API: POST /api/exam-attempts/999/submit
 API -> UEA: submitExam(999)
+UEA -> DB: Get attempt with answers
+DB --> UEA: Data
 
-UEA -> DB: Get UserExamAttempt with all answers
-DB --> UEA: Attempt + answers
-
-UEA -> UEA: Stop timer\nCalculate time_spent
-
-== Scoring Process ==
-UEA -> UEA: Initialize:\ntotal_score = 0\nmax_score = 0
-
-loop For each UserAnswer
-    UEA -> DB: Get QuestionContent\nwith correct_answers
-    DB --> UEA: Question data
-    
-    UEA -> UEA: Compare user_answer\nwith correct_answers
-    
-    alt Answer is correct
-        UEA -> UEA: is_correct = true\nscore_earned = question_score
-    else Answer is incorrect
-        UEA -> UEA: is_correct = false\nscore_earned = 0
-    end
-    
-    UEA -> DB: Update UserAnswer:\nis_correct, score_earned
+loop For each answer
+    UEA -> DB: Get correct answer
+    DB --> UEA: Correct answer
+    UEA -> UEA: Compare and score
+    UEA -> DB: Update UserAnswer
     DB --> UEA: Updated
-    
-    UEA -> UEA: total_score += score_earned\nmax_score += question_score
 end
 
-UEA -> UEA: Calculate percentage:\n(total_score / max_score) * 100
-
-UEA -> UEA: Update attempt:\ncompleted_at = now()\nstatus = 'completed'\ntotal_score\npercentage\ntime_spent
-
-UEA -> DB: Save UserExamAttempt
+UEA -> UEA: Calculate total score
+UEA -> DB: Save attempt
 DB --> UEA: Saved
+UEA --> API: Results
+API --> FE: JSON
+FE --> User: Display score
 
-UEA --> API: Scoring completed
-API --> FE: JSON response with results
-FE --> User: Display exam results:\n- Total score: X/Y\n- Percentage: Z%\n- Time spent: MM:SS\n- Status: Pass/Fail
-
-== View Detailed Results ==
-User -> FE: Click "View Details"
-FE -> API: GET /api/exam-attempts/999/details
-API -> UEA: getDetails(999)
-
-UEA -> DB: Query attempt with:\n- All user_answers\n- Question contents\n- Correct answers\n- Explanations (translations)
-DB --> UEA: Complete results data
-
-UEA --> API: Detailed results
-API --> FE: JSON response
-FE --> User: Display:\n- Each question\n- User's answer (highlight)\n- Correct answer (highlight)\n- Explanation in user's language\n- Score earned per question
-
-User -> FE: Review mistakes
-User -> FE: Read explanations
 User -> FE: Return to dashboard
 
 @enduml
@@ -292,124 +163,66 @@ User -> FE: Return to dashboard
 
 actor User
 participant "Frontend" as FE
-participant "API Controller" as API
+participant "API" as API
 participant "RadicalController" as RC
-participant "WritingAssessmentService" as WAS
-participant "OpenAI Vision API" as AI
+participant "AssessmentService" as WAS
+participant "OpenAI Vision" as AI
 participant "UserLevelProgress" as ULP
-participant "AssessmentResult" as AR
 database Database as DB
 
-== Browse and Select Radical ==
+== Browse and Select ==
 User -> FE: Open Radical Learning
 FE -> API: GET /api/radicals?level_id=1
 API -> RC: index()
-RC -> DB: Query radicals by level
-DB --> RC: Radicals list
-RC --> API: Formatted data
-API --> FE: JSON response
-FE --> User: Display radicals by HSK level
+RC -> DB: Query radicals
+DB --> RC: List
+RC --> API: Response
+API --> FE: JSON
+FE --> User: Display radicals
 
 User -> FE: Select Radical (id: 50)
 FE -> API: GET /api/radicals/50
 API -> RC: show(50)
-RC -> DB: Query radical details
-DB --> RC: Radical data:\n- hanzi, pinyin, meaning\n- stroke_count, radical\n- stroke order data
-RC --> API: Complete radical info
-API --> FE: JSON response
-FE --> User: Display radical details\nand stroke order animation
+RC -> DB: Query radical
+DB --> RC: Data
+RC --> API: Response
+API --> FE: JSON
+FE --> User: Display radical + animation
 
 == Practice Writing ==
-User -> FE: Click "Practice Writing"
-FE -> FE: Initialize HTML5 Canvas\nSet grid guidelines\nEnable drawing tools
-
-User -> FE: Draw character stroke by stroke
-FE -> FE: Capture stroke paths\n(coordinates, timestamps)
-
-alt Need to redo
-    User -> FE: Click "Clear"
-    FE -> FE: Clear canvas
-    User -> FE: Draw again
-end
-
-User -> FE: Click "Submit for Assessment"
-FE -> FE: Convert canvas to image\n(base64 PNG/JPEG)
+User -> FE: Click "Practice"
+FE -> FE: Initialize Canvas
+User -> FE: Draw character
+FE -> FE: Capture strokes
+User -> FE: Submit
+FE -> FE: Convert to image
 
 == AI Assessment ==
-FE -> API: POST /api/radicals/50/assess-writing\n{image: "data:image/png;base64,...",\nuser_id: 10}
-API -> WAS: assessWriting(radical_id, image, user_id)
+FE -> API: POST /api/radicals/50/assess
+API -> WAS: assess(image, radical_id)
+WAS -> DB: Get radical
+DB --> WAS: Data
+WAS -> AI: Analyze image
+AI --> WAS: Score + feedback
+WAS -> WAS: Calculate final score
+WAS -> DB: Save result
+DB --> WAS: Saved
 
-WAS -> DB: Get Radical details
-DB --> WAS: Correct hanzi and metadata
-
-WAS -> AI: POST to OpenAI Vision API\nPrompt: "Analyze this Chinese character\nCompare with: {hanzi}\nEvaluate:\n1. Character recognition\n2. Stroke order\n3. Stroke quality\n4. Overall structure\nProvide score 0-100 and detailed feedback"
-
-AI -> AI: Process image\nAnalyze character features\nCompare with reference
-
-AI --> WAS: JSON response:\n{\n  recognized_char: "字",\n  match_score: 85,\n  stroke_order_accuracy: 90,\n  stroke_quality: 80,\n  structure_score: 85,\n  overall_score: 85,\n  feedback: {...}\n}
-
-== Calculate Final Score ==
-WAS -> WAS: Aggregate AI results:\n- Character match: 85/100\n- Stroke order: 90/100\n- Stroke quality: 80/100\n- Structure: 85/100\n\nFinal Score: 85/100
-
-alt Score >= 90
-    WAS -> WAS: Grade = "Excellent"\nFeedback = "Perfect! Well done!"
-else Score >= 75
-    WAS -> WAS: Grade = "Good"\nFeedback = "Great job! Minor improvements needed"
-else Score >= 60
-    WAS -> WAS: Grade = "Fair"\nFeedback = "Keep practicing, focus on stroke order"
-else Score < 60
-    WAS -> WAS: Grade = "Needs Improvement"\nFeedback = "Practice more, review stroke order"
-end
-
-WAS -> WAS: Generate detailed feedback:\n- Recognized character: X\n- Correct strokes: Y/Z\n- Stroke order accuracy: N%\n- Proportion: Good/Fair/Poor\n- Balance: Centered/Off-center
-
-== Save Assessment Result ==
-WAS -> AR: Create result record
-AR -> DB: Insert assessment_result:\n- user_id\n- radical_id\n- written_image (base64)\n- score: 85\n- grade: "Good"\n- feedback: JSON\n- ai_response: JSON\n- created_at
-DB --> AR: Result saved (id: 777)
-
-alt Score >= 60 (Pass)
+alt Score >= 60
     WAS -> ULP: Update progress
-    ULP -> DB: Get UserLevelProgress\nfor user and level
-    DB --> ULP: Progress record
-    
-    ULP -> ULP: Mark radical as completed\nIncrement completed_radicals\nCalculate progress %
-    
-    alt Progress >= 90%
-        ULP -> ULP: mastery_level = 'mastered'
-    else Progress >= 70%
-        ULP -> ULP: mastery_level = 'advanced'
-    else Progress >= 40%
-        ULP -> ULP: mastery_level = 'intermediate'
-    else
-        ULP -> ULP: mastery_level = 'beginner'
-    end
-    
-    ULP -> ULP: Update last_studied_at
-    ULP -> DB: Save UserLevelProgress
+    ULP -> DB: Get progress
+    DB --> ULP: Data
+    ULP -> ULP: Mark completed
+    ULP -> DB: Save
     DB --> ULP: Updated
-    ULP --> WAS: Progress updated
-else Score < 60 (Fail)
-    WAS -> WAS: Keep radical as incomplete\nSuggest retry
+    ULP --> WAS: Done
 end
 
-WAS --> API: Assessment complete
-API --> FE: JSON response:\n{\n  result_id: 777,\n  score: 85,\n  grade: "Good",\n  feedback: {...},\n  comparison_image: "...",\n  progress_updated: true,\n  mastery_level: "advanced"\n}
+WAS --> API: Results
+API --> FE: JSON
+FE --> User: Display score
 
-== Display Results ==
-FE --> User: Show assessment results:\n- Score: 85/100\n- Grade: Good\n- Visual comparison:\n  Left: User's writing\n  Right: Correct character\n- Detailed feedback:\n  ✓ Character recognized correctly\n  ✓ 9/10 strokes correct\n  ✓ Stroke order: 90% accurate\n  ⚠ Improve: Proportion slightly off\n  ⚠ Tip: Practice stroke 5 angle
-
-User -> FE: Review feedback
-
-alt Satisfied with result
-    User -> FE: Click "Next Radical"
-    FE -> API: GET /api/radicals?level_id=1&after=50
-    API --> FE: Next radical
-else Want to retry
-    User -> FE: Click "Try Again"
-    FE -> FE: Clear canvas\nReset for new attempt
-    User -> FE: Draw again
-end
+User -> FE: Return
 
 @enduml
 ```
@@ -428,8 +241,6 @@ sequenceDiagram
     participant TC as TopicController
     participant VC as VocabularyController
     participant UTP as UserTopicProgress
-    participant SV as SavedVocabulary
-    participant US as UserStreak
     participant DB as Database
 
     Note over User,DB: Browse and Select Topic
@@ -466,15 +277,6 @@ sequenceDiagram
     User->>FE: Click "Play Audio"
     FE->>FE: Play pronunciation_audio
 
-    User->>FE: Click "Save Vocabulary"
-    FE->>API: POST /api/saved-vocabularies
-    API->>SV: store()
-    SV->>DB: Insert saved_vocabulary
-    DB-->>SV: Record created
-    SV-->>API: Success
-    API-->>FE: JSON response
-    FE-->>User: Show "Saved successfully"
-
     Note over User,DB: Mark as Completed
     User->>FE: Click "Mark as Completed"
     FE->>API: POST /api/user-topic-progress/mark-completed
@@ -483,70 +285,13 @@ sequenceDiagram
     DB-->>UTP: Progress record
     
     UTP->>UTP: Increment completed_words
-    UTP->>UTP: Calculate progress %
-    
-    alt Progress >= 90%
-        UTP->>UTP: mastery_level = 'mastered'
-    else Progress >= 70%
-        UTP->>UTP: mastery_level = 'advanced'
-    else Progress >= 40%
-        UTP->>UTP: mastery_level = 'intermediate'
-    else
-        UTP->>UTP: mastery_level = 'beginner'
-    end
-    
+    UTP->>UTP: Calculate progress and mastery level
     UTP->>UTP: Update last_studied_at
     UTP->>DB: Save UserTopicProgress
     DB-->>UTP: Updated
     UTP-->>API: Progress updated
     API-->>FE: JSON response
     FE-->>User: Show updated progress
-
-    Note over User,DB: Review Saved Vocabularies
-    User->>FE: Click "Review Saved Words"
-    FE->>API: GET /api/saved-vocabularies
-    API->>SV: index()
-    SV->>DB: Query saved vocabularies
-    DB-->>SV: Saved vocabularies list
-    SV-->>API: Formatted data
-    API-->>FE: JSON response
-    FE-->>User: Display saved words
-
-    User->>FE: Review a saved word
-    FE->>API: POST /api/saved-vocabularies/{id}/review
-    API->>SV: markAsReviewed(id)
-    SV->>DB: Update review_count, last_reviewed_at
-    DB-->>SV: Updated
-    SV-->>API: Success
-    API-->>FE: JSON response
-    FE-->>User: Show review recorded
-
-    Note over User,DB: Update Streak
-    User->>FE: Complete study session
-    FE->>API: POST /api/streak/check-in
-    API->>US: performCheckIn()
-    US->>DB: Get UserStreak
-    DB-->>US: Streak record
-    
-    US->>US: Check if already checked in today
-    
-    alt Not checked in today
-        US->>US: Check if consecutive day
-        alt Consecutive
-            US->>US: Increment streak_count
-        else Not consecutive
-            US->>US: Reset streak_count = 1
-        end
-        US->>US: Update last_check_in_date<br/>total_check_in_days<br/>weekly_check_ins
-        US->>DB: Save UserStreak
-        DB-->>US: Updated
-        US-->>API: Streak updated
-    else Already checked in
-        US-->>API: Already checked in today
-    end
-    
-    API-->>FE: JSON response
-    FE-->>User: Show streak status
 ```
 
 ### 2. Taking Exam Sequence
@@ -651,16 +396,7 @@ sequenceDiagram
     UEA-->>API: Scoring completed
     API-->>FE: JSON with results
     FE-->>User: Display results:<br/>Score, Percentage, Time
-
-    Note over User,DB: View Detailed Results
-    User->>FE: Click "View Details"
-    FE->>API: GET /api/exam-attempts/999/details
-    API->>UEA: getDetails(999)
-    UEA->>DB: Query attempt with all data<br/>(answers, questions, explanations)
-    DB-->>UEA: Complete results
-    UEA-->>API: Detailed results
-    API-->>FE: JSON response
-    FE-->>User: Display:<br/>- Each question<br/>- User's answer<br/>- Correct answer<br/>- Explanation<br/>- Score per question
+    User->>FE: Return to dashboard
 ```
 
 ### 3. Radical Character Writing Assessment Sequence
@@ -700,13 +436,6 @@ sequenceDiagram
     FE->>FE: Initialize Canvas<br/>Set grid, drawing tools
     User->>FE: Draw character stroke by stroke
     FE->>FE: Capture stroke paths
-
-    opt Need to redo
-        User->>FE: Click "Clear"
-        FE->>FE: Clear canvas
-        User->>FE: Draw again
-    end
-
     User->>FE: Click "Submit for Assessment"
     FE->>FE: Convert canvas to base64 image
 
@@ -721,19 +450,7 @@ sequenceDiagram
     AI-->>WAS: JSON response:<br/>- recognized_char<br/>- match_score: 85<br/>- stroke_order: 90<br/>- quality: 80<br/>- structure: 85<br/>- overall: 85<br/>- feedback
 
     Note over User,DB: Calculate Final Score
-    WAS->>WAS: Aggregate AI results<br/>Final Score: 85/100
-
-    alt Score >= 90
-        WAS->>WAS: Grade = "Excellent"
-    else Score >= 75
-        WAS->>WAS: Grade = "Good"
-    else Score >= 60
-        WAS->>WAS: Grade = "Fair"
-    else
-        WAS->>WAS: Grade = "Needs Improvement"
-    end
-
-    WAS->>WAS: Generate detailed feedback:<br/>- Recognized: X<br/>- Correct strokes: Y/Z<br/>- Accuracy: N%<br/>- Proportion, Balance
+    WAS->>WAS: Aggregate AI results<br/>Calculate score (0-100) and Grade<br/>Generate detailed feedback
 
     Note over User,DB: Save Assessment Result
     WAS->>DB: Insert assessment_result<br/>(user_id, radical_id, image, score, grade, feedback)
@@ -743,41 +460,20 @@ sequenceDiagram
         WAS->>ULP: Update progress
         ULP->>DB: Get UserLevelProgress
         DB-->>ULP: Progress record
-        ULP->>ULP: Mark radical completed<br/>Increment completed_radicals<br/>Calculate progress %
-        
-        alt Progress >= 90%
-            ULP->>ULP: mastery_level = 'mastered'
-        else Progress >= 70%
-            ULP->>ULP: mastery_level = 'advanced'
-        else Progress >= 40%
-            ULP->>ULP: mastery_level = 'intermediate'
-        else
-            ULP->>ULP: mastery_level = 'beginner'
-        end
-        
-        ULP->>ULP: Update last_studied_at
+        ULP->>ULP: Mark radical completed<br/>Calculate progress and mastery
         ULP->>DB: Save UserLevelProgress
         DB-->>ULP: Updated
         ULP-->>WAS: Progress updated
     else Score < 60 (Fail)
-        WAS->>WAS: Keep incomplete<br/>Suggest retry
+        WAS->>WAS: Suggest retry
     end
 
     WAS-->>API: Assessment complete
     API-->>FE: JSON response:<br/>- result_id: 777<br/>- score: 85<br/>- grade: "Good"<br/>- feedback<br/>- comparison_image<br/>- progress_updated: true
 
     Note over User,DB: Display Results
-    FE-->>User: Show assessment:<br/>- Score: 85/100<br/>- Grade: Good<br/>- Visual comparison<br/>- Detailed feedback:<br/>  ✓ Character recognized<br/>  ✓ 9/10 strokes correct<br/>  ✓ Stroke order: 90%<br/>  ⚠ Improve proportion
-
-    User->>FE: Review feedback
-
-    alt Satisfied
-        User->>FE: Click "Next Radical"
-        FE->>API: GET /api/radicals (next)
-    else Want retry
-        User->>FE: Click "Try Again"
-        FE->>FE: Clear canvas, reset
-    end
+    FE-->>User: Show assessment:<br/>- Score<br/>- Grade<br/>- Visual comparison<br/>- Detailed feedback
+    User->>FE: Return to dashboard
 ```
 
 ---

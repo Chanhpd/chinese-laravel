@@ -10,7 +10,6 @@ use App\Http\Controllers\Api\SavedVocabularyController;
 use App\Http\Controllers\Api\WordController;
 use App\Http\Controllers\Api\RadicalController;
 use App\Http\Controllers\Api\StreakController;
-use App\Http\Controllers\StoryController;
 use App\Http\Controllers\ChatController;
 
 /*
@@ -72,13 +71,6 @@ Route::prefix('radicals')->group(function () {
     Route::get('/hsk/{levelNumber}', [RadicalController::class, 'getRadicalsByLevel']); // Get radicals by HSK level
     Route::get('/hsk', [RadicalController::class, 'getAllHSKRadicals']); // Get all HSK radicals grouped by level
     Route::post('/{id}/favorite', [RadicalController::class, 'toggleFavorite']); // Toggle favorite status
-});
-
-// Story routes - Public
-Route::prefix('stories')->group(function () {
-    Route::get('/', [StoryController::class, 'index']);
-    Route::get('/hsk-levels', [StoryController::class, 'hskLevels']);
-    Route::get('/{slug}', [StoryController::class, 'show']);
 });
 
 // Chat bot AI - Public (nhưng tự động lưu lịch sử nếu có token)

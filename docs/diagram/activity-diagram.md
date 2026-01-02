@@ -18,78 +18,42 @@
 |User|
 start
 :Open Learning Section;
-
 :Browse Topics;
-
 :Select Topic;
 
 |System|
-:Load Topic Details;
-:Fetch Vocabularies;
+:Load Topic with Vocabularies;
 :Check User Progress;
 
 |User|
 :View Vocabulary List;
 
-while (More vocabularies to study?) is (yes)
+while (More vocabularies?) is (yes)
   :Select Vocabulary;
   
   |System|
-  :Display Word Details;
-  :Show Translations;
-  :Show Examples;
-  :Play Audio (optional);
+  :Display Word Details
+  (translations, examples, audio);
   
   |User|
   :Study Vocabulary;
   
-  if (Want to save vocabulary?) then (yes)
+  if (Save vocabulary?) then (yes)
     |System|
     :Add to Saved Vocabularies;
-    :Update Save Count;
-  else (no)
   endif
   
   :Mark as Completed;
   
   |System|
   :Update UserTopicProgress;
-  :Increment completed_words;
-  :Calculate progress percentage;
-  
-  if (Progress >= 90%?) then (yes)
-    :Set mastery_level = 'mastered';
-  elseif (Progress >= 70%?) then (yes)
-    :Set mastery_level = 'advanced';
-  elseif (Progress >= 40%?) then (yes)
-    :Set mastery_level = 'intermediate';
-  else (no)
-    :Set mastery_level = 'beginner';
-  endif
-  
-  :Update last_studied_at;
-  
-  |User|
-  if (Review saved words?) then (yes)
-    |System|
-    :Load Saved Vocabularies;
-    :Display Review List;
-    
-    |User|
-    :Review Vocabulary;
-    
-    |System|
-    :Increment review_count;
-    :Update last_reviewed_at;
-  else (no)
-  endif
+  :Calculate progress %
+  and mastery level;
 
-endwhile (no more)
+endwhile (done)
 
 |System|
 :Update User Streak;
-:Perform Check-in;
-:Update weekly_check_ins;
 
 |User|
 :View Progress Summary;
@@ -107,31 +71,12 @@ stop
 |User|
 start
 :Open Exam Section;
-
 :Browse Available Exams;
-
-if (Filter by level?) then (yes)
-  :Select HSK Level;
-  |System|
-  :Filter Exams by Level;
-else (no)
-endif
-
-|User|
 :Select Exam;
 
 |System|
-:Check Exam is_active;
-
-if (Exam is active?) then (yes)
-  :Load Exam Details;
-  :Load Exam Parts;
-  :Load Questions;
-else (no)
-  |User|
-  :Show "Exam not available";
-  stop
-endif
+:Load Exam Details
+(parts, questions);
 
 |User|
 :Review Exam Info;
@@ -140,105 +85,42 @@ endif
 |System|
 :Create UserExamAttempt;
 :Set status = 'in_progress';
-:Record started_at;
-:Initialize timer;
+:Start timer;
 
 |User|
-partition "Listening Part" {
-  while (More listening questions?) is (yes)
+partition "Answer Questions" {
+  while (More questions?) is (yes)
     |System|
-    :Display Question;
-    :Play Audio (if applicable);
-    :Show Answer Options;
+    :Display Question
+    (audio/text/image);
     
     |User|
-    :Listen to Audio;
     :Select Answer;
     
     |System|
     :Record UserAnswer;
-    :Save user_answer;
-    :Record answered_at;
   endwhile (complete)
 }
-
-partition "Reading Part" {
-  while (More reading questions?) is (yes)
-    |System|
-    :Display Question Text;
-    :Show Answer Options;
-    
-    |User|
-    :Read Question;
-    :Select Answer;
-    
-    |System|
-    :Record UserAnswer;
-    :Save user_answer;
-    :Record answered_at;
-  endwhile (complete)
-}
-
-|User|
-if (Review answers?) then (yes)
-  :Navigate back to questions;
-  :Change answers if needed;
-  
-  |System|
-  :Update UserAnswer records;
-else (no)
-endif
 
 :Click "Submit Exam";
 
 |System|
-:Stop timer;
-:Calculate time_spent;
-
-partition "Scoring Process" {
-  :Initialize total_score = 0;
-  
-  while (For each UserAnswer) is (more)
-    :Get QuestionContent;
-    :Get correct_answers;
-    :Compare user_answer with correct_answers;
-    
-    if (Answer is correct?) then (yes)
-      :Set is_correct = true;
-      :Set score_earned = question_score;
-    else (no)
-      :Set is_correct = false;
-      :Set score_earned = 0;
-    endif
-    
-    :Update UserAnswer;
-    :Add score_earned to total_score;
-  endwhile (done)
-  
-  :Calculate percentage;
-  :percentage = (total_score / max_score) * 100;
+partition "Scoring" {
+  :Compare answers with
+  correct answers;
+  :Calculate total score
+  and percentage;
+  :Update attempt status
+  = 'completed';
 }
-
-:Update UserExamAttempt;
-:Set completed_at = now();
-:Set status = 'completed';
-:Save total_score, percentage;
 
 |User|
 :View Exam Results;
-:See score and percentage;
 
-if (View detailed results?) then (yes)
+if (View details?) then (yes)
   |System|
-  :Show all questions;
-  :Show user answers;
-  :Show correct answers;
-  :Display explanations;
-  
-  |User|
-  :Review mistakes;
-  :Read explanations;
-else (no)
+  :Show questions, answers,
+  explanations;
 endif
 
 :Return to Dashboard;
@@ -256,150 +138,60 @@ stop
 |User|
 start
 :Open Radical Learning;
-
 :Browse Radicals by Level;
-
-if (Filter by HSK level?) then (yes)
-  :Select HSK Level;
-  
-  |System|
-  :Filter Radicals by level_id;
-else (no)
-endif
-
-|User|
-:Select Radical to Practice;
+:Select Radical;
 
 |System|
 :Load Radical Details;
-:Display hanzi, pinyin, meaning;
-:Show stroke_count, radical;
-:Display stroke order animation;
+:Show stroke order animation;
 
 |User|
 :Study Radical Structure;
-:View Stroke Order;
-
 :Click "Practice Writing";
 
 |System|
 :Initialize Drawing Canvas;
-:Set grid guidelines;
-:Prepare stroke capture;
 
 |User|
-partition "Writing Process" {
-  :Write Character on Canvas;
-  :Draw strokes one by one;
-  
-  note right
-    User draws character
-    using touch/mouse/stylus
-  end note
-  
-  if (Need to redo?) then (yes)
-    :Clear canvas;
-    :Start over;
-  else (no)
-  endif
-}
+:Write Character on Canvas;
 
 :Submit Written Character;
 
 |System|
 partition "AI Assessment" {
   :Capture Canvas Image;
-  :Convert to base64/binary;
+  :Send to AI Model
+  (OpenAI Vision API);
   
-  :Send to AI Model;
-  note right
-    Uses OpenAI Vision API or
-    Custom OCR Model
-  end note
+  :AI Analyzes:
+  - Character recognition
+  - Stroke order
+  - Stroke quality
+  - Overall structure;
   
-  :AI Analyzes Character;
+  :Calculate Score (0-100)
+  and Grade;
   
-  fork
-    :Check Character Recognition;
-    :Compare with correct hanzi;
-  fork again
-    :Analyze Stroke Order;
-    :Check sequence correctness;
-  fork again
-    :Evaluate Stroke Quality;
-    :Check proportions, angles;
-  fork again
-    :Assess Overall Structure;
-    :Check balance, composition;
-  end fork
-  
-  :Calculate Score (0-100);
-  
-  if (Score >= 90?) then (excellent)
-    :Grade = "Excellent";
-    :Feedback = "Perfect! Well done!";
-  elseif (Score >= 75?) then (good)
-    :Grade = "Good";
-    :Feedback = "Great job! Minor improvements needed";
-  elseif (Score >= 60?) then (fair)
-    :Grade = "Fair";
-    :Feedback = "Keep practicing, focus on stroke order";
-  else (needs improvement)
-    :Grade = "Needs Improvement";
-    :Feedback = "Practice more, review stroke order";
-  endif
-  
-  :Generate Detailed Feedback;
-  note right
-    - Correct strokes: X/Y
-    - Stroke order accuracy: Z%
-    - Proportion: Good/Fair/Poor
-    - Structure: Balanced/Unbalanced
-  end note
+  :Generate Feedback;
 }
 
 :Save Assessment Result;
-:Store written_image, score, feedback;
-:Update UserLevelProgress;
 
 if (Score >= 60?) then (pass)
-  :Mark Radical as Completed;
-  :Increment completed_radicals;
-  :Calculate progress percentage;
+  :Update UserLevelProgress;
+  :Mark Radical Completed;
 else (fail)
-  :Keep as incomplete;
   :Suggest retry;
 endif
 
 |User|
-:View Assessment Results;
-:See score and grade;
-:Read detailed feedback;
-:View side-by-side comparison;
+:View Results
+(score, feedback, comparison);
 
-if (Satisfied with result?) then (no)
-  :Click "Try Again";
+if (Try again?) then (yes)
   |System|
-  :Clear previous attempt;
   :Reset canvas;
-  |User|
-  :Practice writing again;
-else (yes)
-endif
-
-if (Practice another radical?) then (yes)
-  :Select next radical;
-  |System|
-  :Load new radical;
 else (no)
-  :View Overall Progress;
-  
-  |System|
-  :Calculate level completion;
-  :Show mastery_level;
-  :Display completed vs total radicals;
-  
-  |User|
   :Return to Dashboard;
 endif
 
@@ -416,51 +208,33 @@ stop
 
 ```mermaid
 flowchart TD
-    Start([User Opens Learning Section]) --> BrowseTopics[Browse Topics]
-    BrowseTopics --> SelectTopic[Select Topic]
-    SelectTopic --> LoadTopic[System: Load Topic Details<br/>Fetch Vocabularies<br/>Check User Progress]
-    LoadTopic --> ViewList[View Vocabulary List]
+    Start([User Opens Learning Section]) --> Browse[Browse Topics]
+    Browse --> Select[Select Topic]
+    Select --> Load[System: Load Topic with<br/>Vocabularies and Progress]
+    Load --> ViewList[View Vocabulary List]
     
-    ViewList --> MoreVocab{More vocabularies<br/>to study?}
-    MoreVocab -->|Yes| SelectVocab[Select Vocabulary]
+    ViewList --> More{More<br/>vocabularies?}
+    More -->|Yes| SelectVocab[Select Vocabulary]
     
-    SelectVocab --> DisplayWord[System: Display Word Details<br/>Show Translations<br/>Show Examples<br/>Play Audio]
-    DisplayWord --> StudyWord[Study Vocabulary]
+    SelectVocab --> Display[System: Display Word Details<br/>translations, examples, audio]
+    Display --> Study[Study Vocabulary]
     
-    StudyWord --> WantSave{Want to<br/>save vocabulary?}
-    WantSave -->|Yes| SaveVocab[System: Add to Saved Vocabularies<br/>Update Save Count]
-    WantSave -->|No| MarkComplete
-    SaveVocab --> MarkComplete[Mark as Completed]
+    Study --> Save{Save<br/>vocabulary?}
+    Save -->|Yes| SaveSys[System: Add to Saved]
+    Save -->|No| Mark
+    SaveSys --> Mark[Mark as Completed]
     
-    MarkComplete --> UpdateProgress[System: Update UserTopicProgress<br/>Increment completed_words<br/>Calculate progress %]
+    Mark --> Update[System: Update UserTopicProgress<br/>Calculate progress % and mastery level]
+    Update --> More
     
-    UpdateProgress --> CheckProgress{Progress<br/>percentage?}
-    CheckProgress -->|>= 90%| Mastered[Set mastery_level = 'mastered']
-    CheckProgress -->|>= 70%| Advanced[Set mastery_level = 'advanced']
-    CheckProgress -->|>= 40%| Intermediate[Set mastery_level = 'intermediate']
-    CheckProgress -->|< 40%| Beginner[Set mastery_level = 'beginner']
-    
-    Mastered --> UpdateTime[Update last_studied_at]
-    Advanced --> UpdateTime
-    Intermediate --> UpdateTime
-    Beginner --> UpdateTime
-    
-    UpdateTime --> ReviewSaved{Review<br/>saved words?}
-    ReviewSaved -->|Yes| LoadSaved[System: Load Saved Vocabularies<br/>Display Review List]
-    LoadSaved --> DoReview[Review Vocabulary]
-    DoReview --> UpdateReview[System: Increment review_count<br/>Update last_reviewed_at]
-    UpdateReview --> MoreVocab
-    ReviewSaved -->|No| MoreVocab
-    
-    MoreVocab -->|No more| UpdateStreak[System: Update User Streak<br/>Perform Check-in<br/>Update weekly_check_ins]
-    UpdateStreak --> ViewSummary[View Progress Summary]
-    ViewSummary --> End([End])
+    More -->|Done| Streak[System: Update User Streak]
+    Streak --> Summary[View Progress Summary]
+    Summary --> End([End])
     
     style Start fill:#90EE90
     style End fill:#FFB6C1
-    style UpdateProgress fill:#87CEEB
-    style SaveVocab fill:#DDA0DD
-    style UpdateStreak fill:#F0E68C
+    style Update fill:#87CEEB
+    style Streak fill:#F0E68C
 ```
 
 ### 2. Taking Exam Flow
@@ -468,74 +242,38 @@ flowchart TD
 ```mermaid
 flowchart TD
     Start([User Opens Exam Section]) --> Browse[Browse Available Exams]
-    Browse --> FilterQ{Filter<br/>by level?}
-    FilterQ -->|Yes| SelectLevel[Select HSK Level]
-    SelectLevel --> FilterSystem[System: Filter Exams by Level]
-    FilterSystem --> SelectExam
-    FilterQ -->|No| SelectExam[Select Exam]
+    Browse --> Select[Select Exam]
+    Select --> Load[System: Load Exam Details<br/>parts, questions]
     
-    SelectExam --> CheckActive[System: Check Exam is_active]
-    CheckActive --> IsActive{Exam<br/>is active?}
-    IsActive -->|No| ShowError[Show 'Exam not available']
-    ShowError --> EndError([End])
-    IsActive -->|Yes| LoadExam[System: Load Exam Details<br/>Load Exam Parts<br/>Load Questions]
+    Load --> Review[Review Exam Info]
+    Review --> StartExam[Click 'Start Exam']
+    StartExam --> Create[System: Create UserExamAttempt<br/>status = 'in_progress'<br/>Start timer]
     
-    LoadExam --> ReviewInfo[Review Exam Info]
-    ReviewInfo --> StartExam[Click 'Start Exam']
-    StartExam --> CreateAttempt[System: Create UserExamAttempt<br/>Set status = 'in_progress'<br/>Record started_at<br/>Initialize timer]
+    Create --> Answer[=== ANSWER QUESTIONS ===]
+    Answer --> More{More<br/>questions?}
+    More -->|Yes| Display[System: Display Question<br/>audio/text/image]
+    Display --> SelectAns[Select Answer]
+    SelectAns --> Record[System: Record UserAnswer]
+    Record --> More
     
-    CreateAttempt --> ListeningPart[=== LISTENING PART ===]
-    ListeningPart --> MoreListening{More listening<br/>questions?}
-    MoreListening -->|Yes| ShowListening[System: Display Question<br/>Play Audio<br/>Show Answer Options]
-    ShowListening --> ListenAnswer[Listen to Audio<br/>Select Answer]
-    ListenAnswer --> RecordListening[System: Record UserAnswer<br/>Save user_answer<br/>Record answered_at]
-    RecordListening --> MoreListening
+    More -->|Complete| Submit[Click 'Submit Exam']
+    Submit --> Score[=== SCORING ===]
+    Score --> Compare[System: Compare answers<br/>with correct answers]
+    Compare --> Calc[Calculate total score<br/>and percentage]
+    Calc --> UpdateAttempt[Update attempt<br/>status = 'completed']
     
-    MoreListening -->|Complete| ReadingPart[=== READING PART ===]
-    ReadingPart --> MoreReading{More reading<br/>questions?}
-    MoreReading -->|Yes| ShowReading[System: Display Question Text<br/>Show Answer Options]
-    ShowReading --> ReadAnswer[Read Question<br/>Select Answer]
-    ReadAnswer --> RecordReading[System: Record UserAnswer<br/>Save user_answer<br/>Record answered_at]
-    RecordReading --> MoreReading
+    UpdateAttempt --> ViewResults[View Exam Results]
+    ViewResults --> Details{View<br/>details?}
+    Details -->|Yes| ShowDetails[System: Show questions,<br/>answers, explanations]
+    Details -->|No| Return
+    ShowDetails --> Return[Return to Dashboard]
     
-    MoreReading -->|Complete| ReviewAnswers{Review<br/>answers?}
-    ReviewAnswers -->|Yes| NavigateBack[Navigate back to questions<br/>Change answers if needed]
-    NavigateBack --> UpdateAnswers[System: Update UserAnswer records]
-    UpdateAnswers --> SubmitExam
-    ReviewAnswers -->|No| SubmitExam[Click 'Submit Exam']
-    
-    SubmitExam --> StopTimer[System: Stop timer<br/>Calculate time_spent]
-    StopTimer --> ScoringStart[=== SCORING PROCESS ===]
-    
-    ScoringStart --> InitScore[Initialize total_score = 0]
-    InitScore --> ForEachAnswer{For each<br/>UserAnswer}
-    ForEachAnswer -->|More| GetContent[Get QuestionContent<br/>Get correct_answers<br/>Compare with user_answer]
-    
-    GetContent --> IsCorrect{Answer<br/>is correct?}
-    IsCorrect -->|Yes| SetCorrect[Set is_correct = true<br/>Set score_earned = question_score]
-    IsCorrect -->|No| SetWrong[Set is_correct = false<br/>Set score_earned = 0]
-    
-    SetCorrect --> UpdateAnswer[Update UserAnswer<br/>Add score_earned to total_score]
-    SetWrong --> UpdateAnswer
-    UpdateAnswer --> ForEachAnswer
-    
-    ForEachAnswer -->|Done| CalcPercentage[Calculate percentage<br/>percentage = total_score / max_score × 100]
-    CalcPercentage --> UpdateAttempt[Update UserExamAttempt<br/>Set completed_at = now<br/>Set status = 'completed'<br/>Save total_score, percentage]
-    
-    UpdateAttempt --> ViewResults[View Exam Results<br/>See score and percentage]
-    ViewResults --> ViewDetailed{View detailed<br/>results?}
-    ViewDetailed -->|Yes| ShowDetailed[System: Show all questions<br/>Show user answers<br/>Show correct answers<br/>Display explanations]
-    ShowDetailed --> ReviewMistakes[Review mistakes<br/>Read explanations]
-    ReviewMistakes --> ReturnDash
-    ViewDetailed -->|No| ReturnDash[Return to Dashboard]
-    
-    ReturnDash --> End([End])
+    Return --> End([End])
     
     style Start fill:#90EE90
     style End fill:#FFB6C1
-    style EndError fill:#FFB6C1
-    style CreateAttempt fill:#87CEEB
-    style ScoringStart fill:#FFD700
+    style Create fill:#87CEEB
+    style Score fill:#FFD700
     style UpdateAttempt fill:#DDA0DD
 ```
 
@@ -543,142 +281,82 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    Start([User Opens Radical Learning]) --> BrowseRadical[Browse Radicals by Level]
-    BrowseRadical --> FilterLevel{Filter by<br/>HSK level?}
-    FilterLevel -->|Yes| SelectHSK[Select HSK Level]
-    SelectHSK --> FilterRadicals[System: Filter Radicals by level_id]
-    FilterRadicals --> SelectRadical
-    FilterLevel -->|No| SelectRadical[Select Radical to Practice]
+    Start([User Opens Radical Learning]) --> Browse[Browse Radicals by Level]
+    Browse --> Select[Select Radical]
+    Select --> Load[System: Load Radical Details<br/>Show stroke order animation]
     
-    SelectRadical --> LoadRadical[System: Load Radical Details<br/>Display hanzi, pinyin, meaning<br/>Show stroke_count, radical<br/>Display stroke order animation]
+    Load --> Study[Study Radical Structure]
+    Study --> Click[Click 'Practice Writing']
+    Click --> Init[System: Initialize Canvas]
     
-    LoadRadical --> StudyRadical[Study Radical Structure<br/>View Stroke Order]
-    StudyRadical --> ClickPractice[Click 'Practice Writing']
+    Init --> Write[Write Character on Canvas]
+    Write --> Submit[Submit Written Character]
     
-    ClickPractice --> InitCanvas[System: Initialize Drawing Canvas<br/>Set grid guidelines<br/>Prepare stroke capture]
+    Submit --> AI[=== AI ASSESSMENT ===]
+    AI --> Capture[System: Capture Image]
+    Capture --> Send[Send to AI Model<br/>OpenAI Vision API]
     
-    InitCanvas --> WriteChar[Write Character on Canvas<br/>Draw strokes one by one]
-    WriteChar --> NeedRedo{Need to<br/>redo?}
-    NeedRedo -->|Yes| ClearCanvas[Clear canvas<br/>Start over]
-    ClearCanvas --> WriteChar
-    NeedRedo -->|No| SubmitChar[Submit Written Character]
+    Send --> Analyze[AI Analyzes:<br/>- Character recognition<br/>- Stroke order<br/>- Stroke quality<br/>- Overall structure]
     
-    SubmitChar --> AIStart[=== AI ASSESSMENT ===]
-    AIStart --> CaptureImage[System: Capture Canvas Image<br/>Convert to base64/binary]
-    CaptureImage --> SendAI[Send to AI Model<br/>OpenAI Vision API / Custom OCR]
+    Analyze --> CalcScore[Calculate Score 0-100<br/>and Grade]
+    CalcScore --> Feedback[Generate Feedback]
     
-    SendAI --> AnalyzeChar[AI Analyzes Character]
-    AnalyzeChar --> CheckRecog[Check Character Recognition<br/>Compare with correct hanzi]
-    AnalyzeChar --> CheckStroke[Analyze Stroke Order<br/>Check sequence correctness]
-    AnalyzeChar --> CheckQuality[Evaluate Stroke Quality<br/>Check proportions, angles]
-    AnalyzeChar --> CheckStructure[Assess Overall Structure<br/>Check balance, composition]
+    Feedback --> Save[Save Assessment Result]
+    Save --> Pass{Score >= 60?}
+    Pass -->|Yes| Update[Update UserLevelProgress<br/>Mark Radical Completed]
+    Pass -->|No| Suggest[Suggest retry]
     
-    CheckRecog --> CalcScore
-    CheckStroke --> CalcScore
-    CheckQuality --> CalcScore
-    CheckStructure --> CalcScore[Calculate Score 0-100]
+    Update --> ViewResult
+    Suggest --> ViewResult[View Results<br/>score, feedback, comparison]
     
-    CalcScore --> ScoreRange{Score<br/>range?}
-    ScoreRange -->|>= 90| Excellent[Grade = 'Excellent'<br/>Feedback = 'Perfect! Well done!']
-    ScoreRange -->|>= 75| Good[Grade = 'Good'<br/>Feedback = 'Great job! Minor improvements']
-    ScoreRange -->|>= 60| Fair[Grade = 'Fair'<br/>Feedback = 'Keep practicing, focus on stroke order']
-    ScoreRange -->|< 60| NeedImprove[Grade = 'Needs Improvement'<br/>Feedback = 'Practice more, review stroke order']
+    ViewResult --> Again{Try<br/>again?}
+    Again -->|Yes| Reset[System: Reset canvas]
+    Reset --> Write
+    Again -->|No| Return[Return to Dashboard]
     
-    Excellent --> GenFeedback
-    Good --> GenFeedback
-    Fair --> GenFeedback
-    NeedImprove --> GenFeedback[Generate Detailed Feedback<br/>- Correct strokes: X/Y<br/>- Stroke order accuracy: Z%<br/>- Proportion: Good/Fair/Poor<br/>- Structure: Balanced/Unbalanced]
-    
-    GenFeedback --> SaveResult[Save Assessment Result<br/>Store written_image, score, feedback<br/>Update UserLevelProgress]
-    
-    SaveResult --> PassCheck{Score >= 60?}
-    PassCheck -->|Pass| MarkComplete[Mark Radical as Completed<br/>Increment completed_radicals<br/>Calculate progress %]
-    PassCheck -->|Fail| KeepIncomplete[Keep as incomplete<br/>Suggest retry]
-    
-    MarkComplete --> ViewResult
-    KeepIncomplete --> ViewResult[View Assessment Results<br/>See score and grade<br/>Read detailed feedback<br/>View side-by-side comparison]
-    
-    ViewResult --> Satisfied{Satisfied<br/>with result?}
-    Satisfied -->|No| TryAgain[Click 'Try Again']
-    TryAgain --> ResetCanvas[System: Clear previous attempt<br/>Reset canvas]
-    ResetCanvas --> WriteChar
-    
-    Satisfied -->|Yes| AnotherRadical{Practice<br/>another radical?}
-    AnotherRadical -->|Yes| SelectNext[Select next radical]
-    SelectNext --> LoadNext[System: Load new radical]
-    LoadNext --> StudyRadical
-    
-    AnotherRadical -->|No| ViewOverall[View Overall Progress]
-    ViewOverall --> CalcCompletion[System: Calculate level completion<br/>Show mastery_level<br/>Display completed vs total radicals]
-    CalcCompletion --> ReturnDash[Return to Dashboard]
-    
-    ReturnDash --> End([End])
+    Return --> End([End])
     
     style Start fill:#90EE90
     style End fill:#FFB6C1
-    style AIStart fill:#FFD700
-    style SendAI fill:#87CEEB
+    style AI fill:#FFD700
+    style Send fill:#87CEEB
     style CalcScore fill:#DDA0DD
-    style SaveResult fill:#F0E68C
+    style Save fill:#F0E68C
 ```
 
 ---
 
-## Giải thích các luồng
+## Tóm tắt các luồng chính
 
 ### 1. Vocabulary Learning (Học từ vựng)
-- **Input**: User chọn Topic
-- **Process**: 
-  - Xem danh sách từ vựng
-  - Học từng từ với translations, examples, audio
-  - Lưu từ yêu thích (optional)
-  - Đánh dấu hoàn thành
-  - Hệ thống tự động cập nhật progress và mastery level
-  - Review từ đã lưu
-- **Output**: 
-  - UserTopicProgress được cập nhật
-  - Streak được ghi nhận
-  - Progress summary
+**Luồng chính**: Browse Topics → Select Topic → Study Vocabularies → Mark Completed → Update Progress & Streak
+
+**Điểm chính**:
+- Học từ vựng theo chủ đề (Topic-based)
+- Lưu từ yêu thích (optional)
+- Tự động tính progress % và mastery level
+- Cập nhật streak hàng ngày
 
 ### 2. Taking Exam (Làm bài thi)
-- **Input**: User chọn Exam
-- **Process**:
-  - Kiểm tra exam còn active
-  - Tạo UserExamAttempt mới
-  - Làm từng phần: Listening → Reading
-  - Ghi nhận câu trả lời theo thời gian thực
-  - Review và sửa đổi câu trả lời (optional)
-  - Submit exam
-  - Hệ thống chấm điểm tự động
-  - So sánh user_answer với correct_answers
-  - Tính tổng điểm và phần trăm
-- **Output**:
-  - UserExamAttempt với status = 'completed'
-  - Tất cả UserAnswers với is_correct và score_earned
-  - Kết quả chi tiết với explanations
+**Luồng chính**: Browse Exams → Select Exam → Start Exam → Answer Questions → Submit → Auto Scoring → View Results
+
+**Điểm chính**:
+- Tạo UserExamAttempt khi bắt đầu
+- Ghi nhận từng câu trả lời
+- Chấm điểm tự động so với correct_answers
+- Hiển thị kết quả với explanations (optional)
 
 ### 3. Radical Character Writing Assessment (Chấm điểm viết Radical)
-- **Input**: User chọn Radical và viết trên canvas
-- **Process**:
-  - Hiển thị radical details và stroke order animation
-  - User vẽ character trên canvas
-  - Capture canvas image
-  - Gửi đến AI model (OpenAI Vision/Custom OCR)
-  - AI phân tích 4 tiêu chí:
-    - Character Recognition (nhận dạng chữ)
-    - Stroke Order (thứ tự nét)
-    - Stroke Quality (chất lượng nét)
-    - Overall Structure (cấu trúc tổng thể)
-  - Tính điểm 0-100 và grade
-  - Tạo detailed feedback
-  - Cập nhật UserLevelProgress nếu pass (>= 60)
-- **Output**:
-  - Assessment result với score, grade, feedback
-  - UserLevelProgress được cập nhật
-  - User có thể retry hoặc practice radical khác
+**Luồng chính**: Browse Radicals → Select Radical → Study Stroke Order → Write on Canvas → Submit → AI Assessment → View Results
+
+**Điểm chính**:
+- Học cấu trúc và thứ tự nét của radical
+- Vẽ character trên canvas
+- AI phân tích 4 tiêu chí: Recognition, Stroke Order, Quality, Structure
+- Chấm điểm 0-100 với detailed feedback
+- Cập nhật progress nếu pass (≥60%)
 
 ## Notes
-- Tất cả 3 luồng đều có error handling và validation
-- Progress được tự động tính toán dựa trên completed/total
+- Các sơ đồ đã được rút gọn, tập trung vào luồng chính
+- Progress tracking tự động cho cả 3 chức năng
 - Mastery levels: beginner (0-39%), intermediate (40-69%), advanced (70-89%), mastered (90-100%)
-- AI assessment sử dụng multiple criteria để đánh giá chính xác

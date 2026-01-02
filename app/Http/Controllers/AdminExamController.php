@@ -20,23 +20,33 @@ class AdminExamController extends Controller
         $query = Exam::query();
 
         // Filter by level
-        if ($request->has('level')) {
+        if ($request->has('level') && $request->level != '') {
             $query->where('level', $request->level);
         }
 
         // Filter by status
-        if ($request->has('is_active')) {
+        if ($request->has('is_active') && $request->is_active !== '') {
             $query->where('is_active', $request->is_active);
         }
 
+        // Search by title
+        if ($request->has('search') && $request->search != '') {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        $perPage = $request->get('per_page', 20);
         $exams = $query->withCount(['parts', 'attempts'])
             ->orderBy('created_at', 'desc')
-            ->paginate(20);
+            ->paginate($perPage)
+            ->appends($request->except('page'));
 
-        return response()->json([
-            'success' => true,
-            'data' => $exams,
-        ]);
+        // Get statistics
+        $activeCount = Exam::where('is_active', true)->count();
+        $totalAttempts = UserExamAttempt::count();
+        $completedAttempts = UserExamAttempt::where('status', 'completed')->count();
+        $avgCompletion = $totalAttempts > 0 ? ($completedAttempts / $totalAttempts) * 100 : 0;
+
+        return view('admin.exams.index', compact('exams', 'activeCount', 'totalAttempts', 'avgCompletion'));
     }
 
     /**

@@ -24,14 +24,14 @@ class RadicalController extends Controller
         }
 
         // Filter by HSK level number
-        if ($request->has('level_number')) {
+        if ($request->has('level_number') && $request->level_number != '') {
             $query->whereHas('level', function ($q) use ($request) {
                 $q->where('level_number', $request->level_number);
             });
         }
 
         // Search by hanzi, pinyin, or meaning
-        if ($request->has('search')) {
+        if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('hanzi', 'like', "%{$search}%")
@@ -44,12 +44,12 @@ class RadicalController extends Controller
         }
 
         // Filter by stroke count
-        if ($request->has('stroke_count')) {
+        if ($request->has('stroke_count') && $request->stroke_count != '') {
             $query->where('stroke_count', $request->stroke_count);
         }
 
         // Filter by favorites
-        if ($request->has('is_favorite')) {
+        if ($request->has('is_favorite') && $request->is_favorite != '') {
             $query->where('is_favorite', $request->is_favorite);
         }
 
@@ -65,49 +65,20 @@ class RadicalController extends Controller
             $query->orderBy($sortBy, $sortOrder);
         }
 
-        $radicals = $query->paginate($request->get('per_page', 50));
+        $perPage = $request->get('per_page', 50);
+        $radicals = $query->paginate($perPage)->appends($request->except('page'));
 
-        return response()->json([
-            'success' => true,
-            'data' => $radicals->map(function ($radical) {
-                return [
-                    'id' => $radical->id,
-                    'hanzi' => $radical->hanzi,
-                    'traditional' => $radical->traditional,
-                    'pinyin' => $radical->pinyin,
-                    'radical' => $radical->radical,
-                    'stroke_count' => $radical->stroke_count,
-                    'frequency_rank' => $radical->frequency_rank,
-                    'general_standard' => $radical->general_standard,
-                    'level_id' => $radical->level_id,
-                    'level' => $radical->level ? [
-                        'id' => $radical->level->id,
-                        'level_name' => $radical->level->level_name,
-                        'level_number' => $radical->level->level_number,
-                    ] : null,
-                    'meaning' => $radical->meaning,
-                    'meaning_vi' => $radical->meaning_vi,
-                    'meaning_cn' => $radical->meaning_cn,
-                    'meaning_en' => $radical->meaning_en,
-                    'meaning_jp' => $radical->meaning_jp,
-                    'meaning_kr' => $radical->meaning_kr,
-                    'meaning_th' => $radical->meaning_th,
-                    'meaning_de' => $radical->meaning_de,
-                    'meaning_fr' => $radical->meaning_fr,
-                    'meaning_es' => $radical->meaning_es,
-                    'meaning_it' => $radical->meaning_it,
-                    'meaning_br' => $radical->meaning_br,
-                    'meaning_tr' => $radical->meaning_tr,
-                    'is_favorite' => $radical->is_favorite,
-                ];
-            }),
-            'meta' => [
-                'current_page' => $radicals->currentPage(),
-                'last_page' => $radicals->lastPage(),
-                'per_page' => $radicals->perPage(),
-                'total' => $radicals->total(),
-            ],
-        ]);
+        // Get levels for filter dropdown with radical counts
+        $levels = Level::where('test_type', 'hsk')
+            ->withCount('radicals')
+            ->orderBy('level_number')
+            ->get();
+
+        // Get statistics
+        $avgStrokeCount = Radical::avg('stroke_count') ?? 0;
+        $favoriteCount = Radical::where('is_favorite', true)->count();
+
+        return view('admin.radicals.index', compact('radicals', 'levels', 'avgStrokeCount', 'favoriteCount'));
     }
 
     /**

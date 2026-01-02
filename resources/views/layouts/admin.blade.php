@@ -174,6 +174,18 @@
                                 <i class="bi bi-book"></i> Vocabularies
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.radicals.*') ? 'active' : '' }}" 
+                               href="{{ route('admin.radicals.index') }}">
+                                <i class="bi bi-grid-3x3"></i> Radicals
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.exams.*') ? 'active' : '' }}" 
+                               href="{{ route('admin.exams.index') }}">
+                                <i class="bi bi-clipboard-check"></i> Exams
+                            </a>
+                        </li>
                         
                         <li class="nav-item mt-4 pt-3 border-top border-light">
                             <small class="text-white-50 px-3">HSK LEVELS</small>

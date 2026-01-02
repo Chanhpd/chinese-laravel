@@ -22,9 +22,7 @@ class User {
   + levelProgress()
   + savedVocabularies()
   + chatHistories()
-  + streak()
   + examAttempts()
-  + adminLogs()
   + isAdmin(): bool
   + isSuperAdmin(): bool
   + isStaff(): bool
@@ -54,7 +52,6 @@ class Word {
   + meaning_ko: string
   + meaning_ja: string
   + meaning_id: string
-  + level_id: int
   --
   + level()
   + toJsonFormat()
@@ -69,7 +66,6 @@ class Radical {
   + stroke_count: int
   + frequency_rank: int
   + general_standard: string
-  + level_id: int
   + meaning: string
   + meaning_vi: string
   + meaning_cn: string
@@ -93,28 +89,11 @@ class Topic {
   + updated_at: datetime
   --
   + vocabularies()
-  + translations()
   + userProgress()
-  + getTranslation()
-  + getLocalizedName()
-  + getLocalizedDescription()
-}
-
-class TopicTranslation {
-  + id: int
-  + topic_id: int
-  + language_code: string
-  + name: string
-  + description: text
-  + created_at: datetime
-  + updated_at: datetime
-  --
-  + topic()
 }
 
 class Vocabulary {
   + id: int
-  + topic_id: int
   + word: string
   + phonetic: string
   + pinyin: string
@@ -141,28 +120,12 @@ class Vocabulary {
   + updated_at: datetime
   --
   + topic()
-  + translations()
   + savedBy()
-  + getTranslation()
-}
-
-class VocabularyTranslation {
-  + id: int
-  + vocabulary_id: int
-  + language_code: string
-  + meaning: text
-  + example_translation: text
-  + created_at: datetime
-  + updated_at: datetime
-  --
-  + vocabulary()
 }
 
 ' User Progress Tracking
 class UserLevelProgress {
   + id: int
-  + user_id: int
-  + level_id: int
   + completed_words: int
   + total_words: int
   + completed_radicals: int
@@ -182,8 +145,6 @@ class UserLevelProgress {
 
 class UserTopicProgress {
   + id: int
-  + user_id: int
-  + topic_id: int
   + completed_words: int
   + total_words: int
   + mastery_level: enum
@@ -200,8 +161,6 @@ class UserTopicProgress {
 
 class SavedVocabulary {
   + id: int
-  + user_id: int
-  + vocabulary_id: int
   + notes: text
   + review_count: int
   + last_reviewed_at: datetime
@@ -213,26 +172,9 @@ class SavedVocabulary {
   + markAsReviewed()
 }
 
-class UserStreak {
-  + id: int
-  + user_id: int
-  + streak_count: int
-  + last_check_in_date: date
-  + weekly_check_ins: json
-  + total_check_in_days: int
-  + longest_streak: int
-  + created_at: datetime
-  + updated_at: datetime
-  --
-  + user()
-  + performCheckIn()
-  + updateWeeklyCheckIns()
-}
-
 ' Chat & AI Features
 class ChatHistory {
   + id: int
-  + user_id: int
   + message: text
   + response: text
   + language: string
@@ -260,7 +202,6 @@ class Exam {
 
 class ExamPart {
   + id: int
-  + exam_id: int
   + name: string
   + part_order: int
   + time: int
@@ -273,7 +214,6 @@ class ExamPart {
 
 class QuestionType {
   + id: int
-  + exam_part_id: int
   + kind: string
   + type_order: int
   + instruction: text
@@ -286,7 +226,6 @@ class QuestionType {
 
 class Question {
   + id: int
-  + question_type_id: int
   + kind: string
   + question_order: int
   + score: int
@@ -298,25 +237,11 @@ class Question {
   + updated_at: datetime
   --
   + questionType()
-  + translations()
   + contents()
-}
-
-class QuestionTranslation {
-  + id: int
-  + question_id: int
-  + language_code: string
-  + general_text_translate: text
-  + general_text_audio_translate: text
-  + created_at: datetime
-  + updated_at: datetime
-  --
-  + question()
 }
 
 class QuestionContent {
   + id: int
-  + question_id: int
   + content_order: int
   + question_text: text
   + question_audio: string
@@ -330,25 +255,11 @@ class QuestionContent {
   + updated_at: datetime
   --
   + question()
-  + explanations()
   + userAnswers()
-}
-
-class QuestionExplanation {
-  + id: int
-  + question_content_id: int
-  + language_code: string
-  + explanation: text
-  + created_at: datetime
-  + updated_at: datetime
-  --
-  + questionContent()
 }
 
 class UserExamAttempt {
   + id: int
-  + user_id: int
-  + exam_id: int
   + started_at: datetime
   + completed_at: datetime
   + time_spent: int
@@ -368,8 +279,6 @@ class UserExamAttempt {
 
 class UserAnswer {
   + id: int
-  + attempt_id: int
-  + question_content_id: int
   + user_answer: json
   + is_correct: boolean
   + score_earned: int
@@ -382,43 +291,20 @@ class UserAnswer {
   + checkCorrect()
 }
 
-' Admin & Logging
-class AdminLog {
-  + id: int
-  + admin_id: int
-  + action: string
-  + target_type: string
-  + target_id: int
-  + description: text
-  + old_values: json
-  + new_values: json
-  + ip_address: string
-  + user_agent: text
-  + created_at: datetime
-  + updated_at: datetime
-  --
-  + admin()
-  + log()
-}
-
 ' Relationships
 User "1" -- "0..*" UserTopicProgress : has
 User "1" -- "0..*" UserLevelProgress : has
 User "1" -- "0..*" SavedVocabulary : saves
-User "1" -- "0..1" UserStreak : tracks
 User "1" -- "0..*" ChatHistory : chats
 User "1" -- "0..*" UserExamAttempt : takes
-User "1" -- "0..*" AdminLog : performs
 
 Level "1" -- "0..*" Word : contains
 Level "1" -- "0..*" Radical : contains
 Level "1" -- "0..*" UserLevelProgress : tracks
 
-Topic "1" -- "0..*" TopicTranslation : has
 Topic "1" -- "0..*" Vocabulary : contains
 Topic "1" -- "0..*" UserTopicProgress : tracks
 
-Vocabulary "1" -- "0..*" VocabularyTranslation : has
 Vocabulary "1" -- "0..*" SavedVocabulary : saved by
 
 Exam "1" -- "0..*" ExamPart : contains
@@ -428,10 +314,8 @@ ExamPart "1" -- "0..*" QuestionType : has
 
 QuestionType "1" -- "0..*" Question : contains
 
-Question "1" -- "0..*" QuestionTranslation : has
 Question "1" -- "0..*" QuestionContent : has
 
-QuestionContent "1" -- "0..*" QuestionExplanation : has
 QuestionContent "1" -- "0..*" UserAnswer : answered by
 
 UserExamAttempt "1" -- "0..*" UserAnswer : contains
@@ -463,9 +347,7 @@ classDiagram
         +levelProgress()
         +savedVocabularies()
         +chatHistories()
-        +streak()
         +examAttempts()
-        +adminLogs()
         +bool isAdmin()
         +bool isSuperAdmin()
         +bool isStaff()
@@ -494,7 +376,6 @@ classDiagram
         +string meaning_ko
         +string meaning_ja
         +string meaning_id
-        +int level_id
         +level()
         +toJsonFormat()
     }
@@ -508,7 +389,6 @@ classDiagram
         +int stroke_count
         +int frequency_rank
         +string general_standard
-        +int level_id
         +string meaning
         +string meaning_vi
         +string meaning_cn
@@ -531,27 +411,11 @@ classDiagram
         +datetime created_at
         +datetime updated_at
         +vocabularies()
-        +translations()
         +userProgress()
-        +getTranslation()
-        +getLocalizedName()
-        +getLocalizedDescription()
-    }
-
-    class TopicTranslation {
-        +int id
-        +int topic_id
-        +string language_code
-        +string name
-        +text description
-        +datetime created_at
-        +datetime updated_at
-        +topic()
     }
 
     class Vocabulary {
         +int id
-        +int topic_id
         +string word
         +string phonetic
         +string pinyin
@@ -577,27 +441,12 @@ classDiagram
         +datetime created_at
         +datetime updated_at
         +topic()
-        +translations()
         +savedBy()
-        +getTranslation()
-    }
-
-    class VocabularyTranslation {
-        +int id
-        +int vocabulary_id
-        +string language_code
-        +text meaning
-        +text example_translation
-        +datetime created_at
-        +datetime updated_at
-        +vocabulary()
     }
 
     %% User Progress Tracking
     class UserLevelProgress {
         +int id
-        +int user_id
-        +int level_id
         +int completed_words
         +int total_words
         +int completed_radicals
@@ -616,8 +465,6 @@ classDiagram
 
     class UserTopicProgress {
         +int id
-        +int user_id
-        +int topic_id
         +int completed_words
         +int total_words
         +enum mastery_level
@@ -633,8 +480,6 @@ classDiagram
 
     class SavedVocabulary {
         +int id
-        +int user_id
-        +int vocabulary_id
         +text notes
         +int review_count
         +datetime last_reviewed_at
@@ -645,25 +490,9 @@ classDiagram
         +markAsReviewed()
     }
 
-    class UserStreak {
-        +int id
-        +int user_id
-        +int streak_count
-        +date last_check_in_date
-        +json weekly_check_ins
-        +int total_check_in_days
-        +int longest_streak
-        +datetime created_at
-        +datetime updated_at
-        +user()
-        +performCheckIn()
-        +updateWeeklyCheckIns()
-    }
-
     %% Chat & AI Features
     class ChatHistory {
         +int id
-        +int user_id
         +text message
         +text response
         +string language
@@ -689,7 +518,6 @@ classDiagram
 
     class ExamPart {
         +int id
-        +int exam_id
         +string name
         +int part_order
         +int time
@@ -701,7 +529,6 @@ classDiagram
 
     class QuestionType {
         +int id
-        +int exam_part_id
         +string kind
         +int type_order
         +text instruction
@@ -713,7 +540,6 @@ classDiagram
 
     class Question {
         +int id
-        +int question_type_id
         +string kind
         +int question_order
         +int score
@@ -724,24 +550,11 @@ classDiagram
         +datetime created_at
         +datetime updated_at
         +questionType()
-        +translations()
         +contents()
-    }
-
-    class QuestionTranslation {
-        +int id
-        +int question_id
-        +string language_code
-        +text general_text_translate
-        +text general_text_audio_translate
-        +datetime created_at
-        +datetime updated_at
-        +question()
     }
 
     class QuestionContent {
         +int id
-        +int question_id
         +int content_order
         +text question_text
         +string question_audio
@@ -754,24 +567,11 @@ classDiagram
         +datetime created_at
         +datetime updated_at
         +question()
-        +explanations()
         +userAnswers()
-    }
-
-    class QuestionExplanation {
-        +int id
-        +int question_content_id
-        +string language_code
-        +text explanation
-        +datetime created_at
-        +datetime updated_at
-        +questionContent()
     }
 
     class UserExamAttempt {
         +int id
-        +int user_id
-        +int exam_id
         +datetime started_at
         +datetime completed_at
         +int time_spent
@@ -790,8 +590,6 @@ classDiagram
 
     class UserAnswer {
         +int id
-        +int attempt_id
-        +int question_content_id
         +json user_answer
         +boolean is_correct
         +int score_earned
@@ -803,42 +601,20 @@ classDiagram
         +checkCorrect()
     }
 
-    %% Admin & Logging
-    class AdminLog {
-        +int id
-        +int admin_id
-        +string action
-        +string target_type
-        +int target_id
-        +text description
-        +json old_values
-        +json new_values
-        +string ip_address
-        +text user_agent
-        +datetime created_at
-        +datetime updated_at
-        +admin()
-        +log()
-    }
-
     %% Relationships
     User "1" -- "0..*" UserTopicProgress : has
     User "1" -- "0..*" UserLevelProgress : has
     User "1" -- "0..*" SavedVocabulary : saves
-    User "1" -- "0..1" UserStreak : tracks
     User "1" -- "0..*" ChatHistory : chats
     User "1" -- "0..*" UserExamAttempt : takes
-    User "1" -- "0..*" AdminLog : performs
 
     Level "1" -- "0..*" Word : contains
     Level "1" -- "0..*" Radical : contains
     Level "1" -- "0..*" UserLevelProgress : tracks
 
-    Topic "1" -- "0..*" TopicTranslation : has
     Topic "1" -- "0..*" Vocabulary : contains
     Topic "1" -- "0..*" UserTopicProgress : tracks
 
-    Vocabulary "1" -- "0..*" VocabularyTranslation : has
     Vocabulary "1" -- "0..*" SavedVocabulary : saved by
 
     Exam "1" -- "0..*" ExamPart : contains
@@ -848,10 +624,8 @@ classDiagram
 
     QuestionType "1" -- "0..*" Question : contains
 
-    Question "1" -- "0..*" QuestionTranslation : has
     Question "1" -- "0..*" QuestionContent : has
 
-    QuestionContent "1" -- "0..*" QuestionExplanation : has
     QuestionContent "1" -- "0..*" UserAnswer : answered by
 
     UserExamAttempt "1" -- "0..*" UserAnswer : contains
@@ -865,7 +639,6 @@ classDiagram
 
 ### 1. **User Management (Quản lý người dùng)**
 - `User`: Người dùng với các vai trò (admin, super_admin, staff, user)
-- `AdminLog`: Ghi log các hành động của admin
 
 ### 2. **Level System (Hệ thống cấp độ)**
 - `Level`: Cấp độ HSK (HSK 1-6)
@@ -874,15 +647,12 @@ classDiagram
 
 ### 3. **Topic & Vocabulary (Chủ đề & Từ vựng)**
 - `Topic`: Chủ đề học tập
-- `TopicTranslation`: Bản dịch chủ đề đa ngôn ngữ
 - `Vocabulary`: Từ vựng chi tiết trong chủ đề
-- `VocabularyTranslation`: Bản dịch từ vựng đa ngôn ngữ
 
 ### 4. **User Progress (Tiến độ học tập)**
 - `UserTopicProgress`: Theo dõi tiến độ học theo chủ đề (Topic-based learning)
 - `UserLevelProgress`: Theo dõi tiến độ học theo cấp độ HSK (Level-based learning)
 - `SavedVocabulary`: Từ vựng đã lưu của người dùng
-- `UserStreak`: Streak học tập hàng ngày
 
 ### 5. **AI Chat (Chat AI)**
 - `ChatHistory`: Lịch sử chat với AI
@@ -892,9 +662,7 @@ classDiagram
 - `ExamPart`: Phần thi (Listening, Reading, Writing)
 - `QuestionType`: Loại câu hỏi (110001, 110002, etc.)
 - `Question`: Câu hỏi với general section
-- `QuestionTranslation`: Bản dịch general section đa ngôn ngữ
 - `QuestionContent`: Nội dung câu hỏi chi tiết với đáp án
-- `QuestionExplanation`: Giải thích đáp án đa ngôn ngữ
 - `UserExamAttempt`: Lượt thi của user
 - `UserAnswer`: Câu trả lời của user
 
@@ -905,9 +673,7 @@ classDiagram
    - UserLevelProgress (tiến độ học theo cấp độ HSK)
    - SavedVocabulary (từ vựng đã lưu)
    - ChatHistory (lịch sử chat)
-   - UserStreak (streak học tập)
    - UserExamAttempt (lượt thi)
-   - AdminLog (log hành động)
 
 2. **Level** chứa:
    - Words (từ vựng)
@@ -916,15 +682,11 @@ classDiagram
 
 3. **Topic** có:
    - Vocabularies (từ vựng)
-   - TopicTranslations (bản dịch)
    - UserTopicProgress (tiến độ của users)
 
 4. **Vocabulary** có:
-   - VocabularyTranslations (bản dịch)
    - SavedVocabulary (được lưu bởi users)
 
 5. **Exam** (Hệ thống phân cấp):
    - Exam → ExamParts → QuestionTypes → Questions → QuestionContents
-   - Question có: QuestionTranslations (đa ngôn ngữ)
-   - QuestionContent có: QuestionExplanations (đa ngôn ngữ)
    - UserExamAttempt chứa: UserAnswers (câu trả lời của user)
