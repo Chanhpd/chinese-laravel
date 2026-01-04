@@ -68,11 +68,55 @@
                                id="image_url" 
                                name="image_url" 
                                value="{{ old('image_url', $topic->image_url) }}"
-                               placeholder="https://example.com/images/topic.jpg">
+                               placeholder="https://example.com/images/topic.jpg"
+                               onchange="updateImagePreview(this.value)">
                         @error('image_url')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        
+                        @if($topic->image_url)
+                        <div class="mt-3" id="imagePreviewContainer">
+                            <label class="form-label">Image Preview:</label>
+                            <div>
+                                <img id="imagePreview" 
+                                     src="{{ $topic->image_url }}" 
+                                     alt="{{ $topic->name }}" 
+                                     class="img-thumbnail"
+                                     style="max-width: 300px; max-height: 200px; object-fit: cover;"
+                                     onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27300%27 height=%27200%27%3E%3Crect width=%27300%27 height=%27200%27 fill=%27%23ddd%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 dominant-baseline=%27middle%27 text-anchor=%27middle%27 font-family=%27sans-serif%27 font-size=%2716%27 fill=%27%23999%27%3EImage not available%3C/text%3E%3C/svg%3E';">
+                            </div>
+                        </div>
+                        @endif
                     </div>
+                    
+                    <script>
+                    function updateImagePreview(url) {
+                        if (!url) {
+                            document.getElementById('imagePreviewContainer')?.remove();
+                            return;
+                        }
+                        
+                        let container = document.getElementById('imagePreviewContainer');
+                        if (!container) {
+                            container = document.createElement('div');
+                            container.id = 'imagePreviewContainer';
+                            container.className = 'mt-3';
+                            container.innerHTML = `
+                                <label class="form-label">Image Preview:</label>
+                                <div>
+                                    <img id="imagePreview" 
+                                         class="img-thumbnail"
+                                         style="max-width: 300px; max-height: 200px; object-fit: cover;"
+                                         onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27300%27 height=%27200%27%3E%3Crect width=%27300%27 height=%27200%27 fill=%27%23ddd%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 dominant-baseline=%27middle%27 text-anchor=%27middle%27 font-family=%27sans-serif%27 font-size=%2716%27 fill=%27%23999%27%3EImage not available%3C/text%3E%3C/svg%3E';">
+                                </div>
+                            `;
+                            document.getElementById('image_url').parentElement.appendChild(container);
+                        }
+                        
+                        const img = document.getElementById('imagePreview');
+                        img.src = url;
+                    }
+                    </script>
                     
                     <div class="row">
                         <div class="col-md-6 mb-3">

@@ -153,9 +153,18 @@
                     <dt class="col-sm-3">Image URL:</dt>
                     <dd class="col-sm-9">
                         @if($vocabulary->image_url)
-                            <a href="{{ $vocabulary->image_url }}" target="_blank">
-                                <i class="bi bi-image"></i> View Image
-                            </a>
+                            <div class="mb-2">
+                                <a href="{{ $vocabulary->image_url }}" target="_blank">
+                                    <i class="bi bi-image"></i> {{ Str::limit($vocabulary->image_url, 50) }}
+                                </a>
+                            </div>
+                            <div class="mt-2">
+                                <img src="{{ $vocabulary->image_url }}" 
+                                     alt="{{ $vocabulary->word }}" 
+                                     class="img-thumbnail"
+                                     style="max-width: 250px; max-height: 200px; object-fit: cover;"
+                                     onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27250%27 height=%27200%27%3E%3Crect width=%27250%27 height=%27200%27 fill=%27%23ddd%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 dominant-baseline=%27middle%27 text-anchor=%27middle%27 font-family=%27sans-serif%27 font-size=%2716%27 fill=%27%23999%27%3ENo image%3C/text%3E%3C/svg%3E';">
+                            </div>
                         @else
                             -
                         @endif

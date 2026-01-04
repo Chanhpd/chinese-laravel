@@ -5,7 +5,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TopicController;
 use App\Http\Controllers\Admin\VocabularyController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\StoryController;
+use App\Http\Controllers\Admin\RadicalController;
+use App\Http\Controllers\AdminExamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,14 +46,31 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('vocabularies', VocabularyController::class);
     Route::post('vocabularies/{vocabulary}/translations', [VocabularyController::class, 'updateTranslations'])
         ->name('vocabularies.translations.update');
-    
-    // Stories
-    Route::prefix('stories')->name('stories.')->group(function () {
-        Route::get('/', [StoryController::class, 'index'])->name('index');
-        Route::post('/', [StoryController::class, 'store'])->name('store');
-        Route::get('/statistics', [StoryController::class, 'statistics'])->name('statistics');
-        Route::get('/{id}', [StoryController::class, 'show'])->name('show');
-        Route::put('/{id}', [StoryController::class, 'update'])->name('update');
-        Route::delete('/{id}', [StoryController::class, 'destroy'])->name('destroy');
+
+    // Radicals
+    Route::prefix('radicals')->name('radicals.')->group(function () {
+        Route::get('/', [RadicalController::class, 'index'])->name('index');
+        Route::post('/', [RadicalController::class, 'store'])->name('store');
+        Route::get('/statistics', [RadicalController::class, 'statistics'])->name('statistics');
+        Route::get('/levels', [RadicalController::class, 'getLevels'])->name('levels');
+        Route::post('/bulk-import', [RadicalController::class, 'bulkImport'])->name('bulk-import');
+        Route::put('/bulk-update', [RadicalController::class, 'bulkUpdate'])->name('bulk-update');
+        Route::delete('/bulk-delete', [RadicalController::class, 'bulkDelete'])->name('bulk-delete');
+        Route::get('/{id}', [RadicalController::class, 'show'])->name('show');
+        Route::put('/{id}', [RadicalController::class, 'update'])->name('update');
+        Route::delete('/{id}', [RadicalController::class, 'destroy'])->name('destroy');
+    });
+
+    // Exams
+    Route::prefix('exams')->name('exams.')->group(function () {
+        Route::get('/', [AdminExamController::class, 'index'])->name('index');
+        Route::post('/', [AdminExamController::class, 'store'])->name('store');
+        Route::get('/{id}', [AdminExamController::class, 'show'])->name('show');
+        Route::put('/{id}', [AdminExamController::class, 'update'])->name('update');
+        Route::delete('/{id}', [AdminExamController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}/statistics', [AdminExamController::class, 'statistics'])->name('statistics');
+        Route::get('/{id}/attempts', [AdminExamController::class, 'attempts'])->name('attempts');
+        Route::post('/{id}/toggle-active', [AdminExamController::class, 'toggleActive'])->name('toggle-active');
+        Route::post('/{id}/duplicate', [AdminExamController::class, 'duplicate'])->name('duplicate');
     });
 });

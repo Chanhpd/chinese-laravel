@@ -7,7 +7,9 @@ use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Api\VocabularyController;
 use App\Http\Controllers\Api\UserProgressController;
 use App\Http\Controllers\Api\SavedVocabularyController;
-use App\Http\Controllers\StoryController;
+use App\Http\Controllers\Api\WordController;
+use App\Http\Controllers\Api\RadicalController;
+use App\Http\Controllers\Api\StreakController;
 use App\Http\Controllers\ChatController;
 
 /*
@@ -35,6 +37,8 @@ Route::get('/ping', function () {
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 });
 
 // Public routes - Vocabulary và Topics (không cần authentication)
@@ -51,11 +55,22 @@ Route::prefix('vocabularies')->group(function () {
     Route::get('/{id}/translation/{languageCode}', [VocabularyController::class, 'translation']);
 });
 
-// Story routes - Public
-Route::prefix('stories')->group(function () {
-    Route::get('/', [StoryController::class, 'index']);
-    Route::get('/hsk-levels', [StoryController::class, 'hskLevels']);
-    Route::get('/{slug}', [StoryController::class, 'show']);
+// Word routes - Public (New word system from level table)
+Route::prefix('words')->group(function () {
+    Route::get('/levels', [WordController::class, 'getLevels']); // Get all levels with word count
+    Route::get('/search', [WordController::class, 'searchWords']); // Search words
+    Route::get('/{testType}/{levelNumber}', [WordController::class, 'getWordsByLevel']); // Get words by level (e.g., hsk/1, tocfl/2)
+    Route::get('/{testType}', [WordController::class, 'getWordsByTestType']); // Get all words by test type
+});
+
+// Radical routes - Public (HSK radicals/characters system)
+Route::prefix('radicals')->group(function () {
+    Route::get('/levels', [RadicalController::class, 'getLevels']); // Get all HSK levels with radical count
+    Route::get('/statistics', [RadicalController::class, 'getStatistics']); // Get radical statistics
+    Route::get('/search', [RadicalController::class, 'searchRadicals']); // Search radicals
+    Route::get('/hsk/{levelNumber}', [RadicalController::class, 'getRadicalsByLevel']); // Get radicals by HSK level
+    Route::get('/hsk', [RadicalController::class, 'getAllHSKRadicals']); // Get all HSK radicals grouped by level
+    Route::post('/{id}/favorite', [RadicalController::class, 'toggleFavorite']); // Toggle favorite status
 });
 
 // Chat bot AI - Public (nhưng tự động lưu lịch sử nếu có token)
@@ -70,6 +85,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
+        Route::post('/change-password', [AuthController::class, 'changePassword']);
     });
 
     // Chat History routes (Yêu cầu authentication)
@@ -98,4 +114,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/{id}/review', [SavedVocabularyController::class, 'markReviewed']); // Mark as reviewed
         Route::delete('/{id}', [SavedVocabularyController::class, 'destroy']); // Remove saved vocabulary
     });
+
+    // Streak routes - Daily check-in and streak tracking
+    Route::prefix('user/streak')->group(function () {
+        Route::get('/', [StreakController::class, 'getStreakData']); // Get current streak data
+        Route::post('/check-in', [StreakController::class, 'checkIn']); // Perform daily check-in
+        Route::put('/sync', [StreakController::class, 'syncData']); // Sync offline data
+        Route::get('/statistics', [StreakController::class, 'getStatistics']); // Get detailed statistics
+        Route::delete('/reset', [StreakController::class, 'resetStreak']); // Reset streak (for testing)
+    });
+
+    // Include progress tracking routes
+    require __DIR__.'/progress-api.php';
 });

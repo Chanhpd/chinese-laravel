@@ -57,6 +57,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the user's level progress records.
+     */
+    public function levelProgress()
+    {
+        return $this->hasMany(UserLevelProgress::class);
+    }
+
+    /**
      * Get the user's saved vocabularies.
      */
     public function savedVocabularies()
@@ -65,11 +73,27 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the user's streak data.
+     */
+    public function streak()
+    {
+        return $this->hasOne(UserStreak::class);
+    }
+
+    /**
      * Get progress for a specific topic.
      */
     public function getProgressForTopic($topicId)
     {
         return $this->topicProgress()->where('topic_id', $topicId)->first();
+    }
+
+    /**
+     * Get progress for a specific level.
+     */
+    public function getProgressForLevel($levelId)
+    {
+        return $this->levelProgress()->where('level_id', $levelId)->first();
     }
 
     /**
@@ -94,6 +118,22 @@ class User extends Authenticatable
     public function isSuperAdmin()
     {
         return $this->role === 'super_admin';
+    }
+
+    /**
+     * Check if user is staff.
+     */
+    public function isStaff()
+    {
+        return $this->role === 'staff';
+    }
+
+    /**
+     * Check if user is admin, super admin, or staff.
+     */
+    public function isAdminOrStaff()
+    {
+        return in_array($this->role, ['admin', 'super_admin', 'staff']);
     }
 
     /**
