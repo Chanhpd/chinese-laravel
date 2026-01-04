@@ -288,8 +288,46 @@
                                    id="image_url" 
                                    name="image_url" 
                                    value="{{ old('image_url', $vocabulary->image_url ?? '') }}"
-                                   placeholder="https://example.com/image.jpg">
+                                   placeholder="https://example.com/image.jpg"
+                                   onchange="updateVocabImagePreview(this.value)">
+                            
+                            @if(isset($vocabulary->image_url) && $vocabulary->image_url)
+                            <div class="mt-2" id="vocabImagePreviewContainer">
+                                <img id="vocabImagePreview" 
+                                     src="{{ $vocabulary->image_url }}" 
+                                     alt="Preview" 
+                                     class="img-thumbnail"
+                                     style="max-width: 200px; max-height: 150px; object-fit: cover;"
+                                     onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27150%27%3E%3Crect width=%27200%27 height=%27150%27 fill=%27%23ddd%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 dominant-baseline=%27middle%27 text-anchor=%27middle%27 font-family=%27sans-serif%27 font-size=%2714%27 fill=%27%23999%27%3ENo image%3C/text%3E%3C/svg%3E';">
+                            </div>
+                            @endif
                         </div>
+                        
+                        <script>
+                        function updateVocabImagePreview(url) {
+                            if (!url) {
+                                document.getElementById('vocabImagePreviewContainer')?.remove();
+                                return;
+                            }
+                            
+                            let container = document.getElementById('vocabImagePreviewContainer');
+                            if (!container) {
+                                container = document.createElement('div');
+                                container.id = 'vocabImagePreviewContainer';
+                                container.className = 'mt-2';
+                                container.innerHTML = `
+                                    <img id="vocabImagePreview" 
+                                         class="img-thumbnail"
+                                         style="max-width: 200px; max-height: 150px; object-fit: cover;"
+                                         onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27200%27 height=%27150%27%3E%3Crect width=%27200%27 height=%27150%27 fill=%27%23ddd%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 dominant-baseline=%27middle%27 text-anchor=%27middle%27 font-family=%27sans-serif%27 font-size=%2714%27 fill=%27%23999%27%3ENo image%3C/text%3E%3C/svg%3E';">
+                                `;
+                                document.getElementById('image_url').parentElement.appendChild(container);
+                            }
+                            
+                            const img = document.getElementById('vocabImagePreview');
+                            img.src = url;
+                        }
+                        </script>
                     </div>
                 </div>
             </div>

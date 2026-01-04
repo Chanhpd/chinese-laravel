@@ -54,7 +54,16 @@
                     <dt class="col-sm-3">Image URL:</dt>
                     <dd class="col-sm-9">
                         @if($topic->image_url)
-                            <a href="{{ $topic->image_url }}" target="_blank">{{ Str::limit($topic->image_url, 50) }}</a>
+                            <div class="mb-2">
+                                <a href="{{ $topic->image_url }}" target="_blank">{{ Str::limit($topic->image_url, 50) }}</a>
+                            </div>
+                            <div class="mt-2">
+                                <img src="{{ $topic->image_url }}" 
+                                     alt="{{ $topic->name }}" 
+                                     class="img-thumbnail"
+                                     style="max-width: 300px; max-height: 200px; object-fit: cover;"
+                                     onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27300%27 height=%27200%27%3E%3Crect width=%27300%27 height=%27200%27 fill=%27%23ddd%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 dominant-baseline=%27middle%27 text-anchor=%27middle%27 font-family=%27sans-serif%27 font-size=%2716%27 fill=%27%23999%27%3EImage not available%3C/text%3E%3C/svg%3E';">
+                            </div>
                         @else
                             <span class="text-muted">No image</span>
                         @endif
