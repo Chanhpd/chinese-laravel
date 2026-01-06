@@ -242,29 +242,42 @@ function handleLoginForm() {
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+        const csrfToken = form.querySelector('input[name="_token"]').value;
         const submitBtn = form.querySelector('button[type="submit"]');
 
         ui.showButtonLoading(submitBtn);
 
         try {
-            const response = await api.login(email, password);
+            // Use web-based login endpoint
+            const response = await fetch('/client/login-submit', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
 
-            if (response.success) {
+            if (response.ok) {
                 ui.showAlert('Login successful! Redirecting...', 'success');
                 setTimeout(() => {
                     window.location.href = '/client/home';
-                }, 1000);
-            }
-        } catch (error) {
-            console.error('Login error:', error);
-
-            if (error.status === 422 && error.data.errors) {
-                ui.handleValidationErrors(error.data.errors);
-            } else if (error.status === 401) {
-                ui.showAlert(error.data.message || 'Invalid email or password', 'danger');
+                }, 500);
+            } else if (response.status === 422) {
+                const data = await response.json();
+                if (data.errors) {
+                    ui.handleValidationErrors(data.errors);
+                }
+                ui.showAlert('Validation failed', 'danger');
+            } else if (response.status === 401) {
+                ui.showAlert('Invalid email or password', 'danger');
             } else {
                 ui.showAlert('An error occurred. Please try again later', 'danger');
             }
+        } catch (error) {
+            console.error('Login error:', error);
+            ui.showAlert('Network error. Please try again', 'danger');
         } finally {
             ui.hideButtonLoading(submitBtn);
         }
@@ -291,27 +304,40 @@ function handleRegisterForm() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const password_confirmation = document.getElementById('password_confirmation').value;
+        const csrfToken = form.querySelector('input[name="_token"]').value;
         const submitBtn = form.querySelector('button[type="submit"]');
 
         ui.showButtonLoading(submitBtn);
 
         try {
-            const response = await api.register(name, email, password, password_confirmation);
+            // Use web-based register endpoint
+            const response = await fetch('/client/register-submit', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ name, email, password, password_confirmation }),
+            });
 
-            if (response.success) {
+            if (response.ok) {
                 ui.showAlert('Registration successful! Redirecting...', 'success');
                 setTimeout(() => {
                     window.location.href = '/client/home';
-                }, 1000);
-            }
-        } catch (error) {
-            console.error('Register error:', error);
-
-            if (error.status === 422 && error.data.errors) {
-                ui.handleValidationErrors(error.data.errors);
+                }, 500);
+            } else if (response.status === 422) {
+                const data = await response.json();
+                if (data.errors) {
+                    ui.handleValidationErrors(data.errors);
+                }
+                ui.showAlert('Validation failed', 'danger');
             } else {
                 ui.showAlert('An error occurred. Please try again later', 'danger');
             }
+        } catch (error) {
+            console.error('Register error:', error);
+            ui.showAlert('Network error. Please try again', 'danger');
         } finally {
             ui.hideButtonLoading(submitBtn);
         }

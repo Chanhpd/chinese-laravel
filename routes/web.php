@@ -21,6 +21,8 @@ Route::prefix('client')->name('client.')->group(function () {
     Route::get('/', [ClientController::class, 'index'])->name('index');
     Route::get('/login', [ClientController::class, 'showLoginForm'])->name('login');
     Route::get('/register', [ClientController::class, 'showRegisterForm'])->name('register');
+    Route::post('/login-submit', [ClientController::class, 'loginSubmit'])->name('login-submit');
+    Route::post('/register-submit', [ClientController::class, 'registerSubmit'])->name('register-submit');
     
     // Authenticated routes (đã đăng nhập)
     Route::get('/home', [ClientController::class, 'home'])->middleware('auth')->name('home');
