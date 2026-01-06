@@ -42,6 +42,7 @@ Route::prefix('client')->name('client.')->group(function () {
         Route::prefix('vocabulary')->name('vocabulary.')->group(function () {
             Route::get('/', [ClientController::class, 'vocabularyIndex'])->name('index');
             Route::get('/topic/{id}', [ClientController::class, 'vocabularyTopic'])->name('topic');
+            Route::get('/learn/{id}', [ClientController::class, 'vocabularyLearn'])->name('learn');
             Route::get('/{id}', [ClientController::class, 'vocabularyDetail'])->name('detail');
         });
         

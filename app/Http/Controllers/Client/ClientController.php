@@ -169,6 +169,18 @@ class ClientController extends Controller
     }
 
     /**
+     * Vocabulary Learning - Learn Mode (Review, Flashcards, Spelling, Quiz)
+     */
+    public function vocabularyLearn(Request $request, $id)
+    {
+        $level = $request->query('level', 'HSK1');
+        return view('client.vocabulary.learn', [
+            'topicId' => $id,
+            'level' => $level
+        ]);
+    }
+
+    /**
      * Vocabulary Learning - Detail
      */
     public function vocabularyDetail($id)

@@ -117,6 +117,12 @@ body::before {
     display: flex;
 }
 
+/* a hover */
+a:hover {
+    text-decoration: none;
+    
+
+}
 /* Desktop Layout */
 @media (min-width: 992px) {
     .container {

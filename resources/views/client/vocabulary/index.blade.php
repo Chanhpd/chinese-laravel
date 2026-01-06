@@ -28,10 +28,24 @@
 
         <!-- Topics Tab -->
         <section class="tab-content active" id="topics-tab">
-            <h2>Vocabulary by Topics</h2>
-            <div class="topics-grid" id="topicsGrid">
-                <!-- Loaded dynamically -->
-                <div class="spinner" style="grid-column: 1/-1; justify-self: center;"></div>
+            <div class="level-selector-section">
+                <h2>Select HSK Level</h2>
+                <div class="level-buttons" id="levelButtons">
+                    <button class="level-btn active" data-level="1">HSK 1</button>
+                    <button class="level-btn" data-level="2">HSK 2</button>
+                    <button class="level-btn" data-level="3">HSK 3</button>
+                    <button class="level-btn" data-level="4">HSK 4</button>
+                    <button class="level-btn" data-level="5">HSK 5</button>
+                    <button class="level-btn" data-level="6">HSK 6</button>
+                </div>
+            </div>
+            
+            <div class="topics-section">
+                <h2>Topics for <span id="currentLevelText">HSK 1</span></h2>
+                <div class="topics-grid" id="topicsGrid">
+                    <!-- Loaded dynamically -->
+                    <div class="spinner" style="grid-column: 1/-1; justify-self: center;"></div>
+                </div>
             </div>
         </section>
 
@@ -67,26 +81,13 @@
 <link rel="stylesheet" href="{{ asset('client-assets/css/variables.css') }}">
 <link rel="stylesheet" href="{{ asset('client-assets/css/base.css') }}">
 <link rel="stylesheet" href="{{ asset('client-assets/css/layout.css') }}">
-<style>
-    /* Vocabulary-specific header gradient */
-    .vocabulary-page .page-header {
-        background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
-        color: white;
-    }
-
-    .vocabulary-page .page-header h1,
-    .vocabulary-page .page-header p {
-        color: white;
-    }
-
-    .vocabulary-page .page-header p {
-        opacity: 0.95;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('client-assets/css/vocabulary.css') }}">
 @endpush
 
 @push('scripts')
 <script>
+    let currentLevel = 1; // Default HSK Level 1
+
     // Tab switching
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -108,37 +109,93 @@
         });
     });
 
-    async function loadTopics() {
-        try {
-            const response = await fetch('/api/topics');
-            const topics = await response.json();
+    // Level selection
+    document.querySelectorAll('.level-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const level = parseInt(this.dataset.level);
+            
+            // Update active state
+            document.querySelectorAll('.level-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+            this.classList.add('active');
+            
+            // Update current level
+            currentLevel = level;
+            document.getElementById('currentLevelText').textContent = `HSK ${level}`;
+            
+            // Reload topics for this level
+            loadTopics(level);
+        });
+    });
 
-            const grid = document.getElementById('topicsGrid');
+    async function loadTopics(level = 1) {
+        const grid = document.getElementById('topicsGrid');
+        grid.innerHTML = '<div class="spinner" style="grid-column: 1/-1; justify-self: center;"></div>';
+        
+        try {
+            // Load topics with vocabulary count for specific level
+            // Convert level number to HSK format (1 -> HSK1)
+            const hskLevel = `HSK${level}`;
+            const response = await fetch(`/api/topics?with_count=true&level=${hskLevel}`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to load topics');
+            }
+            
+            const result = await response.json();
+            const topics = result.data || result;
+
             grid.innerHTML = '';
 
             if (!topics || topics.length === 0) {
-                grid.innerHTML = `<div class="no-results" style="grid-column: 1/-1;"><div class="no-results-icon">📭</div><p>No topics found</p></div>`;
+                grid.innerHTML = `
+                    <div class="no-results" style="grid-column: 1/-1;">
+                        <div class="no-results-icon">📭</div>
+                        <p>No topics found for HSK ${level}</p>
+                    </div>
+                `;
                 return;
             }
 
-            topics.forEach(topic => {
+            topics.forEach((topic, index) => {
                 const card = document.createElement('a');
-                card.href = `{{ route('client.vocabulary.topic', '') }}/${topic.id}`;
+                card.href = `{{ route('client.vocabulary.learn', '') }}/${topic.id}?level=HSK${level}`;
                 card.className = 'topic-card';
+                card.style.animationDelay = `${index * 0.05}s`;
+                
+                const topicName = topic.name || topic.topic_name || 'Unnamed Topic';
+                const vocabCount = topic.vocabularies_level_count || topic.vocabularies_count || topic.vocabulary_count || 0;
+                const imageUrl = topic.image_url || topic.image;
+                const icon = topic.icon || '📚';
+                
+                // Use image if available, otherwise use icon
+                const headerContent = imageUrl 
+                    ? `<img src="${imageUrl}" alt="${topicName}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                       <div class="topic-icon-fallback" style="display:none;">${icon}</div>`
+                    : `<div class="topic-icon-fallback">${icon}</div>`;
+                
                 card.innerHTML = `
-                    <div class="topic-header">${topic.icon || '📚'}</div>
+                    <div class="topic-header">${headerContent}</div>
                     <div class="topic-body">
-                        <div class="topic-name">${topic.name}</div>
+                        <div class="topic-name">${topicName}</div>
                         <div class="topic-meta">
-                            <span>📖 ${topic.vocabulary_count || 0} words</span>
+                            <span>📖 ${vocabCount} words</span>
+                            <span>🎯 HSK ${level}</span>
                         </div>
-                        <button class="topic-btn">Learn</button>
+                        <button class="topic-btn">Start Learning</button>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         } catch (error) {
             console.error('Error loading topics:', error);
+            grid.innerHTML = `
+                <div class="no-results" style="grid-column: 1/-1;">
+                    <div class="no-results-icon">❌</div>
+                    <p>Failed to load topics. Please try again later.</p>
+                </div>
+            `;
         }
     }
 

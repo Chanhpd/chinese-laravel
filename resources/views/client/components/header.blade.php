@@ -94,6 +94,10 @@
     }
 
     .nav-link:hover {
+        text-decoration: none;
+    }
+
+    .nav-link:hover {
         background: rgba(98, 191, 186, 0.1);
         color: #62bfba;
         transform: translateY(-2px);
