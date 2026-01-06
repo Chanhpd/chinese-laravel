@@ -168,7 +168,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('admin.login') }}">
             @csrf
 
             <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">

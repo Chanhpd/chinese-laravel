@@ -121,6 +121,117 @@ class ClientController extends Controller
     }
 
     /**
+     * Radicals Learning - Index
+     */
+    public function radicalsIndex()
+    {
+        return view('client.radicals.index');
+    }
+
+    /**
+     * Radicals Learning - By Level
+     */
+    public function radicalsLevel($level)
+    {
+        return view('client.radicals.level', ['level' => $level]);
+    }
+
+    /**
+     * Radicals Learning - Detail
+     */
+    public function radicalsDetail($id)
+    {
+        return view('client.radicals.detail', ['id' => $id]);
+    }
+
+    /**
+     * Vocabulary Learning - Index
+     */
+    public function vocabularyIndex()
+    {
+        return view('client.vocabulary.index');
+    }
+
+    /**
+     * Vocabulary Learning - By Topic
+     */
+    public function vocabularyTopic($id)
+    {
+        return view('client.vocabulary.topic', ['id' => $id]);
+    }
+
+    /**
+     * Vocabulary Learning - Detail
+     */
+    public function vocabularyDetail($id)
+    {
+        return view('client.vocabulary.detail', ['id' => $id]);
+    }
+
+    /**
+     * Quiz/Exam - Index
+     */
+    public function quizIndex()
+    {
+        return view('client.quiz.index');
+    }
+
+    /**
+     * Quiz/Exam - Detail
+     */
+    public function quizDetail($id)
+    {
+        return view('client.quiz.detail', ['id' => $id]);
+    }
+
+    /**
+     * Quiz/Exam - Submit
+     */
+    public function quizSubmit(Request $request, $id)
+    {
+        return response()->json([
+            'success' => true,
+            'message' => 'Quiz submitted successfully',
+        ]);
+    }
+
+    /**
+     * Chat page
+     */
+    public function chat()
+    {
+        return view('client.chat');
+    }
+
+    /**
+     * User Profile
+     */
+    public function profile()
+    {
+        return view('client.profile');
+    }
+
+    /**
+     * Update User Profile
+     */
+    public function updateProfile(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email,' . Auth::id(),
+            ]);
+
+            $user = Auth::user();
+            $user->update($validated);
+
+            return redirect()->route('client.profile')->with('success', 'Profile updated successfully!');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
+        }
+    }
+
+    /**
      * Handle user logout
      */
     public function logout(Request $request)

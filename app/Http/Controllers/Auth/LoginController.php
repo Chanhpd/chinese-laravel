@@ -10,11 +10,11 @@ use Illuminate\Validation\ValidationException;
 class LoginController extends Controller
 {
     /**
-     * Show the login form
+     * Show the admin login form
      */
-    public function showLoginForm()
+    public function showAdminLoginForm()
     {
-        if (Auth::check()) {
+        if (Auth::check() && in_array(Auth::user()->role, ['admin', 'super_admin'])) {
             return redirect()->route('admin.dashboard');
         }
         
@@ -22,9 +22,9 @@ class LoginController extends Controller
     }
 
     /**
-     * Handle login request
+     * Handle admin login request
      */
-    public function login(Request $request)
+    public function adminLogin(Request $request)
     {
         $credentials = $request->validate([
             'email' => 'required|email',
@@ -72,6 +72,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()->route('admin.login');
     }
 }
