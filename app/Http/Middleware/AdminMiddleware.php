@@ -16,7 +16,11 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $user = auth()->user();
+        $user = auth('admin')->user();
+
+        if (!$user) {
+            return redirect()->route('admin.login');
+        }
 
         // Check if user has admin, super_admin, or staff role
         if (!in_array($user->role, ['admin', 'super_admin', 'staff'])) {
@@ -27,8 +31,8 @@ class AdminMiddleware
                 ], 403);
             }
             
-            auth()->logout();
-            return redirect()->route('login')->withErrors([
+            auth('admin')->logout();
+            return redirect()->route('admin.login')->withErrors([
                 'email' => 'You do not have admin access.'
             ]);
         }
@@ -42,8 +46,8 @@ class AdminMiddleware
                 ], 403);
             }
             
-            auth()->logout();
-            return redirect()->route('login')->withErrors([
+            auth('admin')->logout();
+            return redirect()->route('admin.login')->withErrors([
                 'email' => 'Your account has been blocked.'
             ]);
         }

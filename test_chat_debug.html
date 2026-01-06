@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .result {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐛 Chat API Debug Tool</h1>
+    
+    <div>
+        <h3>Step 1: Check Authentication</h3>
+        <button onclick="checkAuth()">Check Auth Status</button>
+        <div id="auth-result" class="result"></div>
+    </div>
+
+    <div>
+        <h3>Step 2: Check GEMINI_API_KEY</h3>
+        <button onclick="checkGemini()">Test Chat API (Hello)</button>
+        <div id="gemini-result" class="result"></div>
+    </div>
+
+    <div>
+        <h3>Step 3: Check Chat History</h3>
+        <button onclick="checkHistory()">Get Chat History</button>
+        <div id="history-result" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:8000/api';
+
+        async function checkAuth() {
+            const result = document.getElementById('auth-result');
+            result.innerHTML = 'Checking...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/user`, {
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    result.className = 'result success';
+                    result.innerHTML = `
+                        <strong>✅ Authenticated!</strong>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    result.className = 'result error';
+                    result.innerHTML = `
+                        <strong>❌ Not Authenticated</strong>
+                        <p>Status: ${response.status}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                        <p><a href="http://127.0.0.1:8000/client/login">Please login first</a></p>
+                    `;
+                }
+            } catch (error) {
+                result.className = 'result error';
+                result.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        }
+
+        async function checkGemini() {
+            const result = document.getElementById('gemini-result');
+            result.innerHTML = 'Sending message to AI...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/chat`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': await getCSRFToken()
+                    },
+                    body: JSON.stringify({
+                        message: 'Hello, how do you say "hello" in Chinese?'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    result.className = 'result success';
+                    result.innerHTML = `
+                        <strong>✅ Chat API Working!</strong>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    result.className = 'result error';
+                    result.innerHTML = `
+                        <strong>❌ Chat API Error</strong>
+                        <p>Status: ${response.status}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                result.className = 'result error';
+                result.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        }
+
+        async function checkHistory() {
+            const result = document.getElementById('history-result');
+            result.innerHTML = 'Loading history...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/chat/history`, {
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    result.className = 'result success';
+                    result.innerHTML = `
+                        <strong>✅ Chat History API Working!</strong>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    result.className = 'result error';
+                    result.innerHTML = `
+                        <strong>❌ History API Error</strong>
+                        <p>Status: ${response.status}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                result.className = 'result error';
+                result.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        }
+
+        async function getCSRFToken() {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/sanctum/csrf-cookie', {
+                    credentials: 'include'
+                });
+                
+                // Get CSRF token from cookie
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    const [name, value] = cookie.trim().split('=');
+                    if (name === 'XSRF-TOKEN') {
+                        return decodeURIComponent(value);
+                    }
+                }
+            } catch (error) {
+                console.error('Error getting CSRF token:', error);
+            }
+            return '';
+        }
+
+        // Auto check auth on load
+        window.addEventListener('load', () => {
+            checkAuth();
+        });
+    </script>
+</body>
+</html>

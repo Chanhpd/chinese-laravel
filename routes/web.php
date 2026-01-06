@@ -33,6 +33,7 @@ Route::prefix('client')->name('client.')->group(function () {
         // Radicals Learning
         Route::prefix('radicals')->name('radicals.')->group(function () {
             Route::get('/', [ClientController::class, 'radicalsIndex'])->name('index');
+            Route::get('/practice', [ClientController::class, 'radicalsPractice'])->name('practice');
             Route::get('/level/{level}', [ClientController::class, 'radicalsLevel'])->name('level');
             Route::get('/{id}', [ClientController::class, 'radicalsDetail'])->name('detail');
         });
@@ -64,12 +65,12 @@ Route::prefix('client')->name('client.')->group(function () {
 Route::redirect('/', '/client', 301);
 
 // Admin Authentication Routes (at /admin/login)
-Route::middleware('guest')->group(function () {
+Route::middleware('guest:admin')->group(function () {
     Route::get('/admin/login', [LoginController::class, 'showAdminLoginForm'])->name('admin.login');
     Route::post('/admin/login', [LoginController::class, 'adminLogin'])->name('admin.login-submit');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:admin')->group(function () {
     Route::post('/admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
 });
 

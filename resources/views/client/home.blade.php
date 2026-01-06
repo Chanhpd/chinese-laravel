@@ -2,36 +2,19 @@
 
 @section('title', 'Dashboard - Learn Chinese')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('client-assets/css/variables.css') }}">
+<link rel="stylesheet" href="{{ asset('client-assets/css/base.css') }}">
+<link rel="stylesheet" href="{{ asset('client-assets/css/layout.css') }}">
+@endpush
+
 @section('content')
 <div class="client-container">
     <!-- Navigation Header -->
-    <nav class="client-navbar">
-        <div class="navbar-brand">
-            <div class="brand-logo">🇨🇳</div>
-            <h1>ChineseHub</h1>
-        </div>
-        <ul class="nav-menu">
-            <li><a href="{{ route('client.home') }}" class="nav-link active">Dashboard</a></li>
-            <li><a href="{{ route('client.radicals.index') }}" class="nav-link">Characters</a></li>
-            <li><a href="{{ route('client.vocabulary.index') }}" class="nav-link">Vocabulary</a></li>
-            <li><a href="{{ route('client.chat') }}" class="nav-link">AI Chat</a></li>
-        </ul>
-        <div class="nav-user">
-            <div class="user-info">
-                <span class="user-avatar">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-                <div>
-                    <p class="user-name">{{ Auth::user()->name }}</p>
-                    <p class="user-level" id="userLevel">Beginner</p>
-                </div>
-            </div>
-            <form action="{{ route('client.logout') }}" method="POST" style="margin: 0;">
-                @csrf
-                <button type="submit" class="btn-logout">Logout</button>
-            </form>
-        </div>
-    </nav>
+    @include('client.components.header')
 
     <!-- Main Content -->
+    <main class="client-main">
         <!-- Welcome Section -->
         <section class="welcome-section">
             <div class="welcome-content">
@@ -39,25 +22,25 @@
                 <p>Continue your journey to master Chinese language</p>
             </div>
             <div class="welcome-stats">
-                <div class="stat-card">
+                <div class="stat-card animate-fadeInUp delay-100">
                     <span class="stat-icon">🔥</span>
                     <div class="stat-info">
                         <p class="stat-label">Current Streak</p>
-                        <p class="stat-value" id="streakCount">0 days</p>
+                        <h3 id="streakCount">0 days</h3>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card animate-fadeInUp delay-200">
                     <span class="stat-icon">📚</span>
                     <div class="stat-info">
                         <p class="stat-label">Words Learned</p>
-                        <p class="stat-value" id="wordsLearned">0</p>
+                        <h3 id="wordsLearned">0</h3>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card animate-fadeInUp delay-300">
                     <span class="stat-icon">⏱️</span>
                     <div class="stat-info">
                         <p class="stat-label">Study Time</p>
-                        <p class="stat-value" id="studyTime">0h</p>
+                        <h3 id="studyTime">0h</h3>
                     </div>
                 </div>
             </div>
@@ -66,7 +49,7 @@
         <!-- Content Grid -->
         <div class="content-grid">
             <!-- Learning Progress -->
-            <section class="dashboard-card learning-card">
+            <section class="dashboard-card learning-card animate-fadeInUp delay-200">
                 <h3>📖 Learning Progress</h3>
                 <div class="progress-levels" id="progressLevels">
                     <div class="level-item">
@@ -82,7 +65,7 @@
             </section>
 
             <!-- Practice Zone -->
-            <section class="dashboard-card practice-zone">
+            <section class="dashboard-card practice-zone animate-fadeInUp delay-300">
                 <h3>🎮 Practice Zone</h3>
                 <div class="practice-items">
                     <a href="{{ route('client.radicals.index') }}" class="practice-item">
@@ -117,22 +100,22 @@
             </section>
 
             <!-- Quick Stats -->
-            <section class="dashboard-card">
+            <section class="dashboard-card animate-fadeInUp delay-400">
                 <h3>📊 Quick Stats</h3>
-                <div style="display: flex; flex-direction: column; gap: var(--spacing-4);">
+                <div class="flex flex-col gap-4">
                     <div>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-2);">
+                        <div class="flex-between mb-2">
                             <span>Total Progress</span>
-                            <span id="totalProgress" style="font-weight: var(--font-weight-semibold); color: var(--color-primary);">0%</span>
+                            <span id="totalProgress" class="font-semibold text-primary">0%</span>
                         </div>
                         <div class="progress">
                             <div class="progress-bar" id="totalProgressBar" style="width: 0%"></div>
                         </div>
                     </div>
                     <div>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-2);">
+                        <div class="flex-between mb-2">
                             <span>Accuracy Rate</span>
-                            <span id="accuracy" style="font-weight: var(--font-weight-semibold); color: var(--color-success);">0%</span>
+                            <span id="accuracy" class="font-semibold text-success">0%</span>
                         </div>
                         <div class="progress">
                             <div class="progress-bar success" id="accuracyBar" style="width: 0%"></div>
@@ -141,15 +124,93 @@
                 </div>
             </section>
         </div>
-    </div>
+    </main>
 </div>
 @endsection
 
-@push('styles')
-<link rel="stylesheet" href="{{ asset('client-assets/css/variables.css') }}">
-<link rel="stylesheet" href="{{ asset('client-assets/css/base.css') }}">
-<link rel="stylesheet" href="{{ asset('client-assets/css/layout.css') }}">
+@push('scripts')
+<script>
+    // Load user statistics
+    async function loadUserStats() {
+        try {
+            const response = await fetch('/api/user', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('api_token'),
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) return;
+
+            const data = await response.json();
+            
+            // Update user level based on progress
+            const userLevel = document.getElementById('userLevel');
+            if (data.level) userLevel.textContent = data.level;
+
+            // Mock stats for now - will be replaced with actual API calls
+            document.getElementById('streakCount').textContent = '5 days';
+            document.getElementById('wordsLearned').textContent = '245';
+            document.getElementById('studyTime').textContent = '12h';
+            document.getElementById('totalProgress').textContent = '65%';
+            document.getElementById('totalProgressBar').style.width = '65%';
+            document.getElementById('accuracy').textContent = '82%';
+            document.getElementById('accuracyBar').style.width = '82%';
+
+        } catch (error) {
+            console.error('Error loading stats:', error);
+        }
+    }
+
+    // Load HSK levels for progress display
+    async function loadProgressLevels() {
+        try {
+            const response = await fetch('/api/radicals/hsk');
+            const data = await response.json();
+
+            // Group by level
+            const levelMap = {};
+            data.forEach(radical => {
+                const level = radical.level || 'HSK1';
+                if (!levelMap[level]) levelMap[level] = 0;
+                levelMap[level]++;
+            });
+
+            const progressContainer = document.getElementById('progressLevels');
+            progressContainer.innerHTML = '';
+
+            const levels = ['HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6'];
+            levels.forEach((level, index) => {
+                const count = levelMap[level] || 0;
+                const percentage = Math.floor((Math.random() * 100)); // Mock progress
+                const levelNum = index + 1;
+                const badgeClass = `hsk${levelNum}`;
+
+                progressContainer.innerHTML += `
+                    <div class="level-item">
+                        <div class="level-badge ${badgeClass}">
+                            <span class="level-name">${level}</span>
+                            <span class="level-progress">${percentage}%</span>
+                        </div>
+                        <div class="level-bar">
+                            <div class="level-fill" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+        } catch (error) {
+            console.error('Error loading progress levels:', error);
+        }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+        loadUserStats();
+        loadProgressLevels();
+    });
+</script>
 @endpush
+
 
 @push('scripts')
 <script>

@@ -14,7 +14,7 @@ use App\Http\Controllers\AdminExamController;
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'admin'])->group(function () {
     
     // Dashboard & Statistics
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');

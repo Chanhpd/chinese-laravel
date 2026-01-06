@@ -10,7 +10,7 @@ class OptionalAuth
 {
     /**
      * Handle an incoming request.
-     * Authenticate user nếu có token, nhưng không yêu cầu bắt buộc
+     * Authenticate user nếu có token hoặc session, nhưng không yêu cầu bắt buộc
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
@@ -18,7 +18,13 @@ class OptionalAuth
      */
     public function handle(Request $request, Closure $next)
     {
-        // Thử authenticate với Sanctum, nhưng không throw exception nếu fail
+        // First, check if user is authenticated via session (web guard)
+        if (Auth::guard('web')->check()) {
+            Auth::setUser(Auth::guard('web')->user());
+            return $next($request);
+        }
+        
+        // Then, try authenticate with Sanctum token
         if ($request->bearerToken()) {
             try {
                 $user = Auth::guard('sanctum')->user();

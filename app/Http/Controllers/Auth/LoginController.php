@@ -14,7 +14,7 @@ class LoginController extends Controller
      */
     public function showAdminLoginForm()
     {
-        if (Auth::check() && in_array(Auth::user()->role, ['admin', 'super_admin'])) {
+        if (Auth::guard('admin')->check() && in_array(Auth::guard('admin')->user()->role, ['admin', 'super_admin'])) {
             return redirect()->route('admin.dashboard');
         }
         
@@ -33,14 +33,14 @@ class LoginController extends Controller
 
         $remember = $request->filled('remember');
 
-        if (Auth::attempt($credentials, $remember)) {
+        if (Auth::guard('admin')->attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            $user = Auth::user();
+            $user = Auth::guard('admin')->user();
 
             // Check if user is admin
             if (!in_array($user->role, ['admin', 'super_admin'])) {
-                Auth::logout();
+                Auth::guard('admin')->logout();
                 throw ValidationException::withMessages([
                     'email' => 'You do not have admin access.',
                 ]);
@@ -48,7 +48,7 @@ class LoginController extends Controller
 
             // Check if user is blocked
             if ($user->status === 'blocked') {
-                Auth::logout();
+                Auth::guard('admin')->logout();
                 throw ValidationException::withMessages([
                     'email' => 'Your account has been blocked.',
                 ]);
@@ -67,7 +67,7 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

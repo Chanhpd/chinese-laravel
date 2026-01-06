@@ -63,12 +63,14 @@ Dự án này đã triển khai một **Web Client đa nền tảng** cho hệ t
 
 ### Color Palette (Theo Spec)
 ```
-Primary:   #62bfba (Xanh ngọc chủ đạo)
-Secondary: #95D5B2 (Xanh lá mint)
-Accent:    #FFB088 (Cam đào)
-Success:   #52C688
-Warning:   #FFBD5A
-Error:     #FF8787
+Primary:   #62bfba (Teal - Xanh ngọc teal chủ đạo)
+Secondary: #95D5B2 (Mint Green - Xanh lá mint)
+Accent:    #FFB088 (Peach - Cam đào)
+Success:   #52C688 (Green)
+Warning:   #FFBD5A (Amber)
+Error:     #FF8787 (Red)
+
+Background: Teal-Mint Gradient (NOT light blue)
 ```
 
 ### Typography

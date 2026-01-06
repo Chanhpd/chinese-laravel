@@ -71,9 +71,13 @@ EOT;
         ];
 
         // 4. Gửi Request
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-        ])->post($url, $payload);
+        // Note: withoutVerifying() chỉ dùng cho development, production nên dùng SSL certificate đúng cách
+        $response = Http::withoutVerifying()
+            ->withHeaders([
+                'Content-Type' => 'application/json',
+            ])
+            ->timeout(30) // Add timeout 30 seconds
+            ->post($url, $payload);
 
         // 5. Xử lý kết quả
         if ($response->successful()) {
@@ -106,8 +110,10 @@ EOT;
             }
             
             return response()->json([
+                'success' => true,
                 'status' => 'success',
-                'bot_reply' => $botReply
+                'response' => $botReply,
+                'bot_reply' => $botReply // backward compatibility
             ]);
         } else {
             // Log lỗi để debug (xem trong storage/logs/laravel.log)

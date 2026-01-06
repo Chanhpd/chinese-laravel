@@ -129,6 +129,14 @@ class ClientController extends Controller
     }
 
     /**
+     * Radicals Learning - Practice Page
+     */
+    public function radicalsPractice()
+    {
+        return view('client.radicals.practice');
+    }
+
+    /**
      * Radicals Learning - By Level
      */
     public function radicalsLevel($level)

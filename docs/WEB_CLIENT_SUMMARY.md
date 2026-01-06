@@ -7,10 +7,10 @@
 #### 1. **CSS & Design System** ✅
 - **File**: `public/client-assets/css/variables.css`
 - **Nội dung**: 
-  - Color variables (Primary, Secondary, Accent, Status)
+  - Color variables (Teal Primary #62bfba, Mint Secondary #95D5B2, Peach Accent #FFB088, Status Colors)
   - Typography system (Nunito + Noto Sans SC)
-  - Spacing, Border Radius, Shadows
-  - Z-index, Transitions, Gradients
+  - Spacing, Border Radius, Modern Shadows
+  - Z-index, Smooth Transitions, Beautiful Gradients
 
 - **File**: `public/client-assets/css/base.css`
 - **Nội dung**:

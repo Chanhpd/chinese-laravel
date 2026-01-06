@@ -2,37 +2,19 @@
 
 @section('title', 'Learn Characters - Chinese Learning')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('client-assets/css/variables.css') }}">
+<link rel="stylesheet" href="{{ asset('client-assets/css/base.css') }}">
+<link rel="stylesheet" href="{{ asset('client-assets/css/layout.css') }}">
+@endpush
+
 @section('content')
 <div class="client-container">
     <!-- Navigation Header -->
-    <nav class="client-navbar">
-        <div class="navbar-brand">
-            <div class="brand-logo">🇨🇳</div>
-            <h1>ChineseHub</h1>
-        </div>
-        <ul class="nav-menu">
-            <li><a href="{{ route('client.home') }}" class="nav-link">Dashboard</a></li>
-            <li><a href="{{ route('client.radicals.index') }}" class="nav-link active">Characters</a></li>
-            <li><a href="{{ route('client.vocabulary.index') }}" class="nav-link">Vocabulary</a></li>
-            <li><a href="{{ route('client.chat') }}" class="nav-link">AI Chat</a></li>
-        </ul>
-        <div class="nav-user">
-            <div class="user-info">
-                <span class="user-avatar">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-                <div>
-                    <p class="user-name">{{ Auth::user()->name }}</p>
-                    <p class="user-level">Learner</p>
-                </div>
-            </div>
-            <form action="{{ route('client.logout') }}" method="POST" style="margin: 0;">
-                @csrf
-                <button type="submit" class="btn-logout">Logout</button>
-            </form>
-        </div>
-    </nav>
+    @include('client.components.header')
 
     <!-- Main Content -->
-    <div class="client-main">
+    <main class="client-main">
         <!-- Page Header -->
         <section class="page-header">
             <div class="header-content">
@@ -46,7 +28,7 @@
             <h2>Select HSK Level</h2>
             <div class="levels-grid" id="levelsGrid">
                 <!-- Loaded dynamically -->
-                <div class="spinner" style="grid-column: 1/-1; justify-self: center;"></div>
+                <div class="spinner spinner-lg" style="grid-column: 1/-1; justify-self: center;"></div>
             </div>
         </section>
 
@@ -78,272 +60,161 @@
                 <!-- Loaded dynamically -->
             </div>
         </section>
-    </div>
+    </main>
 </div>
 @endsection
-
-@push('styles')
-<link rel="stylesheet" href="{{ asset('client-assets/css/variables.css') }}">
-<link rel="stylesheet" href="{{ asset('client-assets/css/base.css') }}">
-<link rel="stylesheet" href="{{ asset('client-assets/css/layout.css') }}">
-<style>
-    .page-header {
-        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-        color: white;
-        padding: var(--spacing-10);
-        border-radius: var(--border-radius-xl);
-        margin-bottom: var(--spacing-10);
-        box-shadow: var(--shadow-lg);
-    }
-
-    .header-content h1 {
-        margin: 0 0 var(--spacing-2) 0;
-        color: white;
-        font-size: var(--font-size-3xl);
-    }
-
-    .header-content p {
-        margin: 0;
-        color: rgba(255, 255, 255, 0.9);
-        font-size: var(--font-size-lg);
-    }
-
-    .levels-section {
-        margin-bottom: var(--spacing-10);
-    }
-
-    .levels-section h2 {
-        margin-bottom: var(--spacing-6);
-        color: var(--color-primary);
-    }
-
-    .levels-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: var(--spacing-4);
-    }
-
-    .level-card {
-        background: var(--color-surface);
-        border: 2px solid var(--color-border);
-        border-radius: var(--border-radius-lg);
-        padding: var(--spacing-6);
-        text-align: center;
-        cursor: pointer;
-        transition: all var(--transition-base);
-        text-decoration: none;
-        color: var(--color-text-primary);
-    }
-
-    .level-card:hover {
-        border-color: var(--color-primary);
-        box-shadow: var(--shadow-md);
-        transform: translateY(-4px);
-    }
-
-    .level-card.active {
-        background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
-        border-color: var(--color-primary);
-    }
-
-    .level-number {
-        font-size: var(--font-size-2xl);
-        font-weight: var(--font-weight-bold);
-        color: var(--color-primary);
-        display: block;
-    }
-
-    .level-card.active .level-number {
-        color: var(--color-primary-dark);
-    }
-
-    .level-info {
-        font-size: var(--font-size-sm);
-        color: var(--color-text-secondary);
-        margin-top: var(--spacing-2);
-    }
-
-    .filter-section {
-        background: var(--color-surface);
-        padding: var(--spacing-6);
-        border-radius: var(--border-radius-lg);
-        margin-bottom: var(--spacing-8);
-        box-shadow: var(--shadow-sm);
-    }
-
-    .filter-group {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: var(--spacing-6);
-    }
-
-    .filter-item label {
-        display: block;
-        margin-bottom: var(--spacing-2);
-        font-weight: var(--font-weight-semibold);
-    }
-
-    .filter-item select,
-    .filter-item input {
-        width: 100%;
-    }
-
-    .radicals-section {
-        margin-bottom: var(--spacing-10);
-    }
-
-    .radicals-section h2 {
-        margin-bottom: var(--spacing-6);
-        color: var(--color-primary);
-    }
-
-    .radicals-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: var(--spacing-4);
-    }
-
-    .radical-card {
-        background: var(--color-surface);
-        border: 2px solid var(--color-border);
-        border-radius: var(--border-radius-lg);
-        padding: var(--spacing-4);
-        text-align: center;
-        cursor: pointer;
-        transition: all var(--transition-base);
-        text-decoration: none;
-        color: var(--color-text-primary);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .radical-card:hover {
-        border-color: var(--color-primary);
-        box-shadow: var(--shadow-md);
-        transform: translateY(-4px);
-    }
-
-    .radical-hanzi {
-        font-size: 48px;
-        margin-bottom: var(--spacing-2);
-        font-family: var(--font-chinese);
-    }
-
-    .radical-pinyin {
-        font-size: var(--font-size-sm);
-        color: var(--color-text-secondary);
-        font-weight: var(--font-weight-semibold);
-    }
-
-    .radical-meaning {
-        font-size: var(--font-size-xs);
-        color: var(--color-text-disabled);
-        margin-top: var(--spacing-1);
-    }
-
-    .no-results {
-        text-align: center;
-        padding: var(--spacing-10);
-        color: var(--color-text-secondary);
-    }
-
-    .no-results-icon {
-        font-size: 48px;
-        margin-bottom: var(--spacing-4);
-    }
-</style>
-@endpush
 
 @push('scripts')
 <script>
     let currentLevel = 1;
+    let allRadicals = [];
 
     async function loadLevels() {
-        try {
-            const response = await fetch('/api/radicals/levels');
-            const levels = await response.json();
+        const grid = document.getElementById('levelsGrid');
+        grid.innerHTML = '';
 
-            const grid = document.getElementById('levelsGrid');
-            grid.innerHTML = '';
-
-            // Tạo cards cho các level
-            for (let i = 1; i <= 6; i++) {
-                const levelCard = document.createElement('a');
-                levelCard.href = '#';
-                levelCard.className = `level-card ${i === 1 ? 'active' : ''}`;
-                levelCard.dataset.level = i;
-                levelCard.innerHTML = `
-                    <span class="level-number">HSK ${i}</span>
-                    <span class="level-info">${Math.floor(Math.random() * 100) + 50} radicals</span>
-                `;
-                levelCard.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    selectLevel(i);
-                });
-                grid.appendChild(levelCard);
-            }
-        } catch (error) {
-            console.error('Error loading levels:', error);
+        // Create cards for levels 1-6
+        for (let i = 1; i <= 6; i++) {
+            const levelCard = document.createElement('div');
+            levelCard.className = `level-card animate-scaleIn delay-${i}00 ${i === 1 ? 'active' : ''}`;
+            levelCard.dataset.level = i;
+            levelCard.innerHTML = `
+                <span class="level-number">HSK ${i}</span>
+                <span class="level-info">Click to load</span>
+            `;
+            levelCard.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                selectLevel(i);
+            });
+            grid.appendChild(levelCard);
         }
     }
 
-    async function selectLevel(level) {
+    function selectLevel(level) {
         currentLevel = level;
 
-        // Update active card
+        // Update active state
         document.querySelectorAll('.level-card').forEach(card => {
             card.classList.remove('active');
-            if (card.dataset.level == level) {
+            if (parseInt(card.dataset.level) === level) {
                 card.classList.add('active');
             }
         });
+
+        // Update section title
+        document.querySelector('.radicals-section h2').textContent = `Radicals for HSK ${level}`;
 
         loadRadicals(level);
     }
 
     async function loadRadicals(level) {
+        const grid = document.getElementById('radicalsGrid');
+        grid.innerHTML = '<div class="spinner spinner-lg" style="grid-column: 1/-1; justify-self: center;"></div>';
+
         try {
             const response = await fetch(`/api/radicals/hsk/${level}`);
-            const radicals = await response.json();
-
-            const grid = document.getElementById('radicalsGrid');
-            grid.innerHTML = '';
-
-            if (!radicals || radicals.length === 0) {
-                grid.innerHTML = `<div class="no-results" style="grid-column: 1/-1;"><div class="no-results-icon">📭</div><p>No radicals found</p></div>`;
-                return;
+            
+            if (!response.ok) {
+                throw new Error('Failed to load radicals');
             }
 
-            radicals.forEach(radical => {
-                const card = document.createElement('a');
-                card.href = `{{ route('client.radicals.detail', '') }}/${radical.id}`;
-                card.className = 'radical-card';
-                card.innerHTML = `
-                    <div class="radical-hanzi">${radical.hanzi || radical.character}</div>
-                    <div class="radical-pinyin">${radical.pinyin || 'N/A'}</div>
-                    <div class="radical-meaning">${radical.meaning || radical.english}</div>
-                `;
-                grid.appendChild(card);
-            });
+            const radicals = await response.json();
+            allRadicals = radicals;
+
+            displayRadicals(radicals);
         } catch (error) {
             console.error('Error loading radicals:', error);
+            grid.innerHTML = `
+                <div class="no-results" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">❌</div>
+                    <p>Failed to load radicals. Please try again.</p>
+                </div>
+            `;
         }
     }
 
-    // Filter functions
-    document.getElementById('strokeFilter').addEventListener('change', function() {
-        // Filter implementation will be added
-        console.log('Filter by strokes:', this.value);
+    function displayRadicals(radicals) {
+        const grid = document.getElementById('radicalsGrid');
+        grid.innerHTML = '';
+
+        if (!radicals || radicals.length === 0) {
+            grid.innerHTML = `
+                <div class="no-results" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">📭</div>
+                    <p class="text-muted">No radicals found for this level</p>
+                </div>
+            `;
+            return;
+        }
+
+        radicals.forEach((radical, index) => {
+            const card = document.createElement('a');
+            card.href = `{{ route('client.radicals.practice') }}`;
+            card.className = 'radical-card';
+            card.style.animationDelay = `${index * 0.02}s`;
+            
+            const hanzi = radical.hanzi || radical.character || radical.simplified || '?';
+            const pinyin = radical.pinyin || '';
+            const meaning = radical.meaning || radical.english || '';
+            const strokes = radical.stroke_count || radical.strokes || '';
+
+            card.innerHTML = `
+                <div class="radical-character">${hanzi}</div>
+                <div class="radical-pinyin">${pinyin}</div>
+                <div class="radical-meaning">${meaning}</div>
+                ${strokes ? `<div class="radical-strokes">${strokes} strokes</div>` : ''}
+            `;
+            
+            grid.appendChild(card);
+        });
+    }
+
+    // Filter by stroke count
+    document.getElementById('strokeFilter')?.addEventListener('change', function() {
+        const strokeCount = this.value;
+        let filtered = allRadicals;
+
+        if (strokeCount) {
+            filtered = allRadicals.filter(r => {
+                const strokes = parseInt(r.stroke_count || r.strokes || 0);
+                if (strokeCount === '5') {
+                    return strokes >= 5;
+                }
+                return strokes === parseInt(strokeCount);
+            });
+        }
+
+        displayRadicals(filtered);
     });
 
-    document.getElementById('searchRadical').addEventListener('input', function() {
-        // Search implementation will be added
-        console.log('Search:', this.value);
+    // Search functionality
+    let searchTimeout;
+    document.getElementById('searchRadical')?.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        const searchTerm = this.value.toLowerCase().trim();
+
+        searchTimeout = setTimeout(() => {
+            if (!searchTerm) {
+                displayRadicals(allRadicals);
+                return;
+            }
+
+            const filtered = allRadicals.filter(r => {
+                const hanzi = (r.hanzi || r.character || r.simplified || '').toLowerCase();
+                const pinyin = (r.pinyin || '').toLowerCase();
+                const meaning = (r.meaning || r.english || '').toLowerCase();
+                
+                return hanzi.includes(searchTerm) || 
+                       pinyin.includes(searchTerm) || 
+                       meaning.includes(searchTerm);
+            });
+
+            displayRadicals(filtered);
+        }, 300);
     });
 
-    // Initialize
+    // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
         loadLevels();
         loadRadicals(1);

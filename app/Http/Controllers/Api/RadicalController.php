@@ -273,4 +273,59 @@ class RadicalController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Score user's handwriting against reference
+     * This is a simple placeholder - you can integrate with Python ML model
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * Example: POST /api/score-writing
+     * Body: { "image_reference": "base64...", "image_user": "base64...", "character": "好" }
+     */
+    public function scoreWriting(Request $request)
+    {
+        try {
+            $request->validate([
+                'image_reference' => 'required|string',
+                'image_user' => 'required|string',
+                'character' => 'nullable|string',
+            ]);
+
+            // For now, return a mock score
+            // In production, you would call your Python ML model API here
+            // Example: use Guzzle to call Python Flask/FastAPI endpoint
+            
+            $mockScore = rand(60, 95);
+            $mockDistance = rand(100, 1000) / 10000;
+
+            return response()->json([
+                'success' => true,
+                'score' => $mockScore,
+                'distance' => $mockDistance,
+                'interpretation' => $this->getScoreInterpretation($mockScore),
+                'message' => 'Writing scored successfully',
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while scoring writing.',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Get score interpretation
+     */
+    private function getScoreInterpretation($score)
+    {
+        if ($score >= 90) return 'Excellent!';
+        if ($score >= 80) return 'Very Good!';
+        if ($score >= 70) return 'Good!';
+        if ($score >= 60) return 'Not Bad!';
+        if ($score >= 50) return 'Keep Practicing!';
+        return 'Try Again!';
+    }
 }

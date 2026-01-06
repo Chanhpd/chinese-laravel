@@ -5,31 +5,7 @@
 @section('content')
 <div class="client-container">
     <!-- Navigation Header -->
-    <nav class="client-navbar">
-        <div class="navbar-brand">
-            <div class="brand-logo">🇨🇳</div>
-            <h1>ChineseHub</h1>
-        </div>
-        <ul class="nav-menu">
-            <li><a href="{{ route('client.home') }}" class="nav-link">Dashboard</a></li>
-            <li><a href="{{ route('client.radicals.index') }}" class="nav-link">Characters</a></li>
-            <li><a href="{{ route('client.vocabulary.index') }}" class="nav-link">Vocabulary</a></li>
-            <li><a href="{{ route('client.chat') }}" class="nav-link">AI Chat</a></li>
-        </ul>
-        <div class="nav-user">
-            <div class="user-info">
-                <span class="user-avatar">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-                <div>
-                    <p class="user-name">{{ Auth::user()->name }}</p>
-                    <p class="user-level">Learner</p>
-                </div>
-            </div>
-            <form action="{{ route('client.logout') }}" method="POST" style="margin: 0;">
-                @csrf
-                <button type="submit" class="btn-logout">Logout</button>
-            </form>
-        </div>
-    </nav>
+    @include('client.components.header')
 
     <!-- Main Content -->
     <div class="client-main">
@@ -274,6 +250,12 @@
 <link rel="stylesheet" href="{{ asset('client-assets/css/base.css') }}">
 <link rel="stylesheet" href="{{ asset('client-assets/css/layout.css') }}">
 <style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 50%, #80deea 100%);
+        min-height: 100vh;
+    }
+
     .page-header {
         background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
         color: white;
