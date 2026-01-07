@@ -356,34 +356,34 @@
     left: 50%;
     transform: translateX(-50%);
     font-size: 14px;
-    color: #a0aec0;
+    color: var(--color-text-tertiary);
     font-style: italic;
 }
 
 .flashcard-hanzi {
     font-size: 120px;
     font-weight: 700;
-    color: #1a202c;
+    color: var(--color-text-primary);
 }
 
 .flashcard-pinyin {
     font-size: 36px;
-    color: #667eea;
+    color: var(--color-primary);
     font-weight: 500;
 }
 
 .flashcard-meaning {
     font-size: 48px;
-    color: #2d3748;
+    color: var(--color-text-primary);
     font-weight: 700;
 }
 
 .flashcard-example {
     font-size: 20px;
-    color: #718096;
+    color: var(--color-text-secondary);
     text-align: center;
     padding: 24px;
-    background: #f7fafc;
+    background: var(--color-background-light);
     border-radius: 12px;
     max-width: 600px;
 }
@@ -406,19 +406,19 @@
 }
 
 .btn-dont-know {
-    background: #fed7d7;
-    color: #c53030;
+    background: var(--color-error-light);
+    color: var(--color-error-dark);
 }
 
 .btn-dont-know:hover {
-    background: #fc8181;
+    background: var(--color-error);
     color: white;
     transform: scale(1.05);
 }
 
 .btn-know {
-    background: #c6f6d5;
-    color: #2f855a;
+    background: var(--color-success-light);
+    color: var(--color-success-dark);
 }
 
 .btn-know:hover {
@@ -470,24 +470,24 @@
 .audio-instruction {
     margin-top: 16px;
     font-size: 16px;
-    color: #718096;
+    color: var(--color-text-secondary);
 }
 
 .spelling-hint {
     text-align: center;
     padding: 16px;
-    background: #f7fafc;
+    background: var(--color-background-light);
     border-radius: 12px;
 }
 
 .hint-label {
-    color: #a0aec0;
+    color: var(--color-text-tertiary);
     font-size: 14px;
     margin-right: 8px;
 }
 
 #spellingMeaning {
-    color: #2d3748;
+    color: var(--color-text-primary);
     font-size: 18px;
     font-weight: 600;
 }
@@ -495,7 +495,7 @@
 .spelling-input {
     width: 100%;
     padding: 20px 24px;
-    border: 3px solid #e2e8f0;
+    border: 3px solid var(--color-border);
     border-radius: 12px;
     font-size: 24px;
     text-align: center;
@@ -505,8 +505,8 @@
 
 .spelling-input:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(98, 191, 186, 0.1);
 }
 
 .spelling-feedback {
@@ -519,13 +519,13 @@
 }
 
 .spelling-feedback.correct {
-    background: #c6f6d5;
-    color: #2f855a;
+    background: var(--color-success-light);
+    color: var(--color-success-dark);
 }
 
 .spelling-feedback.incorrect {
-    background: #fed7d7;
-    color: #c53030;
+    background: var(--color-error-light);
+    color: var(--color-error-dark);
 }
 
 .check-btn,
@@ -572,7 +572,7 @@
 
 .question-text {
     font-size: 24px;
-    color: #2d3748;
+    color: var(--color-text-primary);
     font-weight: 600;
     margin-bottom: 24px;
 }
@@ -580,7 +580,7 @@
 .quiz-hanzi {
     font-size: 72px;
     font-weight: 700;
-    color: #667eea;
+    color: var(--color-primary);
 }
 
 .quiz-options {
@@ -592,37 +592,37 @@
 
 .quiz-option {
     padding: 24px;
-    border: 3px solid #e2e8f0;
+    border: 3px solid var(--color-border);
     border-radius: 12px;
     background: white;
     font-size: 18px;
     font-weight: 600;
-    color: #2d3748;
+    color: var(--color-text-primary);
     cursor: pointer;
     transition: all 0.3s;
 }
 
 .quiz-option:hover {
-    border-color: #667eea;
-    background: #f7fafc;
+    border-color: var(--color-primary);
+    background: var(--color-background-light);
     transform: translateY(-2px);
 }
 
 .quiz-option.selected {
-    border-color: #667eea;
-    background: #eef2ff;
+    border-color: var(--color-primary);
+    background: var(--color-primary-50);
 }
 
 .quiz-option.correct {
-    border-color: #48bb78;
-    background: #c6f6d5;
-    color: #2f855a;
+    border-color: var(--color-success);
+    background: var(--color-success-light);
+    color: var(--color-success-dark);
 }
 
 .quiz-option.incorrect {
-    border-color: #f56565;
-    background: #fed7d7;
-    color: #c53030;
+    border-color: var(--color-error);
+    background: var(--color-error-light);
+    color: var(--color-error-dark);
 }
 
 .quiz-option:disabled {
@@ -640,13 +640,13 @@
 }
 
 .quiz-feedback.correct {
-    background: #c6f6d5;
-    color: #2f855a;
+    background: var(--color-success-light);
+    color: var(--color-success-dark);
 }
 
 .quiz-feedback.incorrect {
-    background: #fed7d7;
-    color: #c53030;
+    background: var(--color-error-light);
+    color: var(--color-error-dark);
 }
 
 .next-question-btn {
@@ -703,23 +703,23 @@
 
 .modal-content h2 {
     font-size: 32px;
-    color: #1a202c;
+    color: var(--color-text-primary);
     margin-bottom: 16px;
 }
 
 .modal-content p {
     font-size: 18px;
-    color: #718096;
+    color: var(--color-text-secondary);
     margin-bottom: 32px;
 }
 
 .modal-stats {
-    background: #f7fafc;
+    background: var(--color-background-light);
     padding: 24px;
     border-radius: 12px;
     margin-bottom: 32px;
     font-size: 16px;
-    color: #4a5568;
+    color: var(--color-text-secondary);
 }
 
 .modal-actions {
@@ -741,12 +741,12 @@
 }
 
 .btn-restart {
-    background: #f7fafc;
-    color: #4a5568;
+    background: var(--color-background-light);
+    color: var(--color-text-secondary);
 }
 
 .btn-restart:hover {
-    background: #edf2f7;
+    background: var(--color-border-light);
 }
 
 .btn-home {

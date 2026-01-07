@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = window.location.origin + '/api';
 const TOKEN_KEY = 'auth_token';
 const USER_KEY = 'user_data';
 
@@ -223,12 +223,25 @@ function requireAuth() {
 }
 
 // Guest Guard - Redirect if already authenticated
-function requireGuest() {
-    if (api.isAuthenticated()) {
+async function requireGuest() {
+    const token = api.getToken();
+    
+    if (!token) {
+        return true;
+    }
+    
+    // Validate token with API
+    try {
+        const response = await api.getCurrentUser();
+        
+        // Token is valid, redirect to home
         window.location.href = '/client/home';
         return false;
+    } catch (error) {
+        // Token is invalid or API error, clear it and stay
+        api.clearAuth();
+        return true;
     }
-    return true;
 }
 
 // Handle Login Form

@@ -2,7 +2,7 @@
 <nav class="client-navbar">
     <div class="navbar-brand">
         <div class="brand-logo">🇨🇳</div>
-        <h1>ChineseHub</h1>
+        <h1>Chinese Learner</h1>
     </div>
     <ul class="nav-menu">
         <li><a href="{{ route('client.home') }}" class="nav-link {{ request()->routeIs('client.home') ? 'active' : '' }}">Dashboard</a></li>

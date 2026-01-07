@@ -63,9 +63,6 @@
 
 @push('scripts')
 <script>
-    // Redirect if already logged in
-    if (auth.api.isAuthenticated()) {
-        window.location.href = '{{ route('client.home') }}';
-    }
+    // Laravel middleware will handle redirect if already logged in
 </script>
 @endpush

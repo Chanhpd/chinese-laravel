@@ -138,9 +138,6 @@
 
 @push('scripts')
 <script>
-    // Check if already logged in
-    auth.requireGuest();
-    
     // Initialize register form
     auth.handleRegisterForm();
 </script>

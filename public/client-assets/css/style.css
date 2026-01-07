@@ -6,46 +6,21 @@
     box-sizing: border-box;
 }
 
-:root {
-    --primary-color: #5DBBBA;
-    --primary-dark: #4A9A99;
-    --primary-light: #7CD5D4;
-    --secondary-color: #9FE2E0;
-    --accent-color: #B8E8E6;
-    --bg-gradient-start: #B8E8E6;
-    --bg-gradient-middle: #9FE2E0;
-    --bg-gradient-end: #7CD5D4;
-    
-    --chinese-red: #DC143C;
-    --chinese-gold: #FFD700;
-    
-    --white: #FFFFFF;
-    --text-color: #2D3748;
-    --text-light: #718096;
-    --danger-color: #FC8181;
-    --success-color: #68D391;
-    --border-color: #E0F2F1;
-    --card-bg: #FAFEFE;
-    
-    --shadow-sm: 0 2px 8px rgba(93, 187, 186, 0.1);
-    --shadow-md: 0 4px 16px rgba(93, 187, 186, 0.15);
-    --shadow-lg: 0 8px 32px rgba(93, 187, 186, 0.2);
-    --shadow-xl: 0 12px 48px rgba(93, 187, 186, 0.25);
-}
+/* Colors are now imported from variables.css */
 
 html {
     scroll-behavior: smooth;
 }
 
 body {
-    font-family: 'Noto Sans SC', 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-middle) 50%, var(--bg-gradient-end) 100%);
+    font-family: var(--font-chinese);
+    background: var(--color-background-gradient);
     background-attachment: fixed;
     height: 100vh;
     justify-content: center;
     align-items: center;
     padding: 0;
-    color: var(--text-color);
+    color: var(--color-text-primary);
     position: relative;
     margin: 0;
 }
@@ -59,7 +34,7 @@ body::before {
     height: 200%;
     background-image: 
         radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(93, 187, 186, 0.08) 0%, transparent 50%);
+        radial-gradient(circle at 80% 80%, rgba(98, 191, 186, 0.08) 0%, transparent 50%);
     animation: float 20s ease-in-out infinite;
     pointer-events: none;
     z-index: 0;
@@ -146,7 +121,7 @@ a:hover {
 
     /* Left Side */
     .auth-left {
-        background: linear-gradient(135deg, #4A9A99 0%, #5DBBBA 50%, #7CD5D4 100%);
+        background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary) 50%, var(--color-primary-light) 100%);
         position: relative;
         padding: 60px 50px;
         display: flex;
@@ -185,7 +160,7 @@ a:hover {
     .auth-left-content {
         position: relative;
         z-index: 1;
-        color: var(--white);
+        color: var(--color-text-on-primary);
     }
 
     .auth-left-content .chinese-big {
@@ -205,7 +180,7 @@ a:hover {
         font-size: 38px;
         font-weight: 700;
         margin-bottom: 16px;
-        color: var(--white);
+        color: var(--color-text-on-primary);
         animation: fadeIn 1s ease-out 0.2s backwards;
         text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         line-height: 1.3;
@@ -268,7 +243,7 @@ a:hover {
         font-size: 16px;
         font-weight: 600;
         margin-bottom: 4px;
-        color: var(--white);
+        color: var(--color-text-on-primary);
     }
 
     .auth-left-feature .text p {
@@ -279,7 +254,7 @@ a:hover {
 
     /* Right Side */
     .auth-right {
-        background: linear-gradient(135deg, #FAFEFE 0%, #FFFFFF 100%);
+        background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-background) 50%, var(--color-primary-100) 100%);
         padding: 60px 50px;
         display: flex;
         flex-direction: column;
@@ -296,11 +271,11 @@ a:hover {
         width: 4px;
         height: 100%;
         background: linear-gradient(180deg, 
-            var(--chinese-red) 0%, 
-            var(--chinese-gold) 25%, 
-            var(--primary-color) 50%, 
-            var(--chinese-gold) 75%, 
-            var(--chinese-red) 100%
+            #DC143C 0%, 
+            #FFD700 25%, 
+            var(--color-primary) 50%, 
+            #FFD700 75%, 
+            #DC143C 100%
         );
         background-size: 100% 200%;
         animation: gradient-shift-vertical 4s ease infinite;
@@ -320,9 +295,11 @@ a:hover {
         margin: 0 auto;
         width: 100%;
         padding: 40px;
-        background: var(--white);
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(20px);
         border-radius: 24px;
-        box-shadow: 0 4px 24px rgba(93, 187, 186, 0.1);
+        box-shadow: 0 4px 24px rgba(93, 187, 186, 0.15);
+        border: 1px solid rgba(98, 191, 186, 0.2);
     }
 }
 
@@ -342,8 +319,10 @@ a:hover {
         margin: 0 auto;
         border-radius: 32px;
         padding: 48px 40px;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(15px);
         box-shadow: var(--shadow-xl);
-        border: 3px solid var(--border-color);
+        border: 3px solid var(--color-border);
         animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         position: relative;
         overflow: hidden;
@@ -357,11 +336,11 @@ a:hover {
         right: 0;
         height: 8px;
         background: linear-gradient(90deg, 
-            var(--chinese-red) 0%, 
-            var(--chinese-gold) 25%, 
-            var(--primary-color) 50%, 
-            var(--chinese-gold) 75%, 
-            var(--chinese-red) 100%
+            #DC143C 0%, 
+            #FFD700 25%, 
+            var(--color-primary) 50%, 
+            #FFD700 75%, 
+            #DC143C 100%
         );
         background-size: 200% 100%;
         animation: gradient-shift 4s ease infinite;
@@ -405,7 +384,7 @@ a:hover {
 }
 
 .auth-header h1 {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -417,7 +396,7 @@ a:hover {
 }
 
 .auth-header p {
-    color: var(--text-light);
+    color: var(--color-text-secondary);
     font-size: 15px;
     animation: fadeIn 0.8s ease-out 0.4s both;
 }
@@ -430,7 +409,7 @@ a:hover {
 .welcome-section .chinese-calligraphy {
     font-family: 'ZCOOL XiaoWei', 'Ma Shan Zheng', serif;
     font-size: 64px;
-    background: linear-gradient(135deg, var(--chinese-red) 0%, var(--chinese-gold) 50%, var(--primary-color) 100%);
+    background: linear-gradient(135deg, #DC143C 0%, #FFD700 50%, var(--color-primary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -442,13 +421,13 @@ a:hover {
 
 .welcome-section h2 {
     font-size: 36px;
-    color: var(--text-color);
+    color: var(--color-text-primary);
     margin-bottom: 8px;
     font-weight: 700;
 }
 
 .subtitle {
-    color: var(--text-light);
+    color: var(--color-text-secondary);
     font-size: 16px;
     margin-bottom: 28px;
 }
@@ -461,8 +440,8 @@ a:hover {
 }
 
 .btn-secondary {
-    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
-    color: var(--text-color);
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 100%);
+    color: var(--color-text-primary);
     box-shadow: var(--shadow-md);
     animation: fadeIn 0.6s ease-out 0.5s backwards;
 }
@@ -506,8 +485,8 @@ a:hover {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-    color: var(--white);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: var(--color-text-on-primary);
     box-shadow: var(--shadow-md);
     animation: fadeIn 0.6s ease-out 0.4s backwards;
 }
@@ -537,7 +516,7 @@ a:hover {
     left: 50%;
     margin-left: -12px;
     margin-top: -12px;
-    border: 3px solid var(--white);
+    border: 3px solid var(--color-text-on-primary);
     border-radius: 50%;
     border-top-color: transparent;
     animation: spin 0.8s linear infinite;
@@ -567,7 +546,7 @@ a:hover {
 .form-group label {
     display: block;
     margin-bottom: 10px;
-    color: var(--text-color);
+    color: var(--color-text-primary);
     font-weight: 500;
     font-size: 14px;
     letter-spacing: 0.3px;
@@ -576,28 +555,28 @@ a:hover {
 .form-control {
     width: 100%;
     padding: 14px 18px;
-    border: 2px solid var(--border-color);
+    border: 2px solid var(--color-border);
     border-radius: 16px;
     font-size: 15px;
     font-family: 'Noto Sans SC', sans-serif;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: var(--card-bg);
+    background: var(--color-surface-variant);
 }
 
 .form-control:hover {
-    border-color: var(--primary-light);
+    border-color: var(--color-primary-light);
 }
 
 .form-control:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(93, 187, 186, 0.15);
-    background: var(--white);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(98, 191, 186, 0.15);
+    background: var(--color-surface);
     transform: translateY(-2px);
 }
 
 .form-control.error {
-    border-color: var(--danger-color);
+    border-color: var(--color-error);
     animation: shake 0.4s ease;
 }
 
@@ -608,7 +587,7 @@ a:hover {
 }
 
 .error-message {
-    color: var(--danger-color);
+    color: var(--color-error);
     font-size: 13px;
     margin-top: 8px;
     display: none;
@@ -644,15 +623,15 @@ a:hover {
 }
 
 .alert-success {
-    background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
-    color: #065F46;
-    border: 2px solid var(--success-color);
+    background: linear-gradient(135deg, var(--color-success-light) 0%, #A7F3D0 100%);
+    color: var(--color-success-dark);
+    border: 2px solid var(--color-success);
 }
 
 .alert-danger {
-    background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
-    color: #991B1B;
-    border: 2px solid var(--danger-color);
+    background: linear-gradient(135deg, var(--color-error-light) 0%, #FECACA 100%);
+    color: var(--color-error-dark);
+    border: 2px solid var(--color-error);
     display: block;
 }
 
@@ -672,7 +651,7 @@ a:hover {
     content: "•";
     position: absolute;
     left: 0;
-    color: var(--danger-color);
+    color: var(--color-error);
     font-weight: bold;
 }
 
@@ -680,17 +659,17 @@ a:hover {
     text-align: center;
     margin-top: 20px;
     padding-top: 20px;
-    border-top: 2px dashed var(--border-color);
+    border-top: 2px dashed var(--color-border);
     animation: fadeIn 0.6s ease-out 0.5s backwards;
 }
 
 .auth-footer p {
-    color: var(--text-light);
+    color: var(--color-text-secondary);
     font-size: 14px;
 }
 
 .auth-footer a {
-    color: var(--primary-color);
+    color: var(--color-primary);
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s ease;
@@ -704,7 +683,7 @@ a:hover {
     left: 0;
     width: 0;
     height: 2px;
-    background: var(--primary-color);
+    background: var(--color-primary);
     transition: width 0.3s ease;
 }
 
@@ -713,11 +692,11 @@ a:hover {
 }
 
 ::selection {
-    background: var(--primary-light);
-    color: var(--white);
+    background: var(--color-primary-light);
+    color: var(--color-text-on-primary);
 }
 
 ::-moz-selection {
-    background: var(--primary-light);
-    color: var(--white);
+    background: var(--color-primary-light);
+    color: var(--color-text-on-primary);
 }

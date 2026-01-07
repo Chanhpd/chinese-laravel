@@ -59,6 +59,11 @@
             <div class="radicals-grid" id="radicalsGrid">
                 <!-- Loaded dynamically -->
             </div>
+            <!-- Pagination -->
+            <div class="pagination-container" id="paginationContainer" style="display: none;">
+                <div class="pagination-info" id="paginationInfo"></div>
+                <div class="pagination" id="pagination"></div>
+            </div>
         </section>
     </main>
 </div>
@@ -68,6 +73,9 @@
 <script>
     let currentLevel = 1;
     let allRadicals = [];
+    let filteredRadicals = [];
+    let currentPage = 1;
+    const itemsPerPage = 20;
 
     async function loadLevels() {
         const grid = document.getElementById('levelsGrid');
@@ -134,9 +142,13 @@
         }
     }
 
-    function displayRadicals(radicals) {
+    function displayRadicals(radicals, page = 1) {
         const grid = document.getElementById('radicalsGrid');
+        const paginationContainer = document.getElementById('paginationContainer');
         grid.innerHTML = '';
+        
+        filteredRadicals = radicals;
+        currentPage = page;
 
         if (!radicals || radicals.length === 0) {
             grid.innerHTML = `
@@ -145,10 +157,18 @@
                     <p class="text-muted">No radicals found for this level</p>
                 </div>
             `;
+            paginationContainer.style.display = 'none';
             return;
         }
 
-        radicals.forEach((radical, index) => {
+        // Calculate pagination
+        const totalPages = Math.ceil(radicals.length / itemsPerPage);
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, radicals.length);
+        const paginatedRadicals = radicals.slice(startIndex, endIndex);
+
+        // Display radicals for current page
+        paginatedRadicals.forEach((radical, index) => {
             const card = document.createElement('a');
             card.href = `{{ route('client.radicals.practice') }}`;
             card.className = 'radical-card';
@@ -168,6 +188,97 @@
             
             grid.appendChild(card);
         });
+
+        // Show/hide pagination
+        if (totalPages > 1) {
+            paginationContainer.style.display = 'block';
+            renderPagination(totalPages, page, radicals.length, startIndex, endIndex);
+        } else {
+            paginationContainer.style.display = 'none';
+        }
+
+        // Scroll to top of radicals section
+        document.querySelector('.radicals-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function renderPagination(totalPages, currentPage, totalItems, startIndex, endIndex) {
+        const pagination = document.getElementById('pagination');
+        const paginationInfo = document.getElementById('paginationInfo');
+        
+        // Update info
+        paginationInfo.innerHTML = `Showing ${startIndex + 1}-${endIndex} of ${totalItems} characters`;
+        
+        // Clear pagination
+        pagination.innerHTML = '';
+        
+        // Previous button
+        const prevBtn = document.createElement('button');
+        prevBtn.className = `pagination-btn ${currentPage === 1 ? 'disabled' : ''}`;
+        prevBtn.innerHTML = '← Previous';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => {
+            if (currentPage > 1) displayRadicals(filteredRadicals, currentPage - 1);
+        };
+        pagination.appendChild(prevBtn);
+        
+        // Page numbers
+        const pageNumbers = getPageNumbers(currentPage, totalPages);
+        pageNumbers.forEach(pageNum => {
+            if (pageNum === '...') {
+                const ellipsis = document.createElement('span');
+                ellipsis.className = 'pagination-ellipsis';
+                ellipsis.textContent = '...';
+                pagination.appendChild(ellipsis);
+            } else {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `pagination-btn ${pageNum === currentPage ? 'active' : ''}`;
+                pageBtn.textContent = pageNum;
+                pageBtn.onclick = () => displayRadicals(filteredRadicals, pageNum);
+                pagination.appendChild(pageBtn);
+            }
+        });
+        
+        // Next button
+        const nextBtn = document.createElement('button');
+        nextBtn.className = `pagination-btn ${currentPage === totalPages ? 'disabled' : ''}`;
+        nextBtn.innerHTML = 'Next →';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => {
+            if (currentPage < totalPages) displayRadicals(filteredRadicals, currentPage + 1);
+        };
+        pagination.appendChild(nextBtn);
+    }
+
+    function getPageNumbers(current, total) {
+        const pages = [];
+        
+        if (total <= 7) {
+            // Show all pages if 7 or less
+            for (let i = 1; i <= total; i++) {
+                pages.push(i);
+            }
+        } else {
+            // Always show first page
+            pages.push(1);
+            
+            if (current > 3) {
+                pages.push('...');
+            }
+            
+            // Show pages around current
+            for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+                pages.push(i);
+            }
+            
+            if (current < total - 2) {
+                pages.push('...');
+            }
+            
+            // Always show last page
+            pages.push(total);
+        }
+        
+        return pages;
     }
 
     // Filter by stroke count
@@ -185,7 +296,7 @@
             });
         }
 
-        displayRadicals(filtered);
+        displayRadicals(filtered, 1);
     });
 
     // Search functionality
@@ -196,7 +307,7 @@
 
         searchTimeout = setTimeout(() => {
             if (!searchTerm) {
-                displayRadicals(allRadicals);
+                displayRadicals(allRadicals, 1);
                 return;
             }
 
@@ -210,7 +321,7 @@
                        meaning.includes(searchTerm);
             });
 
-            displayRadicals(filtered);
+            displayRadicals(filtered, 1);
         }, 300);
     });
 

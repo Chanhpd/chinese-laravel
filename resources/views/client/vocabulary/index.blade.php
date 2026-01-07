@@ -46,6 +46,11 @@
                     <!-- Loaded dynamically -->
                     <div class="spinner" style="grid-column: 1/-1; justify-self: center;"></div>
                 </div>
+                <!-- Pagination for Topics -->
+                <div class="pagination-container" id="topicsPaginationContainer" style="display: none;">
+                    <div class="pagination-info" id="topicsPaginationInfo"></div>
+                    <div class="pagination" id="topicsPagination"></div>
+                </div>
             </div>
         </section>
 
@@ -87,6 +92,10 @@
 @push('scripts')
 <script>
     let currentLevel = 1; // Default HSK Level 1
+    let allTopics = [];
+    let filteredTopics = [];
+    let currentTopicPage = 1;
+    const topicsPerPage = 12;
 
     // Tab switching
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -145,51 +154,14 @@
             
             const result = await response.json();
             const topics = result.data || result;
-
-            grid.innerHTML = '';
-
-            if (!topics || topics.length === 0) {
-                grid.innerHTML = `
-                    <div class="no-results" style="grid-column: 1/-1;">
-                        <div class="no-results-icon">📭</div>
-                        <p>No topics found for HSK ${level}</p>
-                    </div>
-                `;
-                return;
-            }
-
-            topics.forEach((topic, index) => {
-                const card = document.createElement('a');
-                card.href = `{{ route('client.vocabulary.learn', '') }}/${topic.id}?level=HSK${level}`;
-                card.className = 'topic-card';
-                card.style.animationDelay = `${index * 0.05}s`;
-                
-                const topicName = topic.name || topic.topic_name || 'Unnamed Topic';
-                const vocabCount = topic.vocabularies_level_count || topic.vocabularies_count || topic.vocabulary_count || 0;
-                const imageUrl = topic.image_url || topic.image;
-                const icon = topic.icon || '📚';
-                
-                // Use image if available, otherwise use icon
-                const headerContent = imageUrl 
-                    ? `<img src="${imageUrl}" alt="${topicName}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                       <div class="topic-icon-fallback" style="display:none;">${icon}</div>`
-                    : `<div class="topic-icon-fallback">${icon}</div>`;
-                
-                card.innerHTML = `
-                    <div class="topic-header">${headerContent}</div>
-                    <div class="topic-body">
-                        <div class="topic-name">${topicName}</div>
-                        <div class="topic-meta">
-                            <span>📖 ${vocabCount} words</span>
-                            <span>🎯 HSK ${level}</span>
-                        </div>
-                        <button class="topic-btn">Start Learning</button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
+            
+            allTopics = topics;
+            filteredTopics = topics;
+            
+            displayTopics(topics, 1, level);
         } catch (error) {
             console.error('Error loading topics:', error);
+            const grid = document.getElementById('topicsGrid');
             grid.innerHTML = `
                 <div class="no-results" style="grid-column: 1/-1;">
                     <div class="no-results-icon">❌</div>
@@ -197,6 +169,155 @@
                 </div>
             `;
         }
+    }
+    
+    function displayTopics(topics, page = 1, level = 1) {
+        const grid = document.getElementById('topicsGrid');
+        const paginationContainer = document.getElementById('topicsPaginationContainer');
+        grid.innerHTML = '';
+        
+        filteredTopics = topics;
+        currentTopicPage = page;
+
+        if (!topics || topics.length === 0) {
+            grid.innerHTML = `
+                <div class="no-results" style="grid-column: 1/-1;">
+                    <div class="no-results-icon">📭</div>
+                    <p>No topics found for HSK ${level}</p>
+                </div>
+            `;
+            paginationContainer.style.display = 'none';
+            return;
+        }
+
+        // Calculate pagination
+        const totalPages = Math.ceil(topics.length / topicsPerPage);
+        const startIndex = (page - 1) * topicsPerPage;
+        const endIndex = Math.min(startIndex + topicsPerPage, topics.length);
+        const paginatedTopics = topics.slice(startIndex, endIndex);
+
+        // Display topics for current page
+        paginatedTopics.forEach((topic, index) => {
+            const card = document.createElement('a');
+            card.href = `{{ route('client.vocabulary.learn', '') }}/${topic.id}?level=HSK${level}`;
+            card.className = 'topic-card';
+            card.style.animationDelay = `${index * 0.05}s`;
+            
+            const topicName = topic.name || topic.topic_name || 'Unnamed Topic';
+            const vocabCount = topic.vocabularies_level_count || topic.vocabularies_count || topic.vocabulary_count || 0;
+            const imageUrl = topic.image_url || topic.image;
+            const icon = topic.icon || '📚';
+            
+            // Use image if available, otherwise use icon
+            const headerContent = imageUrl 
+                ? `<img src="${imageUrl}" alt="${topicName}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                   <div class="topic-icon-fallback" style="display:none;">${icon}</div>`
+                : `<div class="topic-icon-fallback">${icon}</div>`;
+            
+            card.innerHTML = `
+                <div class="topic-header">${headerContent}</div>
+                <div class="topic-body">
+                    <div class="topic-name">${topicName}</div>
+                    <div class="topic-meta">
+                        <span>📖 ${vocabCount} words</span>
+                        <span>🎯 HSK ${level}</span>
+                    </div>
+                    <button class="topic-btn">Start Learning</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // Show/hide pagination
+        if (totalPages > 1) {
+            paginationContainer.style.display = 'block';
+            renderTopicsPagination(totalPages, page, topics.length, startIndex, endIndex, level);
+        } else {
+            paginationContainer.style.display = 'none';
+        }
+
+        // Scroll to top of topics section
+        document.querySelector('.topics-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function renderTopicsPagination(totalPages, currentPage, totalItems, startIndex, endIndex, level) {
+        const pagination = document.getElementById('topicsPagination');
+        const paginationInfo = document.getElementById('topicsPaginationInfo');
+        
+        // Update info
+        paginationInfo.innerHTML = `Showing ${startIndex + 1}-${endIndex} of ${totalItems} topics`;
+        
+        // Clear pagination
+        pagination.innerHTML = '';
+        
+        // Previous button
+        const prevBtn = document.createElement('button');
+        prevBtn.className = `pagination-btn ${currentPage === 1 ? 'disabled' : ''}`;
+        prevBtn.innerHTML = '← Previous';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => {
+            if (currentPage > 1) displayTopics(filteredTopics, currentPage - 1, level);
+        };
+        pagination.appendChild(prevBtn);
+        
+        // Page numbers
+        const pageNumbers = getPageNumbers(currentPage, totalPages);
+        pageNumbers.forEach(pageNum => {
+            if (pageNum === '...') {
+                const ellipsis = document.createElement('span');
+                ellipsis.className = 'pagination-ellipsis';
+                ellipsis.textContent = '...';
+                pagination.appendChild(ellipsis);
+            } else {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `pagination-btn ${pageNum === currentPage ? 'active' : ''}`;
+                pageBtn.textContent = pageNum;
+                pageBtn.onclick = () => displayTopics(filteredTopics, pageNum, level);
+                pagination.appendChild(pageBtn);
+            }
+        });
+        
+        // Next button
+        const nextBtn = document.createElement('button');
+        nextBtn.className = `pagination-btn ${currentPage === totalPages ? 'disabled' : ''}`;
+        nextBtn.innerHTML = 'Next →';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => {
+            if (currentPage < totalPages) displayTopics(filteredTopics, currentPage + 1, level);
+        };
+        pagination.appendChild(nextBtn);
+    }
+
+    function getPageNumbers(current, total) {
+        const pages = [];
+        
+        if (total <= 7) {
+            // Show all pages if 7 or less
+            for (let i = 1; i <= total; i++) {
+                pages.push(i);
+            }
+        } else {
+            // Always show first page
+            pages.push(1);
+            
+            if (current > 3) {
+                pages.push('...');
+            }
+            
+            // Show pages around current
+            for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+                pages.push(i);
+            }
+            
+            if (current < total - 2) {
+                pages.push('...');
+            }
+            
+            // Always show last page
+            pages.push(total);
+        }
+        
+        return pages;
     }
 
     async function loadHSKLevels() {
