@@ -46,6 +46,20 @@ Route::prefix('client')->name('client.')->group(function () {
             Route::get('/{id}', [ClientController::class, 'vocabularyDetail'])->name('detail');
         });
         
+        // HSK Learning
+        Route::prefix('hsk')->name('hsk.')->group(function () {
+            Route::get('/', [ClientController::class, 'hskIndex'])->name('index');
+            Route::get('/level/{level}', [ClientController::class, 'hskLevel'])->name('level');
+        });
+        
+        // TOCFL Learning
+        Route::prefix('tocfl')->name('tocfl.')->group(function () {
+            Route::get('/', [ClientController::class, 'tocflIndex'])->name('index');
+            Route::get('/level/{level}', [ClientController::class, 'tocflLevel'])->name('level');
+            Route::get('/level/{level}/practice', [ClientController::class, 'tocflPractice'])->name('practice');
+            Route::get('/level/{level}/writing', [ClientController::class, 'tocflWriting'])->name('writing');
+        });
+        
         // Quiz/Exam
         Route::prefix('quiz')->name('quiz.')->group(function () {
             Route::get('/', [ClientController::class, 'quizIndex'])->name('index');

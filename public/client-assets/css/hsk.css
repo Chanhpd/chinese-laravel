@@ -1,0 +1,328 @@
+/* HSK Learning Styles */
+
+/* Horizontal Scroll Container */
+.hsk-levels-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(102, 126, 234, 0.3) transparent;
+}
+
+.hsk-levels-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.hsk-levels-scroll::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.05);
+    border-radius: 10px;
+}
+
+.hsk-levels-scroll::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.3);
+    border-radius: 10px;
+}
+
+.hsk-levels-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(102, 126, 234, 0.5);
+}
+
+.hsk-levels-scroll .levels-container {
+    display: flex;
+    gap: 24px;
+    padding: 20px 0 30px;
+    justify-content: center;
+}
+
+/* HSK Level Cards */
+.hsk-level-card {
+    position: relative;
+    flex: 0 0 320px;
+    height: 220px;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: block;
+}
+
+.hsk-level-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.4s ease;
+}
+
+.hsk-level-card:hover::before {
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    transform: translateY(-5px);
+}
+
+.hsk-level-card .card-gradient-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+.hsk-level-card:hover .card-gradient-bg {
+    opacity: 1;
+    height: 100%;
+}
+
+/* HSK Level Colors */
+.hsk-level-card[data-level="1"] .card-gradient-bg {
+    background: linear-gradient(135deg, #52b788 0%, #40916c 100%);
+}
+
+.hsk-level-card[data-level="2"] .card-gradient-bg {
+    background: linear-gradient(135deg, #4ca6f3 0%, #3b96e8 100%);
+}
+
+.hsk-level-card[data-level="3"] .card-gradient-bg {
+    background: linear-gradient(135deg, #ffb088 0%, #ff9a68 100%);
+}
+
+.hsk-level-card[data-level="4"] .card-gradient-bg {
+    background: linear-gradient(135deg, #f08080 0%, #e65151 100%);
+}
+
+.hsk-level-card[data-level="5"] .card-gradient-bg {
+    background: linear-gradient(135deg, #ba68c8 0%, #ab47bc 100%);
+}
+
+.hsk-level-card[data-level="6"] .card-gradient-bg {
+    background: linear-gradient(135deg, #424242 0%, #212121 100%);
+}
+
+.hsk-level-card[data-level="7-9"] .card-gradient-bg {
+    background: linear-gradient(135deg, #d62828 0%, #a72b2b 100%);
+}
+
+.hsk-level-card .card-content {
+    position: relative;
+    z-index: 2;
+    padding: 28px 24px 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s ease;
+}
+
+.hsk-level-card:hover .card-content {
+    color: white;
+}
+
+.hsk-level-card .level-number {
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.4s ease;
+}
+
+.hsk-level-card:hover .level-number {
+    -webkit-text-fill-color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.hsk-level-card .card-info {
+    flex: 1;
+    margin-bottom: 20px;
+}
+
+.hsk-level-card .level-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #2d3748;
+    transition: all 0.3s ease;
+}
+
+.hsk-level-card:hover .level-title {
+    color: white;
+}
+
+.hsk-level-card .level-desc {
+    font-size: 0.875rem;
+    color: #718096;
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+.hsk-level-card:hover .level-desc {
+    color: rgba(255,255,255,0.9);
+}
+
+.hsk-level-card .card-footer-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    margin-top: auto;
+    border-top: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.hsk-level-card:hover .card-footer-custom {
+    border-top-color: rgba(255,255,255,0.3);
+}
+
+.hsk-level-card .badge-custom {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #f7fafc;
+    color: #4a5568;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.hsk-level-card:hover .badge-custom {
+    background: rgba(255,255,255,0.2);
+    color: white;
+}
+
+.hsk-level-card .arrow-icon {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #667eea;
+    transition: all 0.3s ease;
+}
+
+.hsk-level-card:hover .arrow-icon {
+    color: white;
+    transform: translateX(5px);
+}
+
+/* Info Card */
+.hsk-page .info-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-top: 3rem;
+}
+
+.hsk-page .info-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.hsk-page .info-icon {
+    font-size: 2rem;
+}
+
+.hsk-page .info-header h4 {
+    color: white;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.hsk-page .info-content {
+    padding: 24px;
+}
+
+.hsk-page .info-intro {
+    font-size: 1rem;
+    color: #4a5568;
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+
+.hsk-page .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.hsk-page .info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: #f7fafc;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.hsk-page .info-item:hover {
+    background: #edf2f7;
+    transform: translateY(-2px);
+}
+
+.hsk-page .info-badge {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.hsk-page .info-badge.hsk-beginner {
+    background: linear-gradient(135deg, #52b788, #40916c);
+}
+
+.hsk-page .info-badge.hsk-intermediate {
+    background: linear-gradient(135deg, #ffb088, #ff9a68);
+}
+
+.hsk-page .info-badge.hsk-advanced {
+    background: linear-gradient(135deg, #ba68c8, #ab47bc);
+}
+
+.hsk-page .info-badge.hsk-mastery {
+    background: linear-gradient(135deg, #d62828, #a72b2b);
+}
+
+.hsk-page .info-text strong {
+    display: block;
+    color: #2d3748;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+}
+
+.hsk-page .info-text p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #718096;
+}
+
+@media (max-width: 768px) {
+    .hsk-level-card {
+        flex: 0 0 280px;
+        height: 180px;
+    }
+    
+    .hsk-level-card .level-number {
+        font-size: 2.5rem;
+    }
+    
+    .hsk-page .info-grid {
+        grid-template-columns: 1fr;
+    }
+}

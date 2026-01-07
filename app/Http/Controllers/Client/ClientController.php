@@ -263,4 +263,179 @@ class ClientController extends Controller
         
         return redirect()->route('client.index')->with('success', 'Đăng xuất thành công!');
     }
+
+    /**
+     * HSK Learning - Index (List all HSK levels)
+     */
+    public function hskIndex()
+    {
+        $hskLevels = [
+            ['level' => 1, 'name' => 'HSK 1', 'description' => 'Beginner level - 150 words'],
+            ['level' => 2, 'name' => 'HSK 2', 'description' => 'Elementary level - 300 words'],
+            ['level' => 3, 'name' => 'HSK 3', 'description' => 'Pre-intermediate level - 600 words'],
+            ['level' => 4, 'name' => 'HSK 4', 'description' => 'Intermediate level - 1200 words'],
+            ['level' => 5, 'name' => 'HSK 5', 'description' => 'Upper-intermediate level - 2500 words'],
+            ['level' => 6, 'name' => 'HSK 6', 'description' => 'Advanced level - 5000+ words'],
+            ['level' => '7-9', 'name' => 'HSK 7-9', 'description' => 'Mastery level - 11092 words'],
+        ];
+        
+        return view('client.hsk.index', compact('hskLevels'));
+    }
+
+    /**
+     * HSK Learning - Level detail
+     */
+    public function hskLevel($level, Request $request)
+    {
+        $jsonPath = database_path("json/note/hsk_{$level}.json");
+        
+        if (!file_exists($jsonPath)) {
+            abort(404, 'HSK level not found');
+        }
+        
+        $words = json_decode(file_get_contents($jsonPath), true);
+        
+        // Pagination - 24 words per page
+        $perPage = 24;
+        $currentPage = $request->get('page', 1);
+        $totalWords = count($words);
+        $totalPages = ceil($totalWords / $perPage);
+        
+        // Ensure current page is valid
+        if ($currentPage < 1) $currentPage = 1;
+        if ($currentPage > $totalPages) $currentPage = $totalPages;
+        
+        // Get words for current page
+        $offset = ($currentPage - 1) * $perPage;
+        $paginatedWords = array_slice($words, $offset, $perPage);
+        
+        return view('client.hsk.level', [
+            'level' => $level,
+            'words' => $paginatedWords,
+            'totalWords' => $totalWords,
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            'perPage' => $perPage,
+        ]);
+    }
+
+    /**
+     * TOCFL Learning - Index (List all TOCFL levels)
+     */
+    public function tocflIndex()
+    {
+        $tocflLevels = [
+            ['level' => 1, 'name' => 'TOCFL 1', 'description' => 'Novice 1 - Basic vocabulary'],
+            ['level' => 2, 'name' => 'TOCFL 2', 'description' => 'Novice 2 - Elementary vocabulary'],
+            ['level' => 3, 'name' => 'TOCFL 3', 'description' => 'Level 3 - Intermediate vocabulary'],
+            ['level' => 4, 'name' => 'TOCFL 4', 'description' => 'Level 4 - Upper-intermediate vocabulary'],
+            ['level' => '5-6', 'name' => 'TOCFL 5-6', 'description' => 'Advanced level - Advanced vocabulary'],
+        ];
+        
+        return view('client.tocfl.index', compact('tocflLevels'));
+    }
+
+    /**
+     * TOCFL Learning - Level detail
+     */
+    public function tocflLevel($level, Request $request)
+    {
+        $jsonPath = database_path("json/note/tocfl_{$level}.json");
+        
+        if (!file_exists($jsonPath)) {
+            abort(404, 'TOCFL level not found');
+        }
+        
+        $words = json_decode(file_get_contents($jsonPath), true);
+        
+        // Pagination - 24 words per page
+        $perPage = 24;
+        $currentPage = $request->get('page', 1);
+        $totalWords = count($words);
+        $totalPages = ceil($totalWords / $perPage);
+        
+        // Ensure current page is valid
+        if ($currentPage < 1) $currentPage = 1;
+        if ($currentPage > $totalPages) $currentPage = $totalPages;
+        
+        // Get words for current page
+        $offset = ($currentPage - 1) * $perPage;
+        $paginatedWords = array_slice($words, $offset, $perPage);
+        
+        return view('client.tocfl.level', [
+            'level' => $level,
+            'words' => $paginatedWords,
+            'totalWords' => $totalWords,
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            'perPage' => $perPage,
+        ]);
+    }
+
+    /**
+     * TOCFL Practice Quiz
+     */
+    public function tocflPractice($level, Request $request)
+    {
+        $jsonPath = database_path("json/note/tocfl_{$level}.json");
+        
+        if (!file_exists($jsonPath)) {
+            abort(404, 'TOCFL level not found');
+        }
+        
+        $allWords = json_decode(file_get_contents($jsonPath), true);
+        
+        // Get starting position (default 0)
+        $startIndex = $request->get('start', 0);
+        
+        // Get 5 words for this quiz
+        $quizWords = array_slice($allWords, $startIndex, 5);
+        
+        // Check if there are more words after this batch
+        $hasMore = ($startIndex + 5) < count($allWords);
+        $nextStart = $startIndex + 5;
+        
+        return view('client.tocfl.practice', [
+            'level' => $level,
+            'words' => $quizWords,
+            'startIndex' => $startIndex,
+            'hasMore' => $hasMore,
+            'nextStart' => $nextStart,
+            'totalWords' => count($allWords),
+        ]);
+    }
+
+    /**
+     * TOCFL Writing Practice
+     */
+    public function tocflWriting($level, Request $request)
+    {
+        $jsonPath = database_path("json/note/tocfl_{$level}.json");
+        
+        if (!file_exists($jsonPath)) {
+            abort(404, 'TOCFL level not found');
+        }
+        
+        $allWords = json_decode(file_get_contents($jsonPath), true);
+        
+        // Get current page to get same 24 words
+        $perPage = 24;
+        $currentPage = $request->get('page', 1);
+        $totalWords = count($allWords);
+        $totalPages = ceil($totalWords / $perPage);
+        
+        if ($currentPage < 1) $currentPage = 1;
+        if ($currentPage > $totalPages) $currentPage = $totalPages;
+        
+        // Get words for current page (same as level view)
+        $offset = ($currentPage - 1) * $perPage;
+        $pageWords = array_slice($allWords, $offset, $perPage);
+        
+        return view('client.tocfl.writing', [
+            'level' => $level,
+            'words' => $pageWords,
+            'totalWords' => count($pageWords),
+            'currentPage' => $currentPage,
+        ]);
+    }
 }

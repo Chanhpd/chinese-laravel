@@ -8,6 +8,8 @@
         <li><a href="{{ route('client.home') }}" class="nav-link {{ request()->routeIs('client.home') ? 'active' : '' }}">Dashboard</a></li>
         <li><a href="{{ route('client.radicals.index') }}" class="nav-link {{ request()->routeIs('client.radicals.*') ? 'active' : '' }}">Characters</a></li>
         <li><a href="{{ route('client.vocabulary.index') }}" class="nav-link {{ request()->routeIs('client.vocabulary.*') ? 'active' : '' }}">Vocabulary</a></li>
+        <li><a href="{{ route('client.hsk.index') }}" class="nav-link {{ request()->routeIs('client.hsk.*') ? 'active' : '' }}">HSK</a></li>
+        <li><a href="{{ route('client.tocfl.index') }}" class="nav-link {{ request()->routeIs('client.tocfl.*') ? 'active' : '' }}">TOCFL</a></li>
         <li><a href="{{ route('client.chat') }}" class="nav-link {{ request()->routeIs('client.chat') ? 'active' : '' }}">AI Chat</a></li>
     </ul>
     <div class="nav-user">

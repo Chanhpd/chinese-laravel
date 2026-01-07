@@ -1,0 +1,709 @@
+/* TOCFL Level Detail Page Styles - Grid Layout with Images */
+
+/* Page Background */
+.tocfl-level-page {
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+    min-height: 100vh;
+    padding-bottom: 3rem;
+}
+
+/* Header Section */
+.tocfl-level-page .page-header h1 {
+    background: linear-gradient(135deg, #00acc1 0%, #0097a7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Back Button */
+.tocfl-level-page .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: white;
+    color: #00acc1;
+    border: 2px solid #00acc1;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 172, 193, 0.1);
+}
+
+.tocfl-level-page .back-button:hover {
+    background: #00acc1;
+    color: white;
+    transform: translateX(-4px);
+    box-shadow: 0 4px 12px rgba(0, 172, 193, 0.2);
+}
+
+/* Search Input */
+.tocfl-level-page .search-input {
+    padding: 12px 20px;
+    border: 2px solid #b2ebf2;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.tocfl-level-page .search-input:focus {
+    border-color: #00acc1;
+    box-shadow: 0 0 0 4px rgba(0, 172, 193, 0.1);
+    outline: none;
+}
+
+/* Mode Buttons Section */
+.mode-buttons-section {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+}
+
+.mode-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 0;
+}
+
+.mode-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    background: white;
+    border: 2px solid #e0f7fa;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    color: #37474f;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.mode-button:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    border-color: #00acc1;
+    color: #00acc1;
+    background: #e0f7fa;
+}
+
+.mode-button .icon {
+    font-size: 2rem;
+}
+
+/* Vocabulary Grid Layout */
+.vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 2rem;
+}
+
+.vocab-card-item {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.vocab-card-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    border-color: #00acc1;
+}
+
+.vocab-card-item .card-number {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(0, 172, 193, 0.9);
+    color: white;
+    font-weight: 800;
+    font-size: 1rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.vocab-card-item .card-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+    overflow: hidden;
+}
+
+.vocab-card-item .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.vocab-card-item:hover .card-image img {
+    transform: scale(1.1);
+}
+
+.vocab-card-item .card-image .no-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: rgba(0, 172, 193, 0.3);
+}
+
+.vocab-card-item .card-body {
+    padding: 20px;
+}
+
+.vocab-card-item .chinese-char {
+    font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #00acc1;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.vocab-card-item .pinyin-text {
+    color: #0097a7;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.vocab-card-item .audio-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: #e0f7fa;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.vocab-card-item .audio-btn:hover {
+    background: #00acc1;
+    transform: scale(1.15);
+}
+
+.vocab-card-item .meaning-text {
+    color: #546e7a;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    text-align: center;
+    min-height: 45px;
+    margin-bottom: 12px;
+}
+
+.vocab-card-item .card-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    padding-top: 12px;
+    border-top: 1px solid #e0f7fa;
+}
+
+.vocab-card-item .action-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 2px solid;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.vocab-card-item .action-btn.learned {
+    color: #66bb6a;
+    border-color: #66bb6a;
+    background: white;
+}
+
+.vocab-card-item .action-btn.learned:hover,
+.vocab-card-item .action-btn.learned.active {
+    background: #66bb6a;
+    color: white;
+}
+
+.vocab-card-item .action-btn.details {
+    color: #00acc1;
+    border-color: #00acc1;
+    background: white;
+}
+
+.vocab-card-item .action-btn.details:hover {
+    background: #00acc1;
+    color: white;
+}
+
+/* Pagination Controls */
+.pagination-controls {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 2rem;
+}
+
+.pagination-info {
+    font-weight: 600;
+    color: #546e7a;
+    font-size: 1rem;
+}
+
+.pagination-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pagination-nav .page-btn {
+    padding: 10px 20px;
+    background: white;
+    border: 2px solid #00acc1;
+    color: #00acc1;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pagination-nav .page-btn:hover:not(:disabled) {
+    background: #00acc1;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 172, 193, 0.3);
+}
+
+.pagination-nav .page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-color: #ccc;
+    color: #ccc;
+}
+
+.pagination-nav .current-page {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #00acc1 0%, #0097a7 100%);
+    color: white;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* Auto-play Controls */
+.autoplay-controls {
+    background: white;
+    border-radius: 20px;
+    padding: 20px 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 2rem;
+}
+
+.autoplay-btn {
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(102, 187, 106, 0.3);
+}
+
+.autoplay-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 187, 106, 0.4);
+}
+
+.autoplay-btn.playing {
+    background: linear-gradient(135deg, #ff7043 0%, #ff5722 100%);
+    box-shadow: 0 4px 12px rgba(255, 112, 67, 0.3);
+}
+
+.autoplay-progress {
+    font-weight: 600;
+    color: #546e7a;
+    font-size: 1.1rem;
+}
+
+/* Modal Styles */
+.word-modal .modal-content {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.word-modal .modal-header {
+    background: linear-gradient(135deg, #00acc1 0%, #0097a7 100%);
+    color: white;
+    border-radius: 20px 20px 0 0;
+    padding: 20px 24px;
+}
+
+.word-modal .modal-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .vocab-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .mode-buttons-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .pagination-controls {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .vocab-card-item .card-image {
+        height: 180px;
+    }
+    
+    .vocab-card-item .chinese-char {
+        font-size: 2rem;
+    }
+}
+
+
+/* Statistics Cards */
+.stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.stat-card.total {
+    border-color: #4dd0e1;
+    background: linear-gradient(135deg, #ffffff 0%, #e0f7fa 100%);
+}
+
+.stat-card.learned {
+    border-color: #66bb6a;
+    background: linear-gradient(135deg, #ffffff 0%, #e8f5e9 100%);
+}
+
+.stat-card.progress {
+    border-color: #ffa726;
+    background: linear-gradient(135deg, #ffffff 0%, #fff3e0 100%);
+}
+
+.stat-card.practice {
+    border-color: #00acc1;
+    background: linear-gradient(135deg, #00acc1 0%, #0097a7 100%);
+}
+
+.stat-card h3 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+}
+
+.stat-card.total h3 {
+    color: #00acc1;
+}
+
+.stat-card.learned h3 {
+    color: #66bb6a;
+}
+
+.stat-card.progress h3 {
+    color: #ffa726;
+}
+
+.stat-card.practice h3 {
+    color: white;
+}
+
+.stat-card small {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #546e7a;
+}
+
+.stat-card.practice small {
+    color: white;
+}
+
+.stat-card .practice-btn {
+    margin-top: 12px;
+    padding: 10px 24px;
+    background: white;
+    color: #00acc1;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card .practice-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Vocabulary Table Card */
+.vocab-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border: 2px solid #e0f7fa;
+}
+
+.vocab-table {
+    margin: 0;
+}
+
+.vocab-table thead {
+    background: linear-gradient(135deg, #00acc1 0%, #0097a7 100%);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.vocab-table thead th {
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    padding: 16px 12px;
+    border: none;
+}
+
+.vocab-table tbody tr {
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #e0f7fa;
+}
+
+.vocab-table tbody tr:hover {
+    background: #e0f7fa;
+    transform: scale(1.01);
+}
+
+.vocab-table tbody td {
+    padding: 16px 12px;
+    vertical-align: middle;
+}
+
+.vocab-table .row-number {
+    color: #90a4ae;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.vocab-table .chinese-char {
+    font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #00acc1;
+}
+
+.vocab-table .pinyin-text {
+    color: #0097a7;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.vocab-table .audio-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: #e0f7fa;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 8px;
+}
+
+.vocab-table .audio-btn:hover {
+    background: #00acc1;
+    transform: scale(1.1);
+}
+
+.vocab-table .meaning-text {
+    color: #37474f;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Action Buttons */
+.action-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 2px solid;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.action-btn.learned {
+    color: #66bb6a;
+    border-color: #66bb6a;
+    background: white;
+}
+
+.action-btn.learned:hover {
+    background: #66bb6a;
+    color: white;
+}
+
+.action-btn.details {
+    color: #00acc1;
+    border-color: #00acc1;
+    background: white;
+    margin-left: 4px;
+}
+
+.action-btn.details:hover {
+    background: #00acc1;
+    color: white;
+}
+
+/* Pagination */
+.pagination-info {
+    text-align: center;
+    margin-top: 24px;
+    padding: 16px;
+    background: white;
+    border-radius: 12px;
+    color: #546e7a;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Modal Styles */
+.word-modal .modal-content {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.word-modal .modal-header {
+    background: linear-gradient(135deg, #00acc1 0%, #0097a7 100%);
+    color: white;
+    border-radius: 20px 20px 0 0;
+    padding: 20px 24px;
+}
+
+.word-modal .modal-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.word-modal .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+.word-modal .modal-body {
+    padding: 32px 24px;
+}
+
+.word-modal .modal-body img {
+    transition: transform 0.3s ease;
+}
+
+.word-modal .modal-body img:hover {
+    transform: scale(1.05);
+}
+
+.word-modal .alert-info {
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+    border: 2px solid #00acc1;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stat-card h3 {
+        font-size: 2rem;
+    }
+    
+    .vocab-table .chinese-char {
+        font-size: 1.5rem;
+    }
+    
+    .vocab-table thead th,
+    .vocab-table tbody td {
+        padding: 12px 8px;
+        font-size: 0.875rem;
+    }
+}

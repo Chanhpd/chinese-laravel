@@ -132,38 +132,45 @@
                     <div class="app-logo">
                         <img src="{{ asset('images/logo.png') }}" alt="Chinese Learner Logo">
                     </div>
-                    <h2>📱 Trải nghiệm tốt hơn với Mobile App</h2>
-                    <p class="app-tagline">Học mọi lúc, mọi nơi với ứng dụng di động Chinese Learner</p>
+                    <h2>📱 Better Experience with Mobile App</h2>
+                    <p class="app-tagline">Learn anytime, anywhere with Chinese Learner mobile application</p>
                     
                     <div class="app-features">
                         <div class="feature-item">
                             <span class="feature-icon">✅</span>
-                            <span>Tham gia thi các bài kiểm tra HSK</span>
+                            <span>Take HSK practice exams</span>
                         </div>
                         <div class="feature-item">
                             <span class="feature-icon">✅</span>
-                            <span>Luyện viết chữ Hán offline</span>
+                            <span>Practice writing Chinese offline</span>
                         </div>
                         <div class="feature-item">
                             <span class="feature-icon">✅</span>
-                            <span>Flashcards thông minh với AI</span>
+                            <span>Smart flashcards with AI</span>
                         </div>
                         <div class="feature-item">
                             <span class="feature-icon">✅</span>
-                            <span>Nhận thông báo học hàng ngày</span>
+                            <span>Daily learning reminders</span>
                         </div>
                     </div>
 
                     <div class="app-download-buttons">
                         <a href="#" class="download-btn app-store">
-                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 40'%3E%3Cpath fill='%23FFF' d='M110.135 0H9.535C4.276 0 0 4.276 0 9.535v20.93C0 35.724 4.276 40 9.535 40h100.6c5.259 0 9.535-4.276 9.535-9.535V9.535C119.67 4.276 115.394 0 110.135 0z'/%3E%3Cpath d='M24.769 20.3a4.949 4.949 0 012.356-4.152 5.066 5.066 0 00-3.99-2.158c-1.68-.176-3.308 1.005-4.164 1.005-.872 0-2.19-.988-3.608-.958a5.315 5.315 0 00-4.473 2.728c-1.934 3.348-.491 8.269 1.361 10.976.927 1.325 2.01 2.805 3.428 2.753 1.387-.058 1.905-.885 3.58-.885 1.658 0 2.144.885 3.591.852 1.489-.025 2.426-1.332 3.32-2.67a10.962 10.962 0 001.52-3.092 4.782 4.782 0 01-2.921-4.4zM22.037 12.21a4.872 4.872 0 001.115-3.49 4.957 4.957 0 00-3.208 1.66 4.636 4.636 0 00-1.143 3.361 4.1 4.1 0 003.236-1.53z' fill='%23000'/%3E%3C/svg%3E" alt="App Store">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="28" height="28" fill="white">
+                                <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-94.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+                            </svg>
                             <span>
                                 <small>Download on the</small>
                                 <strong>App Store</strong>
                             </span>
                         </a>
                         <a href="#" class="download-btn google-play">
-                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 135 40'%3E%3Cpath fill='%23FFF' d='M130 40H5c-2.8 0-5-2.2-5-5V5c0-2.8 2.2-5 5-5h125c2.8 0 5 2.2 5 5v30c0 2.8-2.2 5-5 5z'/%3E%3Cpath d='M47.4 10.2c0 .8-.2 1.5-.7 2-.6.6-1.3.9-2.2.9-.9 0-1.6-.3-2.2-.9-.6-.6-.9-1.3-.9-2.2 0-.9.3-1.6.9-2.2.6-.6 1.3-.9 2.2-.9.4 0 .8.1 1.2.3.4.2.7.4.9.7l-.5.5c-.4-.5-.9-.7-1.6-.7-.6 0-1.2.2-1.6.7-.5.4-.7 1-.7 1.7s.2 1.3.7 1.7c.5.4 1 .7 1.6.7.7 0 1.2-.2 1.7-.7.3-.3.5-.7.5-1.2h-2.2v-.8h2.9v.4z' fill='%23000'/%3E%3C/svg%3E" alt="Google Play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="28" height="28">
+                                <path fill="#4285f4" d="M48 105.2C48 83 59.6 63.7 76.8 53.9L259 234.8 76.8 415.7C59.6 405.9 48 386.6 48 364.4V105.2z"/>
+                                <path fill="#34a853" d="M345.4 241L298.6 195.5 76.8 53.9C85.4 49.7 95.3 47.4 105.6 47.4c18.7 0 37.2 6.3 52.2 18.4L345.4 241z"/>
+                                <path fill="#fbbc04" d="M454.8 205.7c-10.1-5.4-21.5-8.2-33.1-8.2-12 0-23.8 3-34.3 8.7L345.4 241l42.2 42.2 67.2-35.9c10.1-5.4 16.8-15.8 16.8-28.3 0-12.5-6.7-22.9-16.8-28.3z"/>
+                                <path fill="#ea4335" d="M259 320.8L76.8 502.7c8.6 4.2 18.5 6.5 28.8 6.5 18.7 0 37.2-6.3 52.2-18.4L345.4 315.6 298.6 269.5 259 320.8z"/>
+                            </svg>
                             <span>
                                 <small>GET IT ON</small>
                                 <strong>Google Play</strong>
@@ -176,19 +183,19 @@
                     <div class="screenshot-carousel">
                         <div class="screenshot-item">
                             <img src="{{ asset('images/screens/character.png') }}" alt="Character Learning">
-                            <p class="screenshot-label">Học chữ Hán</p>
+                            <p class="screenshot-label">Character Learning</p>
                         </div>
                         <div class="screenshot-item">
                             <img src="{{ asset('images/screens/flashcard.png') }}" alt="Flashcard Practice">
-                            <p class="screenshot-label">Flashcard thông minh</p>
+                            <p class="screenshot-label">Smart Flashcards</p>
                         </div>
                         <div class="screenshot-item">
                             <img src="{{ asset('images/screens/exam.png') }}" alt="HSK Exam">
-                            <p class="screenshot-label">Thi HSK</p>
+                            <p class="screenshot-label">HSK Exams</p>
                         </div>
                         <div class="screenshot-item">
                             <img src="{{ asset('images/screens/exam_2.png') }}" alt="Practice Exam">
-                            <p class="screenshot-label">Luyện đề thi</p>
+                            <p class="screenshot-label">Practice Tests</p>
                         </div>
                     </div>
                 </div>
