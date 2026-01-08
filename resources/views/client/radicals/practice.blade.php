@@ -103,3 +103,5 @@
 <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5.0/dist/hanzi-writer.min.js"></script>
 <script src="{{ asset('client-assets/js/practice.js') }}"></script>
 @endpush
+
+@include('client.components.footer')

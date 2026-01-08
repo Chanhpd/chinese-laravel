@@ -371,3 +371,5 @@ function playCurrentWord() {
 </script>
 
 @endsection
+
+@include('client.components.footer')

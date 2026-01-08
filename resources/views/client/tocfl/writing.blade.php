@@ -572,3 +572,5 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 @endsection
+
+@include('client.components.footer')

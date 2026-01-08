@@ -413,3 +413,5 @@
     });
 </script>
 @endpush
+
+@include('client.components.footer')

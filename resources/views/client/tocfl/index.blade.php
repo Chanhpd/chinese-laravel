@@ -90,3 +90,5 @@
     </main>
 </div>
 @endsection
+
+@include('client.components.footer')

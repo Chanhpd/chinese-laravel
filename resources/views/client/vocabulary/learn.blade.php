@@ -195,3 +195,5 @@
 </script>
 <script src="{{ asset('client-assets/js/vocabulary-learn.js') }}"></script>
 @endpush
+
+@include('client.components.footer')
