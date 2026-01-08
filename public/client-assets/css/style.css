@@ -92,11 +92,13 @@ body::before {
     display: flex;
 }
 
-/* a hover */
+/* Links */
+a {
+    text-decoration: none;
+}
+
 a:hover {
     text-decoration: none;
-    
-
 }
 /* Desktop Layout */
 @media (min-width: 992px) {
@@ -121,7 +123,7 @@ a:hover {
 
     /* Left Side */
     .auth-left {
-        background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary) 50%, var(--color-primary-light) 100%);
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2f1 50%, #e8f5f3 100%);
         position: relative;
         padding: 60px 50px;
         display: flex;
@@ -140,8 +142,8 @@ a:hover {
         right: 0;
         bottom: 0;
         background-image: 
-            radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+            radial-gradient(circle at 20% 30%, rgba(98, 191, 186, 0.08) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(149, 213, 178, 0.06) 0%, transparent 50%);
         opacity: 1;
     }
 
@@ -152,7 +154,7 @@ a:hover {
         height: 400px;
         top: -100px;
         right: -100px;
-        background: rgba(255, 215, 0, 0.1);
+        background: rgba(98, 191, 186, 0.15);
         border-radius: 50%;
         filter: blur(80px);
     }
@@ -160,7 +162,7 @@ a:hover {
     .auth-left-content {
         position: relative;
         z-index: 1;
-        color: var(--color-text-on-primary);
+        color: #2d3e3f;
     }
 
     .auth-left-content .chinese-big {
@@ -169,7 +171,10 @@ a:hover {
         font-weight: 700;
         letter-spacing: 12px;
         margin-bottom: 40px;
-        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(135deg, #2d3e3f 0%, #62bfba 50%, #2d3e3f 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         animation: fadeIn 1s ease-out;
         line-height: 1.2;
         writing-mode: horizontal-tb;
@@ -180,15 +185,14 @@ a:hover {
         font-size: 38px;
         font-weight: 700;
         margin-bottom: 16px;
-        color: var(--color-text-on-primary);
+        color: #2d3e3f;
         animation: fadeIn 1s ease-out 0.2s backwards;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         line-height: 1.3;
     }
 
     .auth-left-content p {
         font-size: 17px;
-        color: rgba(255, 255, 255, 0.95);
+        color: #5f7172;
         margin-bottom: 50px;
         animation: fadeIn 1s ease-out 0.4s backwards;
         line-height: 1.6;
@@ -213,10 +217,10 @@ a:hover {
         align-items: center;
         gap: 16px;
         padding: 20px 24px;
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.9);
         border-radius: 20px;
         backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.25);
+        border: 2px solid rgba(98, 191, 186, 0.3);
         animation: fadeIn 0.6s ease-out backwards;
         transition: all 0.3s ease;
     }
@@ -225,9 +229,10 @@ a:hover {
     .auth-left-feature:nth-child(2) { animation-delay: 0.6s; }
 
     .auth-left-feature:hover {
-        background: rgba(255, 255, 255, 0.2);
+        background: white;
         transform: translateX(8px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 24px rgba(98, 191, 186, 0.2);
+        border-color: rgba(98, 191, 186, 0.5);
     }
 
     .auth-left-feature .icon {
@@ -243,12 +248,12 @@ a:hover {
         font-size: 16px;
         font-weight: 600;
         margin-bottom: 4px;
-        color: var(--color-text-on-primary);
+        color: #2d3e3f;
     }
 
     .auth-left-feature .text p {
         font-size: 13px;
-        color: rgba(255, 255, 255, 0.8);
+        color: #5f7172;
         margin: 0;
     }
 
@@ -435,20 +440,29 @@ a:hover {
 .action-buttons {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     margin-bottom: 0;
 }
 
+.action-buttons .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
 .btn-secondary {
-    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 100%);
-    color: var(--color-text-primary);
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #2d3e3f;
     box-shadow: var(--shadow-md);
     animation: fadeIn 0.6s ease-out 0.5s backwards;
+    border: 2px solid transparent;
 }
 
 .btn-secondary:hover:not(:disabled) {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 8px 24px rgba(255, 165, 0, 0.4);
+    border-color: #FFA500;
 }
 
 .btn {
@@ -485,15 +499,18 @@ a:hover {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-    color: var(--color-text-on-primary);
-    box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, #62bfba 0%, #4a9d99 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(98, 191, 186, 0.3);
     animation: fadeIn 0.6s ease-out 0.4s backwards;
+    border: 2px solid transparent;
+    font-weight: 600;
 }
 
 .btn-primary:hover:not(:disabled) {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 8px 24px rgba(98, 191, 186, 0.5);
+    border-color: #62bfba;
 }
 
 .btn:disabled {

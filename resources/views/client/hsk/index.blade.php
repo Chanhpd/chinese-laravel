@@ -95,7 +95,7 @@
             </div>
         </div>
     </main>
+
+    @include('client.components.footer')
 </div>
 @endsection
-
-@include('client.components.footer')

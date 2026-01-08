@@ -89,6 +89,8 @@
             </div>
         </div>
     </div>
+
+    @include('client.components.footer')
 </div>
 @endsection
 
@@ -104,4 +106,3 @@
 <script src="{{ asset('client-assets/js/practice.js') }}"></script>
 @endpush
 
-@include('client.components.footer')

@@ -370,6 +370,6 @@ function playCurrentWord() {
 }
 </script>
 
+    @include('client.components.footer')
+</div>
 @endsection
-
-@include('client.components.footer')

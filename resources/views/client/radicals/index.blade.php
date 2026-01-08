@@ -66,6 +66,8 @@
             </div>
         </section>
     </main>
+
+    @include('client.components.footer')
 </div>
 @endsection
 
@@ -332,5 +334,3 @@
     });
 </script>
 @endpush
-
-@include('client.components.footer')

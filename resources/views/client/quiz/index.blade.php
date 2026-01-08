@@ -52,6 +52,7 @@
         </section>
     </div>
 </div>
+ @include('client.components.footer')
 @endsection
 
 @push('styles')

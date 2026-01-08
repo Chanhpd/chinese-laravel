@@ -178,6 +178,8 @@
             </div>
         </div>
     </div>
+
+    @include('client.components.footer')
 </div>
 @endsection
 

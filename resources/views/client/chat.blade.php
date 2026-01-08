@@ -65,6 +65,8 @@
             </div>
         </section>
     </div>
+
+    @include('client.components.footer')
 </div>
 @endsection
 
