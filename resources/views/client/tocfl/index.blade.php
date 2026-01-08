@@ -13,13 +13,13 @@
 <div class="client-container tocfl-page">
     @include('client.components.header')
 
-    <main class="client-main" style="background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); min-height: 100vh;">
+    <main class="client-main">
         <!-- Page Header -->
         <section class="page-header mb-5 text-center">
             <div class="header-icon mb-3">
                 <span style="font-size: 4rem;">🇹🇼</span>
             </div>
-            <h1 class="display-4 fw-bold mb-3" style="background: linear-gradient(135deg, #00acc1 0%, #0097a7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">TOCFL Learning</h1>
+            <h1 class="display-4 fw-bold mb-3" >TOCFL Learning</h1>
             <p class="lead text-secondary mb-0">Choose your TOCFL level to start learning Traditional Chinese vocabulary</p>
         </section>
 

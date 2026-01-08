@@ -52,18 +52,51 @@ Your goal is to help users learn Chinese based on their native language.
    - Always provide: Hanzi (Chữ Hán) -> Pinyin -> Meaning (in user's language).
 
 EOT;
-        // 3. Chuẩn bị Payload
-        // API v1 không hỗ trợ system_instruction, nên ghép vào message đầu tiên
-        $fullMessage = "System Instructions:\n" . $systemPrompt . "\n\nUser Question:\n" . $request->message;
+        // 3. Chuẩn bị Payload với lịch sử chat của user
+        $conversationHistory = [];
+        
+        // Nếu user đã đăng nhập, lấy lịch sử chat gần nhất của CHÍNH user đó
+        if ($request->user()) {
+            $recentChats = ChatHistory::where('user_id', $request->user()->id)
+                ->orderBy('created_at', 'desc')
+                ->limit(10) // Lấy 10 câu gần nhất
+                ->get()
+                ->reverse(); // Đảo ngược để thứ tự cũ -> mới
+            
+            // Xây dựng conversation history từ lịch sử
+            foreach ($recentChats as $chat) {
+                $conversationHistory[] = [
+                    "role" => "user",
+                    "parts" => [["text" => $chat->message]]
+                ];
+                $conversationHistory[] = [
+                    "role" => "model",
+                    "parts" => [["text" => $chat->response]]
+                ];
+            }
+        }
+        
+        // Thêm system instruction vào đầu conversation (nếu chưa có lịch sử)
+        if (empty($conversationHistory)) {
+            $fullMessage = "System Instructions:\n" . $systemPrompt . "\n\nUser Question:\n" . $request->message;
+            $conversationHistory[] = [
+                "parts" => [["text" => $fullMessage]]
+            ];
+        } else {
+            // Nếu đã có lịch sử, chỉ thêm system instruction nhẹ hơn
+            $conversationHistory[0]["parts"][0]["text"] = 
+                "System: " . trim(explode("\n\n", $systemPrompt)[0]) . "\n\n" . 
+                $conversationHistory[0]["parts"][0]["text"];
+            
+            // Thêm câu hỏi hiện tại
+            $conversationHistory[] = [
+                "role" => "user",
+                "parts" => [["text" => $request->message]]
+            ];
+        }
         
         $payload = [
-            "contents" => [
-                [
-                    "parts" => [
-                        ["text" => $fullMessage]
-                    ]
-                ]
-            ],
+            "contents" => $conversationHistory,
             "generationConfig" => [
                 "temperature" => 0.3, // Giữ thấp để AI nghiêm túc tuân thủ luật
                 "maxOutputTokens" => 1000,

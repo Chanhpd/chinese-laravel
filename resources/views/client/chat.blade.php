@@ -15,7 +15,7 @@
                     <h1>🤖 AI Tutor</h1>
                     <p>Practice Chinese with our AI assistant</p>
                 </div>
-                <button class="btn btn-sm" id="clearChatBtn">Clear Chat</button>
+                <button class="btn-clear" id="clearChatBtn">Clear Chat</button>
             </div>
 
             <div class="chat-messages" id="chatMessages">
@@ -30,13 +30,6 @@
             </div>
 
             <div class="chat-input-area">
-                <div class="chat-actions">
-                    <select id="languageSelect" class="btn">
-                        <option value="en">English</option>
-                        <option value="cn">中文</option>
-                        <option value="mixed">Mixed</option>
-                    </select>
-                </div>
                 <form class="chat-form" id="chatForm">
                     <input 
                         type="text" 
@@ -108,8 +101,7 @@
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    message: message,
-                    language: document.getElementById('languageSelect').value
+                    message: message
                 })
             });
 
@@ -122,7 +114,7 @@
                 // Add bot response
                 const botMessage = data.response || data.bot_reply || 'No response from AI';
                 addMessage(botMessage, 'bot');
-                // Load chat history
+                // Load chat history sidebar
                 loadChatHistory();
             } else {
                 // Show error from API
@@ -177,6 +169,63 @@
         }
     }
 
+    // Load chat messages vào chat window
+    async function loadChatMessages() {
+        try {
+            const response = await fetch('/api/chat/history', {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            });
+
+            if (!response.ok) return;
+
+            const result = await response.json();
+            
+            // Check if we have data
+            const history = result.data || result;
+            
+            if (!history || history.length === 0) {
+                return; // Giữ welcome message
+            }
+
+            // Clear chat (giữ lại welcome message hoặc xóa hết)
+            chatMessages.innerHTML = '';
+
+            // Render tất cả tin nhắn từ lịch sử (đã được sort từ cũ -> mới)
+            history.reverse().forEach(item => {
+                // User message
+                const userMsgDiv = document.createElement('div');
+                userMsgDiv.className = 'message user-message';
+                const userTime = new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                userMsgDiv.innerHTML = `
+                    <div class="message-content">
+                        <div class="message-text">${escapeHtml(item.message)}</div>
+                        <span class="message-time">${userTime}</span>
+                    </div>
+                `;
+                chatMessages.appendChild(userMsgDiv);
+
+                // Bot response
+                const botMsgDiv = document.createElement('div');
+                botMsgDiv.className = 'message bot-message';
+                botMsgDiv.innerHTML = `
+                    <div class="message-content">
+                        <div class="message-text">${escapeHtml(item.response)}</div>
+                        <span class="message-time">${userTime}</span>
+                    </div>
+                `;
+                chatMessages.appendChild(botMsgDiv);
+            });
+
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        } catch (error) {
+            console.error('Error loading chat messages:', error);
+        }
+    }
+
+    // Load chat history vào sidebar (summary)
     async function loadChatHistory() {
         try {
             const response = await fetch('/api/chat/history', {
@@ -227,7 +276,8 @@
             });
 
             if (response.ok) {
-                loadChatHistory();
+                loadChatMessages(); // Reload messages
+                loadChatHistory(); // Reload sidebar
             }
         } catch (error) {
             console.error('Error deleting chat:', error);
@@ -235,7 +285,7 @@
     }
 
     clearChatBtn.addEventListener('click', async () => {
-        if (!confirm('Clear all messages?')) return;
+        if (!confirm('Clear current chat display? (History will be preserved)')) return;
 
         chatMessages.innerHTML = `
             <div class="message bot-message">
@@ -262,7 +312,8 @@
             });
 
             if (response.ok) {
-                loadChatHistory();
+                loadChatMessages(); // Reload messages
+                loadChatHistory(); // Reload sidebar
             }
         } catch (error) {
             console.error('Error deleting history:', error);
@@ -282,10 +333,10 @@
 
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
-        loadChatHistory();
+        loadChatMessages(); // Load tin nhắn vào chat window
+        loadChatHistory(); // Load sidebar summary
         messageInput.focus();
     });
 </script>
 @endpush
 
-@include('client.components.footer')

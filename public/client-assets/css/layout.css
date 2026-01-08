@@ -707,23 +707,26 @@
 
 .radical-pinyin {
   font-size: var(--font-size-base);
-  color: var(--color-text-secondary);
+  color: #5f7172;
   margin-bottom: var(--spacing-2);
+  font-weight: 500;
 }
 
 .radical-meaning {
   font-size: var(--font-size-sm);
-  color: var(--color-text-primary);
+  color: #2d3e3f;
   margin-bottom: var(--spacing-2);
+  font-weight: 500;
 }
 
 .radical-strokes {
   font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
+  color: #2d3e3f;
   padding: var(--spacing-1) var(--spacing-3);
-  background: var(--color-background-light);
+  background: #e8f5f3;
   border-radius: var(--border-radius-full);
   display: inline-block;
+  font-weight: 600;
 }
 
 /* ============================================

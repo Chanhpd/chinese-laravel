@@ -19,7 +19,7 @@
             <div class="header-icon mb-3">
                 <span style="font-size: 4rem;">📚</span>
             </div>
-            <h1 class="display-4 fw-bold mb-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">HSK Learning</h1>
+            <h1 class="display-4 fw-bold mb-3">HSK Learning</h1>
             <p class="lead text-secondary mb-0">Choose your HSK level to start learning Chinese vocabulary</p>
         </section>
 
