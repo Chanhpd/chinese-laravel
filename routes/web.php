@@ -84,12 +84,12 @@ Route::prefix('client')->name('client.')->group(function () {
 Route::redirect('/', '/client', 301);
 
 // Admin Authentication Routes (at /admin/login)
-Route::middleware('guest:admin')->group(function () {
+Route::middleware(['admin.session', 'guest:admin'])->group(function () {
     Route::get('/admin/login', [LoginController::class, 'showAdminLoginForm'])->name('admin.login');
     Route::post('/admin/login', [LoginController::class, 'adminLogin'])->name('admin.login-submit');
 });
 
-Route::middleware('auth:admin')->group(function () {
+Route::middleware(['admin.session', 'auth:admin'])->group(function () {
     Route::post('/admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
 });
 

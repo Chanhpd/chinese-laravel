@@ -255,7 +255,7 @@ function handleLoginForm() {
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        const csrfToken = form.querySelector('input[name="_token"]').value;
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const submitBtn = form.querySelector('button[type="submit"]');
 
         ui.showButtonLoading(submitBtn);
@@ -317,7 +317,7 @@ function handleRegisterForm() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const password_confirmation = document.getElementById('password_confirmation').value;
-        const csrfToken = form.querySelector('input[name="_token"]').value;
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const submitBtn = form.querySelector('button[type="submit"]');
 
         ui.showButtonLoading(submitBtn);
@@ -341,11 +341,15 @@ function handleRegisterForm() {
                 }, 500);
             } else if (response.status === 422) {
                 const data = await response.json();
+                console.log('Validation errors:', data);
+                console.log('Password errors:', data.errors?.password);
                 if (data.errors) {
                     ui.handleValidationErrors(data.errors);
                 }
-                ui.showAlert('Validation failed', 'danger');
+                ui.showAlert(data.message || 'Validation failed. Please check the form.', 'danger');
             } else {
+                const errorData = await response.json().catch(() => ({}));
+                console.error('Error response:', errorData);
                 ui.showAlert('An error occurred. Please try again later', 'danger');
             }
         } catch (error) {

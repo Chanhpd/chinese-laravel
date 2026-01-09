@@ -73,9 +73,39 @@ class ClientController extends Controller
             Auth::login($user);
             $request->session()->regenerate();
 
+            // Return JSON for AJAX requests
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Login successful',
+                    'redirect' => route('client.home')
+                ]);
+            }
+
             return redirect()->intended(route('client.home'));
         } catch (ValidationException $e) {
+            // Return JSON for AJAX requests
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid credentials',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            
             return back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            // Log the error
+            \Log::error('Login error: ' . $e->getMessage());
+            
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'An error occurred during login'
+                ], 500);
+            }
+            
+            return back()->with('error', 'An error occurred. Please try again.')->withInput();
         }
     }
 
@@ -101,9 +131,39 @@ class ClientController extends Controller
             Auth::login($user);
             $request->session()->regenerate();
 
+            // Return JSON for AJAX requests
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Registration successful',
+                    'redirect' => route('client.home')
+                ]);
+            }
+
             return redirect()->intended(route('client.home'));
         } catch (ValidationException $e) {
+            // Return JSON for AJAX requests
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            
             return back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            // Log the error
+            \Log::error('Registration error: ' . $e->getMessage());
+            
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'An error occurred during registration'
+                ], 500);
+            }
+            
+            return back()->with('error', 'An error occurred. Please try again.')->withInput();
         }
     }
 

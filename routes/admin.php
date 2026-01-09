@@ -14,7 +14,7 @@ use App\Http\Controllers\AdminExamController;
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'admin'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['admin.session', 'auth:admin', 'admin'])->group(function () {
     
     // Dashboard & Statistics
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -22,6 +22,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'admin'])->gro
     Route::get('/statistics/user-growth', [DashboardController::class, 'userGrowth'])->name('statistics.user-growth');
     Route::get('/statistics/learning-activity', [DashboardController::class, 'learningActivity'])->name('statistics.learning-activity');
     Route::get('/statistics/top-learners', [DashboardController::class, 'topLearners'])->name('statistics.top-learners');
+    
+    // User Progress
+    Route::prefix('progress')->name('progress.')->group(function () {
+        Route::get('/', [DashboardController::class, 'userProgress'])->name('index');
+    });
     
     // User Management
     Route::prefix('users')->name('users.')->group(function () {

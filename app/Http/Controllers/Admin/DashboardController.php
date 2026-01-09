@@ -145,6 +145,68 @@ class DashboardController extends Controller
     }
 
     /**
+     * User Progress page
+     */
+    public function userProgress()
+    {
+        // User statistics
+        $totalUsers = User::count();
+        $activeUsersToday = UserTopicProgress::whereDate('last_studied_at', today())
+            ->distinct('user_id')
+            ->count('user_id');
+        $activeUsersWeek = UserTopicProgress::where('last_studied_at', '>=', now()->startOfWeek())
+            ->distinct('user_id')
+            ->count('user_id');
+        $newUsersThisMonth = User::where('created_at', '>=', now()->startOfMonth())->count();
+        
+        // User Progress Statistics
+        $totalProgressRecords = UserTopicProgress::count();
+        $totalSavedWords = SavedVocabulary::count();
+        
+        // Calculate average completion rate
+        $progressWithWords = UserTopicProgress::where('total_words', '>', 0)->get();
+        $averageCompletionRate = $progressWithWords->count() > 0 
+            ? $progressWithWords->avg(function($progress) {
+                return ($progress->completed_words / $progress->total_words) * 100;
+            })
+            : 0;
+        
+        // Mastery distribution
+        $masteryDistribution = [
+            'beginner' => UserTopicProgress::where('mastery_level', 'beginner')->count(),
+            'intermediate' => UserTopicProgress::where('mastery_level', 'intermediate')->count(),
+            'advanced' => UserTopicProgress::where('mastery_level', 'advanced')->count(),
+            'mastered' => UserTopicProgress::where('mastery_level', 'mastered')->count(),
+        ];
+        
+        // Top learners (most active users)
+        $topLearners = User::withCount(['topicProgress', 'savedVocabularies'])
+            ->having('topic_progress_count', '>', 0)
+            ->orderBy('topic_progress_count', 'desc')
+            ->limit(10)
+            ->get();
+        
+        // Recent learning activity
+        $recentActivity = UserTopicProgress::with(['user', 'topic'])
+            ->orderBy('last_studied_at', 'desc')
+            ->limit(20)
+            ->get();
+
+        return view('admin.progress', compact(
+            'totalUsers',
+            'activeUsersToday',
+            'activeUsersWeek',
+            'newUsersThisMonth',
+            'totalProgressRecords',
+            'totalSavedWords',
+            'averageCompletionRate',
+            'masteryDistribution',
+            'topLearners',
+            'recentActivity'
+        ));
+    }
+
+    /**
      * Get admin logs with filters.
      */
     public function logs(Request $request)
