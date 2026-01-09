@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="{{ asset('client-assets/css/variables.css') }}">
 <link rel="stylesheet" href="{{ asset('client-assets/css/base.css') }}">
 <link rel="stylesheet" href="{{ asset('client-assets/css/layout.css') }}">
+<link rel="stylesheet" href="{{ asset('client-assets/css/home.css') }}">
 @endpush
 
 @section('content')
@@ -14,116 +15,76 @@
     @include('client.components.header')
 
     <!-- Main Content -->
-    <main class="client-main">
-        <!-- Welcome Section -->
-        <section class="welcome-section">
-            <div class="welcome-content">
-                <h2>Welcome back, {{ Auth::user()->name }}! 👋</h2>
-                <p>Continue your journey to master Chinese language</p>
-            </div>
-            <div class="welcome-stats">
-                <div class="stat-card animate-fadeInUp delay-100">
-                    <span class="stat-icon">🔥</span>
-                    <div class="stat-info">
-                        <p class="stat-label">Current Streak</p>
-                        <h3 id="streakCount">0 days</h3>
-                    </div>
-                </div>
-                <div class="stat-card animate-fadeInUp delay-200">
-                    <span class="stat-icon">📚</span>
-                    <div class="stat-info">
-                        <p class="stat-label">Words Learned</p>
-                        <h3 id="wordsLearned">0</h3>
-                    </div>
-                </div>
-                <div class="stat-card animate-fadeInUp delay-300">
-                    <span class="stat-icon">⏱️</span>
-                    <div class="stat-info">
-                        <p class="stat-label">Study Time</p>
-                        <h3 id="studyTime">0h</h3>
-                    </div>
-                </div>
+    <main class="client-main home-main">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Master Chinese Language</h1>
+                <p class="hero-subtitle">Learn characters, vocabulary, and practice with AI - Your complete Chinese learning platform</p>
             </div>
         </section>
 
-        <!-- Content Grid -->
-        <div class="content-grid">
-            <!-- Learning Progress -->
-            <section class="dashboard-card learning-card animate-fadeInUp delay-200">
-                <h3>📖 Learning Progress</h3>
-                <div class="progress-levels" id="progressLevels">
-                    <div class="level-item">
-                        <div class="level-badge hsk1">
-                            <span class="level-name">HSK 1</span>
-                            <span class="level-progress">0%</span>
-                        </div>
-                        <div class="level-bar">
-                            <div class="level-fill" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+        <!-- Learning Modes Section -->
+        <section class="learning-modes-section">
+            <div class="section-header">
+                <h2 class="section-title">Choose Your Learning Path</h2>
+                <p class="section-description">Multiple ways to practice and improve your Chinese skills</p>
+            </div>
 
-            <!-- Practice Zone -->
-            <section class="dashboard-card practice-zone animate-fadeInUp delay-300">
-                <h3>🎮 Practice Zone</h3>
-                <div class="practice-items">
-                    <a href="{{ route('client.radicals.index') }}" class="practice-item">
-                        <span class="practice-icon">✍️</span>
-                        <div class="practice-info">
-                            <h4>Characters</h4>
-                            <p>Learn HSK radicals</p>
-                        </div>
-                    </a>
-                    <a href="{{ route('client.vocabulary.index') }}" class="practice-item">
-                        <span class="practice-icon">📕</span>
-                        <div class="practice-info">
-                            <h4>Vocabulary</h4>
-                            <p>Master new words</p>
-                        </div>
-                    </a>
-                    <a href="{{ route('client.quiz.index') }}" class="practice-item">
-                        <span class="practice-icon">❓</span>
-                        <div class="practice-info">
-                            <h4>Quiz</h4>
-                            <p>Test your knowledge</p>
-                        </div>
-                    </a>
-                    <a href="{{ route('client.chat') }}" class="practice-item">
-                        <span class="practice-icon">🤖</span>
-                        <div class="practice-info">
-                            <h4>AI Chat</h4>
-                            <p>Practice conversation</p>
-                        </div>
-                    </a>
-                </div>
-            </section>
+            <div class="learning-modes-grid">
+                <!-- Characters Mode -->
+                <a href="{{ route('client.radicals.index') }}" class="mode-card card-characters">
+                    <div class="mode-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 7h16M4 12h16M4 17h10"/>
+                        </svg>
+                    </div>
+                    <h3 class="mode-title">Characters</h3>
+                    <p class="mode-description">Learn HSK radicals and Chinese characters step by step</p>
+                    <div class="mode-badge">150+ Radicals</div>
+                </a>
 
-            <!-- Quick Stats -->
-            <section class="dashboard-card animate-fadeInUp delay-400">
-                <h3>📊 Quick Stats</h3>
-                <div class="flex flex-col gap-4">
-                    <div>
-                        <div class="flex-between mb-2">
-                            <span>Total Progress</span>
-                            <span id="totalProgress" class="font-semibold text-primary">0%</span>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar" id="totalProgressBar" style="width: 0%"></div>
-                        </div>
+                <!-- Vocabulary Mode -->
+                <a href="{{ route('client.vocabulary.index') }}" class="mode-card card-vocabulary">
+                    <div class="mode-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        </svg>
                     </div>
-                    <div>
-                        <div class="flex-between mb-2">
-                            <span>Accuracy Rate</span>
-                            <span id="accuracy" class="font-semibold text-success">0%</span>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar success" id="accuracyBar" style="width: 0%"></div>
-                        </div>
+                    <h3 class="mode-title">Vocabulary</h3>
+                    <p class="mode-description">Build your word bank with context and examples</p>
+                    <div class="mode-badge">1000+ Words</div>
+                </a>
+
+                <!-- Quiz Mode -->
+                <a href="{{ route('client.quiz.index') }}" class="mode-card card-quiz">
+                    <div class="mode-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
                     </div>
-                </div>
-            </section>
-        </div>
+                    <h3 class="mode-title">Quiz</h3>
+                    <p class="mode-description">Test your knowledge with interactive quizzes</p>
+                    <div class="mode-badge">Practice Tests</div>
+                </a>
+
+                <!-- AI Chat Mode -->
+                <a href="{{ route('client.chat') }}" class="mode-card card-chat">
+                    <div class="mode-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            <path d="M8 10h.01M12 10h.01M16 10h.01"/>
+                        </svg>
+                    </div>
+                    <h3 class="mode-title">AI Tutor</h3>
+                    <p class="mode-description">Practice conversation with AI language assistant</p>
+                    <div class="mode-badge">24/7 Available</div>
+                </a>
+            </div>
+        </section>
 
         <!-- Download App Section -->
         <section class="download-app-section animate-fadeInUp delay-500">
@@ -209,167 +170,29 @@
 
 @push('scripts')
 <script>
-    // Load user statistics
-    async function loadUserStats() {
-        try {
-            const response = await fetch('/api/user', {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('api_token'),
-                    'Accept': 'application/json'
+    // Add smooth scroll behavior for better UX
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
+        }, observerOptions);
 
-            if (!response.ok) return;
-
-            const data = await response.json();
-            
-            // Update user level based on progress
-            const userLevel = document.getElementById('userLevel');
-            if (data.level) userLevel.textContent = data.level;
-
-            // Mock stats for now - will be replaced with actual API calls
-            document.getElementById('streakCount').textContent = '5 days';
-            document.getElementById('wordsLearned').textContent = '245';
-            document.getElementById('studyTime').textContent = '12h';
-            document.getElementById('totalProgress').textContent = '65%';
-            document.getElementById('totalProgressBar').style.width = '65%';
-            document.getElementById('accuracy').textContent = '82%';
-            document.getElementById('accuracyBar').style.width = '82%';
-
-        } catch (error) {
-            console.error('Error loading stats:', error);
-        }
-    }
-
-    // Load HSK levels for progress display
-    async function loadProgressLevels() {
-        try {
-            const response = await fetch('/api/radicals/hsk');
-            const data = await response.json();
-
-            // Group by level
-            const levelMap = {};
-            data.forEach(radical => {
-                const level = radical.level || 'HSK1';
-                if (!levelMap[level]) levelMap[level] = 0;
-                levelMap[level]++;
-            });
-
-            const progressContainer = document.getElementById('progressLevels');
-            progressContainer.innerHTML = '';
-
-            const levels = ['HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6'];
-            levels.forEach((level, index) => {
-                const count = levelMap[level] || 0;
-                const percentage = Math.floor((Math.random() * 100)); // Mock progress
-                const levelNum = index + 1;
-                const badgeClass = `hsk${levelNum}`;
-
-                progressContainer.innerHTML += `
-                    <div class="level-item">
-                        <div class="level-badge ${badgeClass}">
-                            <span class="level-name">${level}</span>
-                            <span class="level-progress">${percentage}%</span>
-                        </div>
-                        <div class="level-bar">
-                            <div class="level-fill" style="width: ${percentage}%"></div>
-                        </div>
-                    </div>
-                `;
-            });
-        } catch (error) {
-            console.error('Error loading progress levels:', error);
-        }
-    }
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', function() {
-        loadUserStats();
-        loadProgressLevels();
-    });
-</script>
-@endpush
-
-
-@push('scripts')
-<script>
-    // Load user statistics
-    async function loadUserStats() {
-        try {
-            const response = await fetch('/api/user', {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('api_token'),
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (!response.ok) return;
-
-            const data = await response.json();
-            
-            // Update user level based on progress
-            const userLevel = document.getElementById('userLevel');
-            if (data.level) userLevel.textContent = data.level;
-
-            // Mock stats for now - will be replaced with actual API calls
-            document.getElementById('streakCount').textContent = '5 days';
-            document.getElementById('wordsLearned').textContent = '245';
-            document.getElementById('studyTime').textContent = '12h';
-            document.getElementById('totalProgress').textContent = '65%';
-            document.getElementById('totalProgressBar').style.width = '65%';
-            document.getElementById('accuracy').textContent = '82%';
-            document.getElementById('accuracyBar').style.width = '82%';
-
-        } catch (error) {
-            console.error('Error loading stats:', error);
-        }
-    }
-
-    // Load HSK levels for progress display
-    async function loadProgressLevels() {
-        try {
-            const response = await fetch('/api/radicals/hsk');
-            const data = await response.json();
-
-            // Group by level
-            const levelMap = {};
-            data.forEach(radical => {
-                const level = radical.level || 'HSK1';
-                if (!levelMap[level]) levelMap[level] = 0;
-                levelMap[level]++;
-            });
-
-            const progressContainer = document.getElementById('progressLevels');
-            progressContainer.innerHTML = '';
-
-            const levels = ['HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6'];
-            levels.forEach((level, index) => {
-                const count = levelMap[level] || 0;
-                const percentage = Math.floor((Math.random() * 100)); // Mock progress
-                const levelNum = index + 1;
-                const badgeClass = `hsk${levelNum}`;
-
-                progressContainer.innerHTML += `
-                    <div class="level-item">
-                        <div class="level-badge ${badgeClass}">
-                            <span class="level-name">${level}</span>
-                            <span class="level-progress">${percentage}%</span>
-                        </div>
-                        <div class="level-bar">
-                            <div class="level-fill" style="width: ${percentage}%"></div>
-                        </div>
-                    </div>
-                `;
-            });
-        } catch (error) {
-            console.error('Error loading progress levels:', error);
-        }
-    }
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', function() {
-        loadUserStats();
-        loadProgressLevels();
+        document.querySelectorAll('.mode-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.5s ease-out';
+            observer.observe(card);
+        });
     });
 </script>
 @endpush
