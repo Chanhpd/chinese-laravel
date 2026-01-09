@@ -25,6 +25,10 @@ Route::prefix('client')->name('client.')->group(function () {
     Route::post('/login-submit', [ClientController::class, 'loginSubmit'])->name('login-submit');
     Route::post('/register-submit', [ClientController::class, 'registerSubmit'])->name('register-submit');
     
+    // Legal pages
+    Route::get('/terms-of-service', [ClientController::class, 'termsOfService'])->name('terms');
+    Route::get('/privacy-policy', [ClientController::class, 'privacyPolicy'])->name('privacy');
+    
     // Authenticated routes (đã đăng nhập)
     Route::middleware('auth')->group(function () {
         Route::get('/home', [ClientController::class, 'home'])->name('home');

@@ -29,8 +29,8 @@ class DashboardController extends Controller
                 'new_users_this_month' => User::where('created_at', '>=', now()->startOfMonth())->count(),
                 'users_by_role' => [
                     'user' => User::where('role', 'user')->count(),
+                    'staff' => User::where('role', 'staff')->count(),
                     'admin' => User::where('role', 'admin')->count(),
-                    'super_admin' => User::where('role', 'super_admin')->count(),
                 ],
             ];
 

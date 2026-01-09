@@ -14,7 +14,7 @@ class LoginController extends Controller
      */
     public function showAdminLoginForm()
     {
-        if (Auth::guard('admin')->check() && in_array(Auth::guard('admin')->user()->role, ['admin', 'super_admin'])) {
+        if (Auth::guard('admin')->check() && in_array(Auth::guard('admin')->user()->role, ['admin', 'staff'])) {
             return redirect()->route('admin.dashboard');
         }
         
@@ -38,8 +38,8 @@ class LoginController extends Controller
 
             $user = Auth::guard('admin')->user();
 
-            // Check if user is admin
-            if (!in_array($user->role, ['admin', 'super_admin'])) {
+            // Check if user is admin or staff
+            if (!in_array($user->role, ['admin', 'staff'])) {
                 Auth::guard('admin')->logout();
                 throw ValidationException::withMessages([
                     'email' => 'You do not have admin access.',

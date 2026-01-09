@@ -21,6 +21,11 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        // Seed users first
+        $this->call([
+            UserSeeder::class,
+        ]);
+
         // Seed topics and vocabularies
         $this->call([
             TopicSeeder::class,

@@ -121,6 +121,22 @@ class ClientController extends Controller
     }
 
     /**
+     * Show Terms of Service page
+     */
+    public function termsOfService()
+    {
+        return view('client.terms');
+    }
+
+    /**
+     * Show Privacy Policy page
+     */
+    public function privacyPolicy()
+    {
+        return view('client.privacy');
+    }
+
+    /**
      * Radicals Learning - Index
      */
     public function radicalsIndex()

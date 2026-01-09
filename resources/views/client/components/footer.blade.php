@@ -70,9 +70,9 @@
                 <div class="footer-copyright">
                     <p>Copyright © {{ date('Y') }} Chinese Learner. All Rights Reserved.</p>
                     <div class="footer-legal">
-                        <a href="#">Privacy Policy</a>
+                        <a href="{{ route('client.privacy') }}">Privacy Policy</a>
                         <span class="separator">|</span>
-                        <a href="#">Terms of Service</a>
+                        <a href="{{ route('client.terms') }}">Terms of Service</a>
                     </div>
                 </div>
                 <div class="footer-social">

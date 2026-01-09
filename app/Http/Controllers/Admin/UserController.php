@@ -132,7 +132,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'role' => ['required', Rule::in(['user', 'admin', 'super_admin', 'staff'])],
+            'role' => ['required', Rule::in(['user', 'admin', 'staff'])],
             'status' => ['nullable', Rule::in(['active', 'inactive', 'blocked'])],
         ]);
 
@@ -181,7 +181,7 @@ class UserController extends Controller
             'name' => 'sometimes|required|string|max:255',
             'email' => ['sometimes', 'required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => 'sometimes|nullable|string|min:8',
-            'role' => ['sometimes', 'required', Rule::in(['user', 'admin', 'super_admin', 'staff'])],
+            'role' => ['sometimes', 'required', Rule::in(['user', 'admin', 'staff'])],
             'status' => ['sometimes', 'required', Rule::in(['active', 'inactive', 'blocked'])],
         ]);
 
@@ -225,14 +225,6 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
 
-        // Prevent deleting super admin
-        if ($user->role === 'super_admin') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Cannot delete super admin',
-            ], 403);
-        }
-
         $userEmail = $user->email;
         $user->delete();
 
@@ -264,19 +256,11 @@ class UserController extends Controller
         }
 
         $request->validate([
-            'role' => ['required', Rule::in(['user', 'admin', 'super_admin', 'staff'])],
+            'role' => ['required', Rule::in(['user', 'admin', 'staff'])],
         ]);
 
         $user = User::findOrFail($id);
         $oldRole = $user->role;
-
-        // Only super admin can create/modify super admin
-        if ($request->role === 'super_admin' && !auth()->user()->isSuperAdmin()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Only super admin can assign super admin role',
-            ], 403);
-        }
 
         $user->update(['role' => $request->role]);
 
@@ -312,13 +296,6 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
 
-        // Cannot block super admin
-        if ($user->role === 'super_admin') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Cannot block super admin',
-            ], 403);
-        }
 
         $user->block();
 

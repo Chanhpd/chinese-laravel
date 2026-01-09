@@ -22,8 +22,8 @@ class AdminMiddleware
             return redirect()->route('admin.login');
         }
 
-        // Check if user has admin, super_admin, or staff role
-        if (!in_array($user->role, ['admin', 'super_admin', 'staff'])) {
+        // Check if user has admin or staff role
+        if (!in_array($user->role, ['admin', 'staff'])) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,

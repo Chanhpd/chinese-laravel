@@ -109,15 +109,7 @@ class User extends Authenticatable
      */
     public function isAdmin()
     {
-        return in_array($this->role, ['admin', 'super_admin']);
-    }
-
-    /**
-     * Check if user is super admin.
-     */
-    public function isSuperAdmin()
-    {
-        return $this->role === 'super_admin';
+        return $this->role === 'admin';
     }
 
     /**
@@ -129,11 +121,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is admin, super admin, or staff.
+     * Check if user is admin or staff.
      */
     public function isAdminOrStaff()
     {
-        return in_array($this->role, ['admin', 'super_admin', 'staff']);
+        return in_array($this->role, ['admin', 'staff']);
     }
 
     /**

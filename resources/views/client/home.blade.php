@@ -57,18 +57,33 @@
                     <div class="mode-badge">1000+ Words</div>
                 </a>
 
-                <!-- Quiz Mode -->
-                <a href="{{ route('client.quiz.index') }}" class="mode-card card-quiz">
+                <!-- HSK Mode -->
+                <a href="#" class="mode-card card-hsk">
                     <div class="mode-icon">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
                         </svg>
                     </div>
-                    <h3 class="mode-title">Quiz</h3>
-                    <p class="mode-description">Test your knowledge with interactive quizzes</p>
-                    <div class="mode-badge">Practice Tests</div>
+                    <h3 class="mode-title">HSK</h3>
+                    <p class="mode-description">Prepare for HSK exams with practice tests</p>
+                    <div class="mode-badge">HSK 1-6</div>
+                </a>
+
+                <!-- TOCFL Mode -->
+                <a href="#" class="mode-card card-tocfl">
+                    <div class="mode-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3 class="mode-title">TOCFL</h3>
+                    <p class="mode-description">Practice for TOCFL certification tests</p>
+                    <div class="mode-badge">All Levels</div>
                 </a>
 
                 <!-- AI Chat Mode -->
@@ -79,7 +94,7 @@
                             <path d="M8 10h.01M12 10h.01M16 10h.01"/>
                         </svg>
                     </div>
-                    <h3 class="mode-title">AI Tutor</h3>
+                    <h3 class="mode-title">AI Chat</h3>
                     <p class="mode-description">Practice conversation with AI language assistant</p>
                     <div class="mode-badge">24/7 Available</div>
                 </a>
