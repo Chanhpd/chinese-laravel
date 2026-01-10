@@ -1,0 +1,190 @@
+/* ============================================
+   CHINESE LEARNING APP - Design System
+   Version 1.0
+   ============================================ */
+
+:root {
+  /* ===== PRIMARY COLORS (Xanh ngọc) ===== */
+  --color-primary: #62bfba;
+  --color-primary-light: #b0e0dc;
+  --color-primary-dark: #5fa9a3;
+  --color-primary-50: #f0f9f8;
+  --color-primary-100: #d4f1f0;
+  --color-primary-200: #aae5e1;
+  --color-primary-300: #7fd3cd;
+  --color-primary-400: #62bfba;
+  --color-primary-500: #4ba49f;
+  --color-primary-600: #3d8a85;
+  --color-primary-700: #2f706b;
+  --color-primary-800: #255651;
+  --color-primary-900: #1c3c3a;
+
+  /* ===== SECONDARY COLORS (Xanh lá mint) ===== */
+  --color-secondary: #95d5b2;
+  --color-secondary-light: #b8e6d5;
+  --color-secondary-dark: #74c69d;
+  --color-secondary-50: #f1faf6;
+  --color-secondary-100: #d4f1e8;
+  --color-secondary-200: #a8e0d1;
+  --color-secondary-300: #7ccfbb;
+  --color-secondary-400: #95d5b2;
+  --color-secondary-500: #52b788;
+  --color-secondary-600: #40916c;
+  --color-secondary-700: #2d6a4f;
+  --color-secondary-800: #1b4332;
+  --color-secondary-900: #0d2818;
+
+  /* ===== ACCENT COLORS (Cam đào) ===== */
+  --color-accent: #ffb088;
+  --color-accent-light: #ffcba8;
+  --color-accent-dark: #ff9a68;
+  --color-accent-50: #fff7f2;
+  --color-accent-100: #ffe8d6;
+  --color-accent-200: #ffc9a3;
+  --color-accent-300: #ffb088;
+  --color-accent-400: #ff9a68;
+  --color-accent-500: #ff7f50;
+  --color-accent-600: #ff6633;
+  --color-accent-700: #e64a19;
+  --color-accent-800: #b83a0f;
+  --color-accent-900: #7a2607;
+
+  /* ===== BACKGROUND COLORS ===== */
+  --color-background: #f0f9f8;
+  --color-background-gradient: linear-gradient(135deg, #f0f9f8 0%, #d4f1f0 50%, #b0e0dc 100%);
+  --color-surface: #ffffff;
+  --color-surface-variant: #f5fbfa;
+  --color-background-light: #fafefe;
+  --color-background-lighter: #ffffff;
+
+  /* ===== TEXT COLORS ===== */
+  --color-text-primary: #080f0f;
+  --color-text-secondary: #439299;
+  --color-text-tertiary: #7a9698;
+  --color-text-disabled: #c2d5d6;
+  --color-text-on-primary: #ffffff;
+  --color-text-on-secondary: #ffffff;
+  --color-text-on-accent: #ffffff;
+  --color-text-link: var(--color-primary-600);
+  --color-text-link-hover: var(--color-primary-700);
+
+  /* ===== STATUS COLORS ===== */
+  --color-success: #52c688;
+  --color-success-light: #81e6b4;
+  --color-success-dark: #2d8866;
+  --color-warning: #ffbd5a;
+  --color-warning-light: #ffd580;
+  --color-warning-dark: #ff9800;
+  --color-error: #ff8787;
+  --color-error-light: #ffb3b3;
+  --color-error-dark: #ff5252;
+  --color-info: #6baed6;
+  --color-info-light: #9bcfe1;
+  --color-info-dark: #1e88e5;
+
+  /* ===== BORDER COLORS ===== */
+  --color-border: #d9eceb;
+  --color-border-light: #e8f5f4;
+  --color-border-focus: #89cec9;
+  --color-border-dark: #5fa9a3;
+
+  /* ===== SHADOW COLORS ===== */
+  --color-shadow: rgba(0, 0, 0, 0.08);
+  --color-shadow-light: rgba(0, 0, 0, 0.03);
+  --color-shadow-dark: rgba(0, 0, 0, 0.15);
+
+  /* ===== TYPOGRAPHY ===== */
+  /* Font Families */
+  --font-primary: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-chinese: 'Noto Sans SC', 'SimSun', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'Menlo', 'Monaco', 'Courier New', monospace;
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Font Sizes */
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 32px;
+  --font-size-4xl: 40px;
+
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* ===== SPACING ===== */
+  --spacing-0: 0;
+  --spacing-1: 2px;
+  --spacing-2: 4px;
+  --spacing-3: 6px;
+  --spacing-4: 8px;
+  --spacing-5: 12px;
+  --spacing-6: 16px;
+  --spacing-7: 20px;
+  --spacing-8: 24px;
+  --spacing-10: 32px;
+  --spacing-12: 40px;
+  --spacing-16: 48px;
+  --spacing-20: 64px;
+  --spacing-24: 96px;
+
+  /* ===== BORDER RADIUS ===== */
+  --border-radius-sm: 6px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-2xl: 20px;
+  --border-radius-3xl: 24px;
+  --border-radius-full: 9999px;
+
+  /* ===== SHADOWS ===== */
+  --shadow-sm: 0 2px 8px rgba(98, 191, 186, 0.08);
+  --shadow-md: 0 4px 16px rgba(98, 191, 186, 0.12);
+  --shadow-lg: 0 8px 32px rgba(98, 191, 186, 0.16);
+  --shadow-xl: 0 16px 48px rgba(98, 191, 186, 0.2);
+  --shadow-none: 0 0 0 transparent;
+  --shadow-primary: 0 8px 24px rgba(98, 191, 186, 0.25);
+  --shadow-secondary: 0 8px 24px rgba(149, 213, 178, 0.25);
+  --shadow-accent: 0 8px 24px rgba(255, 176, 136, 0.25);
+
+  /* ===== TRANSITIONS ===== */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* ===== Z-INDEX ===== */
+  --z-index-dropdown: 100;
+  --z-index-sticky: 200;
+  --z-index-fixed: 300;
+  --z-index-modal-backdrop: 400;
+  --z-index-modal: 500;
+  --z-index-popover: 600;
+  --z-index-tooltip: 700;
+
+  /* ===== BREAKPOINTS (for reference) ===== */
+  /* Mobile: 320px - 639px */
+  /* Tablet: 640px - 1023px */
+  /* Desktop: 1024px+ */
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text-primary: #121b1a;
+    --color-text-secondary: #5f9e9a;
+    --color-surface: #fff;
+    --color-surface-variant: #243d3a;
+    --color-background-light: #03867b;
+  }
+}

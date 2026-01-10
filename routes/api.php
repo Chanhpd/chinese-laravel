@@ -73,11 +73,14 @@ Route::prefix('radicals')->group(function () {
     Route::post('/{id}/favorite', [RadicalController::class, 'toggleFavorite']); // Toggle favorite status
 });
 
+// Writing Practice - Score writing
+Route::post('/score-writing', [RadicalController::class, 'scoreWriting'])->middleware('optional.auth');
+
 // Chat bot AI - Public (nhưng tự động lưu lịch sử nếu có token)
 Route::post('/chat', [ChatController::class, 'chat'])->middleware('optional.auth');
 
-// Protected routes - Cần authentication
-Route::middleware('auth:sanctum')->group(function () {
+// Protected routes - Cần authentication (support both session and API token)
+Route::middleware(['auth:sanctum,web'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });

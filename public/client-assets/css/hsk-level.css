@@ -1,0 +1,423 @@
+/* HSK Level Detail Page Styles - Grid Layout with Images */
+
+/* Page Background */
+.hsk-level-page {
+    background: var(--color-background-gradient);
+    min-height: 100vh;
+    padding-bottom: 3rem;
+}
+
+/* Header Section */
+.hsk-level-page .page-header h1 {
+    color: var(--color-primary-700);
+    font-weight: var(--font-weight-bold);
+}
+
+/* Back Button */
+.hsk-level-page .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: white;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.hsk-level-page .back-button:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: translateX(-4px);
+    box-shadow: 0 4px 12px var(--color-shadow-dark);
+}
+
+/* Search Input */
+.hsk-level-page .search-input {
+    padding: 12px 20px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.hsk-level-page .search-input:focus {
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 0 4px rgba(98, 191, 186, 0.1);
+    outline: none;
+}
+
+/* Mode Buttons Section */
+.mode-buttons-section {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+}
+
+.mode-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 0;
+}
+
+.mode-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    background: white;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    color: var(--color-text-primary);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px var(--color-shadow-light);
+    cursor: pointer;
+}
+
+.mode-button:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px var(--color-shadow-dark);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: var(--color-primary-50);
+}
+
+.mode-button .icon {
+    font-size: 2rem;
+}
+
+/* Vocabulary Grid Layout */
+.vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 2rem;
+}
+
+.vocab-card-item {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.vocab-card-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px var(--color-shadow-dark);
+    border-color: var(--color-primary);
+}
+
+.vocab-card-item .card-number {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--color-primary);
+    color: white;
+    font-weight: 800;
+    font-size: 1rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    box-shadow: 0 2px 8px var(--color-shadow-dark);
+}
+
+.vocab-card-item .card-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-primary-100) 100%);
+    overflow: hidden;
+}
+
+.vocab-card-item .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.vocab-card-item:hover .card-image img {
+    transform: scale(1.1);
+}
+
+.vocab-card-item .card-image .no-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: var(--color-primary-200);
+}
+
+.vocab-card-item .card-body {
+    padding: 20px;
+}
+
+.vocab-card-item .chinese-char {
+    font-family: var(--font-chinese);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-primary-700);
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.vocab-card-item .pinyin-text {
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.vocab-card-item .audio-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--color-primary-50);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.vocab-card-item .audio-btn:hover {
+    background: var(--color-primary);
+    transform: scale(1.15);
+}
+
+.vocab-card-item .meaning-text {
+    color: var(--color-text-tertiary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    text-align: center;
+    min-height: 45px;
+    margin-bottom: 12px;
+}
+
+.vocab-card-item .card-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-border-light);
+}
+
+.vocab-card-item .action-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 2px solid;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.vocab-card-item .action-btn.learned {
+    color: var(--color-success);
+    border-color: var(--color-success);
+    background: white;
+}
+
+.vocab-card-item .action-btn.learned:hover,
+.vocab-card-item .action-btn.learned.active {
+    background: var(--color-success);
+    color: white;
+}
+
+.vocab-card-item .action-btn.details {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    background: white;
+}
+
+.vocab-card-item .action-btn.details:hover {
+    background: var(--color-primary);
+    color: white;
+}
+
+/* Pagination Controls */
+.pagination-controls {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 2rem;
+}
+
+.pagination-info {
+    font-weight: 600;
+    color: var(--color-text-tertiary);
+    font-size: 1rem;
+}
+
+.pagination-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pagination-nav .page-btn {
+    padding: 10px 20px;
+    background: white;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+    border-radius: var(--radius-lg);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pagination-nav .page-btn:hover:not(:disabled) {
+    background: var(--color-primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(98, 191, 186, 0.3);
+}
+
+.pagination-nav .page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-color: var(--color-border);
+    color: var(--color-text-disabled);
+}
+
+.pagination-nav .current-page {
+    padding: 10px 20px;
+    background: var(--color-primary);
+    color: white;
+    border-radius: var(--radius-lg);
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* Auto-play Controls */
+.autoplay-controls {
+    background: white;
+    border-radius: 20px;
+    padding: 20px 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 2rem;
+}
+
+.autoplay-btn {
+    padding: 12px 32px;
+    background: var(--color-success);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(82, 198, 136, 0.3);
+}
+
+.autoplay-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(82, 198, 136, 0.4);
+    background: var(--color-success-dark);
+}
+
+.autoplay-btn.playing {
+    background: var(--color-accent);
+    box-shadow: 0 4px 12px rgba(255, 176, 136, 0.3);
+}
+
+.autoplay-progress {
+    font-weight: 600;
+    color: var(--color-text-tertiary);
+    font-size: 1.1rem;
+}
+
+/* Modal Styles */
+.word-modal .modal-content {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.word-modal .modal-header {
+    background: var(--color-primary);
+    color: white;
+    border-radius: 20px 20px 0 0;
+    padding: 20px 24px;
+}
+
+.word-modal .modal-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .vocab-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .mode-buttons-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .pagination-controls {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .vocab-card-item .card-image {
+        height: 180px;
+    }
+    
+    .vocab-card-item .chinese-char {
+        font-size: 2rem;
+    }
+}

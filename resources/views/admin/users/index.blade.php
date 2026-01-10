@@ -21,8 +21,8 @@
                 <select class="form-select" id="role" name="role">
                     <option value="">All Roles</option>
                     <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>User</option>
+                    <option value="staff" {{ request('role') == 'staff' ? 'selected' : '' }}>Staff</option>
                     <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                    <option value="super_admin" {{ request('role') == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
                 </select>
             </div>
             <div class="col-md-3">
@@ -73,10 +73,10 @@
                                 <td>
                                     @if($user->role === 'user')
                                         <span class="badge bg-info">User</span>
+                                    @elseif($user->role === 'staff')
+                                        <span class="badge bg-primary">Staff</span>
                                     @elseif($user->role === 'admin')
                                         <span class="badge bg-danger">Admin</span>
-                                    @else
-                                        <span class="badge bg-dark">Super Admin</span>
                                     @endif
                                 </td>
                                 <td>
@@ -107,15 +107,13 @@
                                             </form>
                                         @endif
                                         
-                                        @if($user->role !== 'super_admin')
-                                            <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}" style="display: inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this user? This cannot be undone.')" title="Delete User">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
-                                        @endif
+                                        <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this user? This cannot be undone.')" title="Delete User">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

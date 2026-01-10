@@ -34,6 +34,9 @@ class AuthController extends Controller
                 'password' => Hash::make($validated['password']),
             ]);
 
+            // Create session (for web routes)
+            \Illuminate\Support\Facades\Auth::login($user);
+
             $token = $user->createToken('mobile-app')->plainTextToken;
 
             return response()->json([
@@ -82,6 +85,9 @@ class AuthController extends Controller
                     'message' => 'Invalid email or password',
                 ], 401);
             }
+
+            // Create session (for web routes)
+            \Illuminate\Support\Facades\Auth::login($user);
 
             // Delete old tokens (optional)
             $user->tokens()->delete();

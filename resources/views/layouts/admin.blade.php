@@ -163,6 +163,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.progress.*') ? 'active' : '' }}" 
+                               href="{{ route('admin.progress.index') }}">
+                                <i class="bi bi-graph-up-arrow"></i> User Progress
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.topics.*') ? 'active' : '' }}" 
                                href="{{ route('admin.topics.index') }}">
                                 <i class="bi bi-folder"></i> Topics

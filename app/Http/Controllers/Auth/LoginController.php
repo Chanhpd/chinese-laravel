@@ -10,11 +10,11 @@ use Illuminate\Validation\ValidationException;
 class LoginController extends Controller
 {
     /**
-     * Show the login form
+     * Show the admin login form
      */
-    public function showLoginForm()
+    public function showAdminLoginForm()
     {
-        if (Auth::check()) {
+        if (Auth::guard('admin')->check() && in_array(Auth::guard('admin')->user()->role, ['admin', 'staff'])) {
             return redirect()->route('admin.dashboard');
         }
         
@@ -22,9 +22,9 @@ class LoginController extends Controller
     }
 
     /**
-     * Handle login request
+     * Handle admin login request
      */
-    public function login(Request $request)
+    public function adminLogin(Request $request)
     {
         $credentials = $request->validate([
             'email' => 'required|email',
@@ -33,14 +33,14 @@ class LoginController extends Controller
 
         $remember = $request->filled('remember');
 
-        if (Auth::attempt($credentials, $remember)) {
+        if (Auth::guard('admin')->attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            $user = Auth::user();
+            $user = Auth::guard('admin')->user();
 
-            // Check if user is admin
-            if (!in_array($user->role, ['admin', 'super_admin'])) {
-                Auth::logout();
+            // Check if user is admin or staff
+            if (!in_array($user->role, ['admin', 'staff'])) {
+                Auth::guard('admin')->logout();
                 throw ValidationException::withMessages([
                     'email' => 'You do not have admin access.',
                 ]);
@@ -48,7 +48,7 @@ class LoginController extends Controller
 
             // Check if user is blocked
             if ($user->status === 'blocked') {
-                Auth::logout();
+                Auth::guard('admin')->logout();
                 throw ValidationException::withMessages([
                     'email' => 'Your account has been blocked.',
                 ]);
@@ -67,11 +67,11 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()->route('admin.login');
     }
 }
