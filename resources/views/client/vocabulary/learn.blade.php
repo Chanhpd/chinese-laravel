@@ -70,7 +70,14 @@
                         <img id="reviewImage" src="" alt="Vocabulary illustration">
                     </div>
                     <div class="vocab-hanzi" id="reviewHanzi">你好</div>
-                    <div class="vocab-pinyin" id="reviewPinyin">nǐ hǎo</div>
+                    <div class="vocab-pinyin-container">
+                        <div class="vocab-pinyin" id="reviewPinyin">nǐ hǎo</div>
+                        <button class="audio-icon-btn" id="reviewAudioBtn" title="Play pronunciation">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" fill="currentColor"/>
+                            </svg>
+                        </button>
+                    </div>
                     <div class="vocab-meaning" id="reviewMeaning">Hello</div>
                     <div class="vocab-example" id="reviewExample">
                         <div class="example-zh">你好！很高兴见到你。</div>
@@ -100,7 +107,14 @@
                         <div class="flashcard-front">
                             <div class="card-hint">Click to reveal</div>
                             <div class="flashcard-hanzi" id="flashcardHanzi">你好</div>
-                            <div class="flashcard-pinyin" id="flashcardPinyin">nǐ hǎo</div>
+                            <div class="flashcard-pinyin-container">
+                                <div class="flashcard-pinyin" id="flashcardPinyin">nǐ hǎo</div>
+                                <button class="audio-icon-btn" id="flashcardAudioBtn" title="Play pronunciation">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" fill="currentColor"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flashcard-back">
                             <div class="flashcard-image" id="flashcardImageContainer" style="display: none;">

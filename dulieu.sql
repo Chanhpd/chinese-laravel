@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 04, 2026 at 05:21 PM
+-- Generation Time: Jan 10, 2026 at 03:48 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -63,10 +63,8 @@ CREATE TABLE `chat_histories` (
 --
 
 INSERT INTO `chat_histories` (`id`, `user_id`, `message`, `response`, `language`, `created_at`, `updated_at`) VALUES
-(2, 1, '谢谢 là gì?', 'Chào bạn!\n\n**谢谢** (xièxie) có nghĩa là **cảm ơn**.', 'vi', '2025-11-30 00:58:29', '2025-11-30 00:58:29'),
-(3, 1, 'How do you say hello in Chinese?', 'The most common way to say \"hello\" in Chinese is:\n\n你好 (nǐ hǎo) - Hello / Hi', 'en', '2025-11-30 00:58:36', '2025-11-30 00:58:36'),
-(4, 1, '学习 nghĩa là gì?', 'Chào bạn!\n\n学习 (xuéxí) nghĩa là **học tập, học hỏi, nghiên cứu**.', 'vi', '2025-11-30 00:58:42', '2025-11-30 00:58:42'),
-(5, 1, 'How to say \"goodbye\"?', 'Here\'s how to say \"goodbye\" in Chinese:\n\n再见 (zàijiàn) - Goodbye', 'en', '2025-11-30 01:03:48', '2025-11-30 01:03:48');
+(6, 1, 'hello', 'Hello!\n\n你好 (nǐ hǎo) - Hello / Hi\n\nHow can I help you learn Chinese today?', 'en', '2026-01-09 02:28:51', '2026-01-09 02:28:51'),
+(7, 1, 'toi vua hoi gi', 'Bạn vừa hỏi \"hello\".\n\nTôi đã trả lời bạn bằng tiếng Anh và tiếng Trung:\nHello!\n你好 (nǐ hǎo) - Hello / Hi\n\nBạn muốn học gì về tiếng Trung hôm nay?', 'en', '2026-01-09 02:29:07', '2026-01-09 02:29:07');
 
 -- --------------------------------------------------------
 
@@ -250,7 +248,7 @@ CREATE TABLE `personal_access_tokens` (
 --
 
 INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `expires_at`, `created_at`, `updated_at`) VALUES
-(18, 'App\\Models\\User', 1, 'mobile-app', '2be6fbab794b36935a532a23496e85d7837ba82820f6fe38046d6dfc2411a9fa', '[\"*\"]', NULL, NULL, '2025-12-17 06:54:57', '2025-12-17 06:54:57');
+(19, 'App\\Models\\User', 1, 'mobile-app', '77ec1a10cf4c92cae882c56eed4492dbaf7fdd12c363b1bb61bf6f30017264df', '[\"*\"]', '2026-01-09 02:29:05', NULL, '2026-01-09 02:28:37', '2026-01-09 02:29:05');
 
 -- --------------------------------------------------------
 
@@ -3413,7 +3411,10 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `role`, `status`, `blocked_at`, `last_login_at`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'duychan', 'chanh@gmail.com', NULL, '$2y$10$V/JKHzldklOsJiUHRJVcJuwOmXnUz7MOZiJoVbZZ/tQN.ARnALdGy', 'user', 'active', NULL, NULL, NULL, '2025-11-16 01:43:31', '2025-11-16 01:43:31'),
-(2, 'Admin', 'admin@test.com', NULL, '$2y$10$WQ5lHGAeRsDhas0Ps60F4.aWMKtwZfCM1CWLWECdg2FUpX/7S1i6W', 'admin', 'active', NULL, NULL, 'LqVW7toEZCdApHHExBuh70vuQXlVRhRRoqUw1vezW6VlEhTDZxZMO5ujW8fA', '2025-11-16 01:58:18', '2025-12-14 20:32:25');
+(2, 'Admin', 'admin@test.com', NULL, '$2y$10$WQ5lHGAeRsDhas0Ps60F4.aWMKtwZfCM1CWLWECdg2FUpX/7S1i6W', 'admin', 'active', NULL, NULL, 'LqVW7toEZCdApHHExBuh70vuQXlVRhRRoqUw1vezW6VlEhTDZxZMO5ujW8fA', '2025-11-16 01:58:18', '2025-12-14 20:32:25'),
+(4, 'Super Admin', 'superadmin@test.com', NULL, '$2y$10$v.RPfG6fTUXiPEqLjVaM1OrL/h1iIPlABzOHY/hC2GcNdIe6Q5sgm', 'admin', 'active', NULL, NULL, NULL, '2026-01-08 22:04:05', '2026-01-08 22:04:05'),
+(5, 'Chanh Staff', 'chanh.staff@gmail.com', NULL, '$2y$10$MzOshMezh9SLNjqDuCi.9uUWpv97qCQ464l.2jluvSC/kpqjuMCJ2', 'staff', 'active', NULL, NULL, NULL, '2026-01-08 22:04:05', '2026-01-08 22:04:05'),
+(6, 'hello', 'hello@gmail.com', NULL, '$2y$10$RwDbotafdNnidOf3aM8FMO4VGADF6ErxqjnSisL6VUCfRWRklXGTi', 'user', 'active', NULL, NULL, NULL, '2026-01-09 01:31:21', '2026-01-09 01:31:21');
 
 -- --------------------------------------------------------
 
@@ -26648,7 +26649,7 @@ ALTER TABLE `admin_logs`
 -- AUTO_INCREMENT for table `chat_histories`
 --
 ALTER TABLE `chat_histories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `exams`
@@ -26684,7 +26685,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `questions`
@@ -26732,7 +26733,7 @@ ALTER TABLE `topic_translations`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `user_answers`

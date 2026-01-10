@@ -135,6 +135,10 @@ function displayCurrentVocab() {
 function setupReviewMode() {
     document.getElementById('prevBtn').addEventListener('click', () => navigateVocab(-1));
     document.getElementById('nextBtn').addEventListener('click', () => navigateVocab(1));
+    document.getElementById('reviewAudioBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        playAudioForCurrent();
+    });
 }
 
 function displayReview(vocab) {
@@ -186,6 +190,10 @@ function setupFlashcardsMode() {
     
     document.getElementById('knowBtn').addEventListener('click', () => markFlashcard(true));
     document.getElementById('dontKnowBtn').addEventListener('click', () => markFlashcard(false));
+    document.getElementById('flashcardAudioBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        playAudioForCurrent();
+    });
 }
 
 function displayFlashcard(vocab) {
@@ -245,6 +253,21 @@ function displaySpelling(vocab) {
 }
 
 function playAudio() {
+    const vocab = vocabularies[currentIndex];
+    const text = vocab.simplified || vocab.word || vocab.chinese || vocab.hanzi || '';
+    
+    // Use Web Speech API for Chinese TTS
+    if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-CN';
+        utterance.rate = 0.8;
+        speechSynthesis.speak(utterance);
+    } else {
+        alert('Text-to-speech not supported in your browser');
+    }
+}
+
+function playAudioForCurrent() {
     const vocab = vocabularies[currentIndex];
     const text = vocab.simplified || vocab.word || vocab.chinese || vocab.hanzi || '';
     
