@@ -69,7 +69,7 @@ class RadicalController extends Controller
         $radicals = $query->paginate($perPage)->appends($request->except('page'));
 
         // Get levels for filter dropdown with radical counts
-        $levels = Level::where('test_type', 'hsk')
+        $levels = Level::whereIn('test_type', ['hsk', 'HSK', 'Hsk'])
             ->withCount('radicals')
             ->orderBy('level_number')
             ->get();
@@ -256,7 +256,7 @@ class RadicalController extends Controller
     {
         $stats = [
             'total_radicals' => Radical::count(),
-            'by_level' => Level::where('test_type', 'HSK')
+            'by_level' => Level::whereIn('test_type', ['hsk', 'HSK', 'Hsk'])
                 ->withCount('radicals')
                 ->orderBy('level_number')
                 ->get()
@@ -397,7 +397,7 @@ class RadicalController extends Controller
      */
     public function getLevels()
     {
-        $levels = Level::where('test_type', 'HSK')
+        $levels = Level::whereIn('test_type', ['hsk', 'HSK', 'Hsk'])
             ->orderBy('level_number')
             ->get();
 

@@ -103,13 +103,13 @@ EOT;
             ]
         ];
 
-        // 4. Gửi Request
-        // Note: withoutVerifying() chỉ dùng cho development, production nên dùng SSL certificate đúng cách
-        $response = Http::withoutVerifying()
+        $http = app()->environment('local') ? Http::withoutVerifying() : Http::withOptions([]);
+
+        $response = $http
             ->withHeaders([
                 'Content-Type' => 'application/json',
             ])
-            ->timeout(30) // Add timeout 30 seconds
+            ->timeout(30)
             ->post($url, $payload);
 
         // 5. Xử lý kết quả

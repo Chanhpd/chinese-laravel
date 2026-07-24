@@ -193,10 +193,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Password reset link sent to your email',
-            'data' => [
-                'token' => $token, // Only for testing, remove in production
-            ],
+            'message' => 'Password reset link has been sent to your email address.',
         ], 200);
     }
 
